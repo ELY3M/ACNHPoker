@@ -444,8 +444,6 @@ string[] offsets = {
             {
 
 
-                Configuration config = ConfigurationManager.OpenExeConfiguration(Application.ExecutablePath);
-
                     inventorySlot[] SlotPointer = new inventorySlot[40];
                     foreach (inventorySlot btn in this.inventoryPanel.Controls.OfType<inventorySlot>())
                     {
@@ -467,8 +465,47 @@ string[] offsets = {
                     }
 
 
+
+
+                //save to your own filename :)   
+                SaveFileDialog file = new SaveFileDialog()
+                {
+                    Filter = "Cheat Text (*.txt)|*.txt",
+                };
+
+                Configuration config = ConfigurationManager.OpenExeConfiguration(Application.ExecutablePath);
+
+                string savepath;
+
+                if (config.AppSettings.Settings["LastSave"].Value.Equals(string.Empty))
+                    savepath = Directory.GetCurrentDirectory() + @"\save";
+                else
+                    savepath = config.AppSettings.Settings["LastSave"].Value;
+
+                //Debug.Print(savepath);
+                if (Directory.Exists(savepath))
+                {
+                    file.InitialDirectory = savepath;
+                }
+                else
+                {
+                    file.InitialDirectory = @"C:\";
+                }
+
+                if (file.ShowDialog() != DialogResult.OK)
+                    return;
+
+                string[] temp = file.FileName.Split('\\');
+                string path = "";
+                for (int i = 0; i < temp.Length - 1; i++)
+                    path = path + temp[i] + "\\";
+
+                config.AppSettings.Settings["LastSave"].Value = path;
+                config.Save(ConfigurationSaveMode.Minimal);
+
+
                 //write to cheat//  
-                File.WriteAllText("cheat.txt", cheatmaker.ToString());
+                File.WriteAllText(file.FileName, cheatmaker.ToString());
 
 
 
