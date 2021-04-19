@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
+using System.Text;
 
 namespace ACNHPoker
 {
@@ -386,6 +387,106 @@ namespace ACNHPoker
                 }
             }
         }
+
+
+        //elys mod - nhi cheat convertor  :)  
+        private void button18_Click_1(object sender, EventArgs e)
+        {
+
+            StringBuilder cheatmaker = new StringBuilder();
+
+//addresses for 1.9.0   need to update this offsets everytime the game get update.  
+string[] offsets = {
+"08100000 AE19C778",
+"08100000 AE19C780",
+"08100000 AE19C788",
+"08100000 AE19C790",
+"08100000 AE19C798",
+"08100000 AE19C7A0",
+"08100000 AE19C7A8",
+"08100000 AE19C7B0",
+"08100000 AE19C7B8",
+"08100000 AE19C7C0",
+"08100000 AE19C7C8",
+"08100000 AE19C7D0",
+"08100000 AE19C7D8",
+"08100000 AE19C7E0",
+"08100000 AE19C7E8",
+"08100000 AE19C7F0",
+"08100000 AE19C7F8",
+"08100000 AE19C800",
+"08100000 AE19C808",
+"08100000 AE19C810",
+"08100000 AE19C6C0",
+"08100000 AE19C6C8",
+"08100000 AE19C6D0",
+"08100000 AE19C6D8",
+"08100000 AE19C6E0",
+"08100000 AE19C6E8",
+"08100000 AE19C6F0",
+"08100000 AE19C6F8",
+"08100000 AE19C700",
+"08100000 AE19C708",
+"08100000 AE19C710",
+"08100000 AE19C718",
+"08100000 AE19C720",
+"08100000 AE19C728",
+"08100000 AE19C730",
+"08100000 AE19C738",
+"08100000 AE19C740",
+"08100000 AE19C748",
+"08100000 AE19C750",
+"08100000 AE19C758",
+};
+
+
+            try
+            {
+
+
+                Configuration config = ConfigurationManager.OpenExeConfiguration(Application.ExecutablePath);
+
+                    inventorySlot[] SlotPointer = new inventorySlot[40];
+                    foreach (inventorySlot btn in this.inventoryPanel.Controls.OfType<inventorySlot>())
+                    {
+                        int slotId = int.Parse(btn.Tag.ToString());
+                        SlotPointer[slotId - 1] = btn;
+                    }
+                    for (int i = 0; i < SlotPointer.Length; i++)
+                    {
+
+
+                        string first = Utilities.precedingZeros(SlotPointer[i].getFlag1() + SlotPointer[i].getFlag2() + Utilities.precedingZeros(SlotPointer[i].fillItemID(), 4), 8);
+                        string second = Utilities.precedingZeros(SlotPointer[i].fillItemData(), 8);
+                       
+                        cheatmaker.AppendLine(offsets[i] + " " + second + " " + first);
+
+
+                        Debug.Print(first + " " + second + " " + SlotPointer[i].getFlag1() + " " + SlotPointer[i].getFlag2() + " " + SlotPointer[i].fillItemID());
+                        
+                    }
+
+
+                //write to cheat//  
+                File.WriteAllText("cheat.txt", cheatmaker.ToString());
+
+
+
+            }
+            catch
+            {
+                if (s != null)
+                {
+                    s.Close();
+                }
+                return;
+            }
+        }
+//end of elys mod  
+
+
+
+
 
         private void saveBtn_Click(object sender, EventArgs e)
         {

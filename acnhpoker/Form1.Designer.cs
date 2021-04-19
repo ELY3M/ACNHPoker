@@ -160,6 +160,7 @@
             this.saveBtn = new System.Windows.Forms.Button();
             this.loadBtn = new System.Windows.Forms.Button();
             this.inventoryLargePanel = new System.Windows.Forms.Panel();
+            this.convert_to_Cheat = new System.Windows.Forms.Button();
             this.dodoHelperBtn = new System.Windows.Forms.Button();
             this.regeneratorBtn = new System.Windows.Forms.Button();
             this.favModeBtn = new System.Windows.Forms.Button();
@@ -2286,7 +2287,7 @@
             "Player 7 House",
             "Player 8 House",
             "Recycling Bin"});
-            this.playerSelectorInventory.Location = new System.Drawing.Point(564, 11);
+            this.playerSelectorInventory.Location = new System.Drawing.Point(482, 11);
             this.playerSelectorInventory.Name = "playerSelectorInventory";
             this.playerSelectorInventory.Size = new System.Drawing.Size(147, 24);
             this.playerSelectorInventory.TabIndex = 98;
@@ -2326,6 +2327,7 @@
             // inventoryLargePanel
             // 
             this.inventoryLargePanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(54)))), ((int)(((byte)(57)))), ((int)(((byte)(63)))));
+            this.inventoryLargePanel.Controls.Add(this.convert_to_Cheat);
             this.inventoryLargePanel.Controls.Add(this.dodoHelperBtn);
             this.inventoryLargePanel.Controls.Add(this.regeneratorBtn);
             this.inventoryLargePanel.Controls.Add(this.favModeBtn);
@@ -2368,6 +2370,21 @@
             this.inventoryLargePanel.Size = new System.Drawing.Size(1225, 550);
             this.inventoryLargePanel.TabIndex = 91;
             // 
+            // convert_to_Cheat
+            // 
+            this.convert_to_Cheat.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(114)))), ((int)(((byte)(137)))), ((int)(((byte)(218)))));
+            this.convert_to_Cheat.FlatAppearance.BorderSize = 0;
+            this.convert_to_Cheat.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.convert_to_Cheat.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Bold);
+            this.convert_to_Cheat.ForeColor = System.Drawing.Color.White;
+            this.convert_to_Cheat.Location = new System.Drawing.Point(635, -2);
+            this.convert_to_Cheat.Name = "convert_to_Cheat";
+            this.convert_to_Cheat.Size = new System.Drawing.Size(76, 44);
+            this.convert_to_Cheat.TabIndex = 172;
+            this.convert_to_Cheat.Text = "Convert to Cheat Code";
+            this.convert_to_Cheat.UseVisualStyleBackColor = false;
+            this.convert_to_Cheat.Click += new System.EventHandler(this.button18_Click_1);
+            // 
             // dodoHelperBtn
             // 
             this.dodoHelperBtn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(114)))), ((int)(((byte)(137)))), ((int)(((byte)(218)))));
@@ -2375,7 +2392,7 @@
             this.dodoHelperBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.dodoHelperBtn.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Bold);
             this.dodoHelperBtn.ForeColor = System.Drawing.Color.White;
-            this.dodoHelperBtn.Location = new System.Drawing.Point(464, 25);
+            this.dodoHelperBtn.Location = new System.Drawing.Point(371, 24);
             this.dodoHelperBtn.Name = "dodoHelperBtn";
             this.dodoHelperBtn.Size = new System.Drawing.Size(99, 23);
             this.dodoHelperBtn.TabIndex = 171;
@@ -7888,6 +7905,7 @@
         private System.Windows.Forms.Button StayMoveAllBtn;
         private System.Windows.Forms.Button MoveOutAllBtn;
         private System.Windows.Forms.Button dodoHelperBtn;
+        private System.Windows.Forms.Button convert_to_Cheat;
     }
 }
 

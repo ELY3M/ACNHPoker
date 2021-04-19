@@ -1102,5 +1102,6 @@ namespace ACNHPoker
         {
             controller.emote(0);
         }
+
     }
 }
