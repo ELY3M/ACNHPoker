@@ -444,7 +444,9 @@ string[] offsets = {
             {
 
 
-                    inventorySlot[] SlotPointer = new inventorySlot[40];
+                cheatmaker.AppendLine("[Your Cheat Name Here]");
+
+                inventorySlot[] SlotPointer = new inventorySlot[40];
                     foreach (inventorySlot btn in this.inventoryPanel.Controls.OfType<inventorySlot>())
                     {
                         int slotId = int.Parse(btn.Tag.ToString());
