@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
+//elys mod
 using System.Text;
 
 namespace ACNHPoker
@@ -388,56 +389,58 @@ namespace ACNHPoker
             }
         }
 
-
         //elys mod - nhi cheat convertor  :)  
-        private void button18_Click_1(object sender, EventArgs e)
+        private void Converttocheat_Click(object sender, EventArgs e)
         {
 
             StringBuilder cheatmaker = new StringBuilder();
 
-//addresses for 1.10.0   need to update this offsets everytime the game get update.  
-//TODO  use offsets in config and do math thing.   
-string[] offsets = {
-"08100000 AE61F840",
-"08100000 AE61F848",
-"08100000 AE61F850",
-"08100000 AE61F858",
-"08100000 AE61F860",
-"08100000 AE61F868",
-"08100000 AE61F870",
-"08100000 AE61F878",
-"08100000 AE61F880",
-"08100000 AE61F888",
-"08100000 AE61F890",
-"08100000 AE61F898",
-"08100000 AE61F8A0",
-"08100000 AE61F8A8",
-"08100000 AE61F8B0",
-"08100000 AE61F8B8",
-"08100000 AE61F8C0",
-"08100000 AE61F8C8",
-"08100000 AE61F8D0",
-"08100000 AE61F8D8",
-"08100000 AE61F788",
-"08100000 AE61F790",
-"08100000 AE61F798",
-"08100000 AE61F7A0",
-"08100000 AE61F7A8",
-"08100000 AE61F7B0",
-"08100000 AE61F7B8",
-"08100000 AE61F7C0",
-"08100000 AE61F7C8",
-"08100000 AE61F7D0",
-"08100000 AE61F7D8",
-"08100000 AE61F7E0",
-"08100000 AE61F7E8",
-"08100000 AE61F7F0",
-"08100000 AE61F7F8",
-"08100000 AE61F800",
-"08100000 AE61F808",
-"08100000 AE61F810",
-"08100000 AE61F818",
-"08100000 AE61F820",
+            //addresses for 1.11.0   need to update this offsets everytime the game get update.  
+            //TODO  use offsets in config and do math thing.   
+            string[] offsets = {
+
+
+"08100000 AED22840",
+"08100000 AED22848",
+"08100000 AED22850",
+"08100000 AED22858",
+"08100000 AED22860",
+"08100000 AED22868",
+"08100000 AED22870",
+"08100000 AED22878",
+"08100000 AED22880",
+"08100000 AED22888",
+"08100000 AED22890",
+"08100000 AED22898",
+"08100000 AED228A0",
+"08100000 AED228A8",
+"08100000 AED228B0",
+"08100000 AED228B8",
+"08100000 AED228C0",
+"08100000 AED228C8",
+"08100000 AED228D0",
+"08100000 AED228D8",
+"08100000 AED22788",
+"08100000 AED22790",
+"08100000 AED22798",
+"08100000 AED227A0",
+"08100000 AED227A8",
+"08100000 AED227B0",
+"08100000 AED227B8",
+"08100000 AED227C0",
+"08100000 AED227C8",
+"08100000 AED227D0",
+"08100000 AED227D8",
+"08100000 AED227E0",
+"08100000 AED227E8",
+"08100000 AED227F0",
+"08100000 AED227F8",
+"08100000 AED22800",
+"08100000 AED22808",
+"08100000 AED22810",
+"08100000 AED22818",
+"08100000 AED22820",
+
 };
 
 
@@ -448,24 +451,24 @@ string[] offsets = {
                 cheatmaker.AppendLine("[Your Cheat Name Here]");
 
                 inventorySlot[] SlotPointer = new inventorySlot[40];
-                    foreach (inventorySlot btn in this.inventoryPanel.Controls.OfType<inventorySlot>())
-                    {
-                        int slotId = int.Parse(btn.Tag.ToString());
-                        SlotPointer[slotId - 1] = btn;
-                    }
-                    for (int i = 0; i < SlotPointer.Length; i++)
-                    {
+                foreach (inventorySlot btn in this.inventoryPanel.Controls.OfType<inventorySlot>())
+                {
+                    int slotId = int.Parse(btn.Tag.ToString());
+                    SlotPointer[slotId - 1] = btn;
+                }
+                for (int i = 0; i < SlotPointer.Length; i++)
+                {
 
 
-                        string first = Utilities.precedingZeros(SlotPointer[i].getFlag1() + SlotPointer[i].getFlag2() + Utilities.precedingZeros(SlotPointer[i].fillItemID(), 4), 8);
-                        string second = Utilities.precedingZeros(SlotPointer[i].fillItemData(), 8);
-                       
-                        cheatmaker.AppendLine(offsets[i] + " " + second + " " + first);
+                    string first = Utilities.precedingZeros(SlotPointer[i].getFlag1() + SlotPointer[i].getFlag2() + Utilities.precedingZeros(SlotPointer[i].fillItemID(), 4), 8);
+                    string second = Utilities.precedingZeros(SlotPointer[i].fillItemData(), 8);
+
+                    cheatmaker.AppendLine(offsets[i] + " " + second + " " + first);
 
 
-                        Debug.Print(first + " " + second + " " + SlotPointer[i].getFlag1() + " " + SlotPointer[i].getFlag2() + " " + SlotPointer[i].fillItemID());
-                        
-                    }
+                    Debug.Print(first + " " + second + " " + SlotPointer[i].getFlag1() + " " + SlotPointer[i].getFlag2() + " " + SlotPointer[i].fillItemID());
+
+                }
 
 
 
@@ -522,10 +525,7 @@ string[] offsets = {
                 return;
             }
         }
-//end of elys mod  
-
-
-
+        //end of elys mod  
 
 
         private void saveBtn_Click(object sender, EventArgs e)

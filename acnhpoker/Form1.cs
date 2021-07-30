@@ -19,7 +19,7 @@ namespace ACNHPoker
     {
         #region variable
         private static Socket s;
-        private string version = "ACNH Poker R16 for v1.10.0";
+        private string version = "ACNH Poker R17 for v1.11.0";
         private inventorySlot selectedButton;
         private Villager[] V = null;
         private Button[] villagerButton = null;
@@ -100,6 +100,8 @@ namespace ACNHPoker
         private void Form1_Load(object sender, EventArgs e)
         {
             this.Text = version;
+			//elys mod
+            this.Icon = Properties.Resources.ACLeaf;
 
             this.ipBox.Text = ConfigurationManager.AppSettings["ipAddress"];
 
@@ -772,6 +774,7 @@ namespace ACNHPoker
         #region Validation
         private Boolean validation()
         {
+            //return true;
             if (disableValidation)
                 return false;
             try
@@ -1102,6 +1105,7 @@ namespace ACNHPoker
         {
             controller.emote(0);
         }
+
 
     }
 }
