@@ -358,6 +358,7 @@
             this.button5 = new System.Windows.Forms.Button();
             this.button14 = new System.Windows.Forms.Button();
             this.button16 = new System.Windows.Forms.Button();
+			//elys mod
             this.Converttocheat = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.itemRightClick.SuspendLayout();
@@ -2406,6 +2407,7 @@
             // speedX4Btn
             // 
             this.speedX4Btn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(114)))), ((int)(((byte)(137)))), ((int)(((byte)(218)))));
+            this.speedX4Btn.Enabled = false;
             this.speedX4Btn.FlatAppearance.BorderSize = 0;
             this.speedX4Btn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.speedX4Btn.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -2423,6 +2425,7 @@
             // speedX1Btn
             // 
             this.speedX1Btn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(80)))), ((int)(((byte)(80)))), ((int)(((byte)(255)))));
+            this.speedX1Btn.Enabled = false;
             this.speedX1Btn.FlatAppearance.BorderSize = 0;
             this.speedX1Btn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.speedX1Btn.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -2439,6 +2442,7 @@
             // disableCollisionBtn
             // 
             this.disableCollisionBtn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(114)))), ((int)(((byte)(137)))), ((int)(((byte)(218)))));
+            this.disableCollisionBtn.Enabled = false;
             this.disableCollisionBtn.FlatAppearance.BorderSize = 0;
             this.disableCollisionBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.disableCollisionBtn.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -2456,6 +2460,7 @@
             // enableCollisionBtn
             // 
             this.enableCollisionBtn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(80)))), ((int)(((byte)(80)))), ((int)(((byte)(255)))));
+            this.enableCollisionBtn.Enabled = false;
             this.enableCollisionBtn.FlatAppearance.BorderSize = 0;
             this.enableCollisionBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.enableCollisionBtn.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -2833,6 +2838,7 @@
             // speedX2Btn
             // 
             this.speedX2Btn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(114)))), ((int)(((byte)(137)))), ((int)(((byte)(218)))));
+            this.speedX2Btn.Enabled = false;
             this.speedX2Btn.FlatAppearance.BorderSize = 0;
             this.speedX2Btn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.speedX2Btn.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -2849,6 +2855,7 @@
             // speedX3Btn
             // 
             this.speedX3Btn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(114)))), ((int)(((byte)(137)))), ((int)(((byte)(218)))));
+            this.speedX3Btn.Enabled = false;
             this.speedX3Btn.FlatAppearance.BorderSize = 0;
             this.speedX3Btn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.speedX3Btn.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -3228,7 +3235,8 @@
             // inventoryLargePanel
             // 
             this.inventoryLargePanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(54)))), ((int)(((byte)(57)))), ((int)(((byte)(63)))));
-            this.inventoryLargePanel.Controls.Add(this.Converttocheat);
+            //elys mod
+			this.inventoryLargePanel.Controls.Add(this.Converttocheat);
             this.inventoryLargePanel.Controls.Add(this.dodoHelperBtn);
             this.inventoryLargePanel.Controls.Add(this.regeneratorBtn);
             this.inventoryLargePanel.Controls.Add(this.favModeBtn);
@@ -5783,6 +5791,7 @@
             this.MysSelector.IntegralHeight = false;
             this.MysSelector.ItemHeight = 60;
             this.MysSelector.Items.AddRange(new object[] {
+            "Ace : brd09",
             "Admiral : brd06",
             "Agent S : squ05",
             "Agnes : pig17",
@@ -5807,6 +5816,7 @@
             "Ava : chn05",
             "Avery : pbr05",
             "Axel : elp06",
+            "Azalea : rhn05",
             "Baabara : shp01",
             "Bam : der01",
             "Bangle : tig03",
@@ -5857,7 +5867,9 @@
             "Carrie : kgr02",
             "Cashmere : shp04",
             "Celia : pbr09",
+            "Cephalobot : ocp04",
             "Cesar : gor00",
+            "Chabwick : pgn07",
             "Chadder : mus18",
             "Chai : elp11",
             "Charlise : bea12",
@@ -5918,6 +5930,7 @@
             "Étoile : shp14",
             "Eugene : kal10",
             "Eunice : shp02",
+            "Faith : kal07",
             "Fang : wol06",
             "Fauna : der00",
             "Felicity : cat17",
@@ -5929,6 +5942,7 @@
             "Francine : rbt12",
             "Frank : pbr06",
             "Freckles : duk07",
+            "Frett : dog11",
             "Freya : wol05",
             "Friga : pgn04",
             "Frita : shp11",
@@ -5965,6 +5979,7 @@
             "Hugh : pig03",
             "Iggly : pgn11",
             "Ike : bea11",
+            "Ione : squ21",
             "Jacob : brd11",
             "Jacques : brd16",
             "Jambette : flg13",
@@ -6014,6 +6029,7 @@
             "Marcie : kgr10",
             "Margie : elp04",
             "Marina : ocp01",
+            "Marlo : ham09",
             "Marshal : squ17",
             "Marty : cbr18",
             "Mathilda : kgr01",
@@ -6063,6 +6079,7 @@
             "Peggy : pig11",
             "Pekoe : cbr14",
             "Penelope : mus17",
+            "Petri : mus19",
             "Phil : ost07",
             "Phoebe : ost10",
             "Pierce : pbr02",
@@ -6083,6 +6100,7 @@
             "Purrl : cat07",
             "Queenie : ost00",
             "Quillson : duk17",
+            "Quinn : pbr10",
             "Raddle : flg15",
             "Rasher : pig02",
             "Raymond : cat23",
@@ -6093,6 +6111,7 @@
             "Ribbot : flg01",
             "Ricky : squ10",
             "Rilla : gor11",
+            "Rio : ost04",
             "Rizzo : mus09",
             "Roald : pgn01",
             "Robin : brd01",
@@ -6106,18 +6125,21 @@
             "Rory : lon07",
             "Roscoe : hrs04",
             "Rosie : cat02",
+            "Roswell : crd05",
             "Rowan : tig01",
             "Ruby : rbt09",
             "Rudy : cat20",
             "Sally : squ07",
             "Samson : mus04",
             "Sandy : ost02",
+            "Sasha : rbt21",
             "Savannah : hrs02",
             "Scoot : duk10",
             "Shari : mnk07",
             "Sheldon : squ16",
             "Shep : dog18",
             "Sherb : goa09",
+            "Shino : der11",
             "Simon : mnk02",
             "Skye : wol09",
             "Sly : crd06",
@@ -6149,6 +6171,7 @@
             "Teddy : bea00",
             "Tex : pgn12",
             "Tia : elp10",
+            "Tiansheng : mnk09",
             "Tiffany : rbt07",
             "Timbra : shp10",
             "Tipper : cow01",
@@ -6179,6 +6202,7 @@
             "Wolfgang : wol02",
             "Yuka : kal00",
             "Zell : der02",
+            "Zoe : ant05",
             "Zucker : ocp02"});
             this.MysSelector.Location = new System.Drawing.Point(950, 184);
             this.MysSelector.Name = "MysSelector";
@@ -6232,6 +6256,7 @@
             this.ReplaceSelector.IntegralHeight = false;
             this.ReplaceSelector.ItemHeight = 60;
             this.ReplaceSelector.Items.AddRange(new object[] {
+            "Ace : brd09",
             "Admiral : brd06",
             "Agent S : squ05",
             "Agnes : pig17",
@@ -6256,6 +6281,7 @@
             "Ava : chn05",
             "Avery : pbr05",
             "Axel : elp06",
+            "Azalea : rhn05",
             "Baabara : shp01",
             "Bam : der01",
             "Bangle : tig03",
@@ -6306,7 +6332,9 @@
             "Carrie : kgr02",
             "Cashmere : shp04",
             "Celia : pbr09",
+            "Cephalobot : ocp04",
             "Cesar : gor00",
+            "Chabwick : pgn07",
             "Chadder : mus18",
             "Chai : elp11",
             "Charlise : bea12",
@@ -6367,6 +6395,7 @@
             "Étoile : shp14",
             "Eugene : kal10",
             "Eunice : shp02",
+            "Faith : kal07",
             "Fang : wol06",
             "Fauna : der00",
             "Felicity : cat17",
@@ -6378,6 +6407,7 @@
             "Francine : rbt12",
             "Frank : pbr06",
             "Freckles : duk07",
+            "Frett : dog11",
             "Freya : wol05",
             "Friga : pgn04",
             "Frita : shp11",
@@ -6414,6 +6444,7 @@
             "Hugh : pig03",
             "Iggly : pgn11",
             "Ike : bea11",
+            "Ione : squ21",
             "Jacob : brd11",
             "Jacques : brd16",
             "Jambette : flg13",
@@ -6463,6 +6494,7 @@
             "Marcie : kgr10",
             "Margie : elp04",
             "Marina : ocp01",
+            "Marlo : ham09",
             "Marshal : squ17",
             "Marty : cbr18",
             "Mathilda : kgr01",
@@ -6512,6 +6544,7 @@
             "Peggy : pig11",
             "Pekoe : cbr14",
             "Penelope : mus17",
+            "Petri : mus19",
             "Phil : ost07",
             "Phoebe : ost10",
             "Pierce : pbr02",
@@ -6532,6 +6565,7 @@
             "Purrl : cat07",
             "Queenie : ost00",
             "Quillson : duk17",
+            "Quinn : pbr10",
             "Raddle : flg15",
             "Rasher : pig02",
             "Raymond : cat23",
@@ -6542,6 +6576,7 @@
             "Ribbot : flg01",
             "Ricky : squ10",
             "Rilla : gor11",
+            "Rio : ost04",
             "Rizzo : mus09",
             "Roald : pgn01",
             "Robin : brd01",
@@ -6555,18 +6590,21 @@
             "Rory : lon07",
             "Roscoe : hrs04",
             "Rosie : cat02",
+            "Roswell : crd05",
             "Rowan : tig01",
             "Ruby : rbt09",
             "Rudy : cat20",
             "Sally : squ07",
             "Samson : mus04",
             "Sandy : ost02",
+            "Sasha : rbt21",
             "Savannah : hrs02",
             "Scoot : duk10",
             "Shari : mnk07",
             "Sheldon : squ16",
             "Shep : dog18",
             "Sherb : goa09",
+            "Shino : der11",
             "Simon : mnk02",
             "Skye : wol09",
             "Sly : crd06",
@@ -6598,6 +6636,7 @@
             "Teddy : bea00",
             "Tex : pgn12",
             "Tia : elp10",
+            "Tiansheng : mnk09",
             "Tiffany : rbt07",
             "Timbra : shp10",
             "Tipper : cow01",
@@ -6628,6 +6667,7 @@
             "Wolfgang : wol02",
             "Yuka : kal00",
             "Zell : der02",
+            "Zoe : ant05",
             "Zucker : ocp02"});
             this.ReplaceSelector.Location = new System.Drawing.Point(49, 435);
             this.ReplaceSelector.Name = "ReplaceSelector";
@@ -6818,6 +6858,7 @@
             this.VillagerSearchMenu.Font = new System.Drawing.Font("Arial", 10F, System.Drawing.FontStyle.Bold);
             this.VillagerSearchMenu.ImageList = null;
             this.VillagerSearchMenu.Items = new string[] {
+        "Ace",
         "Admiral",
         "Agent S",
         "Agnes",
@@ -6842,6 +6883,7 @@
         "Ava",
         "Avery",
         "Axel",
+        "Azalea",
         "Baabara",
         "Bam",
         "Bangle",
@@ -6892,7 +6934,9 @@
         "Carrie",
         "Cashmere",
         "Celia",
+        "Cephalobot",
         "Cesar",
+        "Chabwick",
         "Chadder",
         "Chai",
         "Charlise",
@@ -6953,6 +6997,7 @@
         "Étoile",
         "Eugene",
         "Eunice",
+        "Faith",
         "Fang",
         "Fauna",
         "Felicity",
@@ -6964,6 +7009,7 @@
         "Francine",
         "Frank",
         "Freckles",
+        "Frett",
         "Freya",
         "Friga",
         "Frita",
@@ -7000,6 +7046,7 @@
         "Hugh",
         "Iggly",
         "Ike",
+        "Ione",
         "Jacob",
         "Jacques",
         "Jambette",
@@ -7049,6 +7096,7 @@
         "Marcie",
         "Margie",
         "Marina",
+        "Marlo",
         "Marshal",
         "Marty",
         "Mathilda",
@@ -7098,6 +7146,7 @@
         "Peggy",
         "Pekoe",
         "Penelope",
+        "Petri",
         "Phil",
         "Phoebe",
         "Pierce",
@@ -7118,6 +7167,7 @@
         "Purrl",
         "Queenie",
         "Quillson",
+        "Quinn",
         "Raddle",
         "Rasher",
         "Raymond",
@@ -7128,6 +7178,7 @@
         "Ribbot",
         "Ricky",
         "Rilla",
+        "Rio",
         "Rizzo",
         "Roald",
         "Robin",
@@ -7141,18 +7192,21 @@
         "Rory",
         "Roscoe",
         "Rosie",
+        "Roswell",
         "Rowan",
         "Ruby",
         "Rudy",
         "Sally",
         "Samson",
         "Sandy",
+        "Sasha",
         "Savannah",
         "Scoot",
         "Shari",
         "Sheldon",
         "Shep",
         "Sherb",
+        "Shino",
         "Simon",
         "Skye",
         "Sly",
@@ -7184,6 +7238,7 @@
         "Teddy",
         "Tex",
         "Tia",
+        "Tiansheng",
         "Tiffany",
         "Timbra",
         "Tipper",
@@ -7214,6 +7269,7 @@
         "Wolfgang",
         "Yuka",
         "Zell",
+        "Zoe",
         "Zucker"};
             this.VillagerSearchMenu.LeftPadding = 0;
             this.VillagerSearchMenu.MaximumSize = new System.Drawing.Size(120, 200);
@@ -7460,7 +7516,7 @@
             this.button16.Text = "villager head";
             this.button16.UseVisualStyleBackColor = true;
             this.button16.Click += new System.EventHandler(this.button16_Click);
-            // 
+            // elys mod
             // Converttocheat
             // 
             this.Converttocheat.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(114)))), ((int)(((byte)(137)))), ((int)(((byte)(218)))));
@@ -7905,6 +7961,7 @@
         private System.Windows.Forms.Button StayMoveAllBtn;
         private System.Windows.Forms.Button MoveOutAllBtn;
         private System.Windows.Forms.Button dodoHelperBtn;
+		//elys mod
         private System.Windows.Forms.Button Converttocheat;
     }
 }

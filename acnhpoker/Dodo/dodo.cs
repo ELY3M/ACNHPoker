@@ -525,6 +525,15 @@ namespace ACNHPoker
                 });
                 return 1;
             }
+            else if (teleport.checkOnlineStatus(true) == 0x1) //Check again for Chinese
+            {
+                onlineLabel.Invoke((MethodInvoker)delegate
+                {
+                    onlineLabel.Text = "ONLINE";
+                    onlineLabel.ForeColor = Color.Lime;
+                });
+                return 1;
+            }
             else
             {
                 onlineLabel.Invoke((MethodInvoker)delegate
@@ -1411,6 +1420,10 @@ namespace ACNHPoker
                             }
                             else
                             {
+                                WriteLog("Time's up! Save and reboot!", true);
+                                EndSession();
+                                mytimer.done = false;
+                                continue;
                             }
                         }
                     }
@@ -1462,7 +1475,11 @@ namespace ACNHPoker
 
                         if (mytimer != null && resetSession)
                         {
-                            mytimer.reset();
+                            this.Invoke((MethodInvoker)delegate
+                            {
+                                mytimer.reset();
+                                mytimer.start();
+                            });
                         }
 
                         WriteLog("Restore sequence finished.", true);
