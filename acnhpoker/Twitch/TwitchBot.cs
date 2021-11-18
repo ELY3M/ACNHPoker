@@ -61,7 +61,7 @@ namespace ACNHPoker
             //We could .SafeFireAndForget() these two calls if we want to
             await JoinChannel(channel);
             if (commandMode)
-                await SendMessage(channel, "Chat bot has started up! (Accept Commands)");
+                await SendMessage(channel, "Chat bot has started up! (Accept Commands !hey)");
             else
                 await SendMessage(channel, "Chat bot has started up!");
 

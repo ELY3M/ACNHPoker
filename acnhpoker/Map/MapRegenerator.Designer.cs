@@ -31,8 +31,8 @@ namespace ACNHPoker
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MapRegenerator));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
             this.PleaseWaitPanel = new System.Windows.Forms.Panel();
             this.PauseTimeLabel = new System.Windows.Forms.Label();
             this.WaitMessagebox = new System.Windows.Forms.RichTextBox();
@@ -52,7 +52,6 @@ namespace ACNHPoker
             this.delay = new System.Windows.Forms.RichTextBox();
             this.ms = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
-            this.debugBtn = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
             this.visitorNameBox = new System.Windows.Forms.RichTextBox();
             this.formToolTip = new System.Windows.Forms.ToolTip(this.components);
@@ -73,10 +72,6 @@ namespace ACNHPoker
             this.yCoordinate = new System.Windows.Forms.RichTextBox();
             this.miniMapBox = new System.Windows.Forms.PictureBox();
             this.xCoordinate = new System.Windows.Forms.RichTextBox();
-            this.readDodoBtn = new System.Windows.Forms.Button();
-            this.clearBtn = new System.Windows.Forms.Button();
-            this.clear = new System.Windows.Forms.Button();
-            this.slowBtn = new System.Windows.Forms.Button();
             this.PleaseWaitPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.logGridView)).BeginInit();
@@ -341,22 +336,6 @@ namespace ACNHPoker
             this.label1.Text = "Refresh Delay :";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // debugBtn
-            // 
-            this.debugBtn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(114)))), ((int)(((byte)(137)))), ((int)(((byte)(218)))));
-            this.debugBtn.FlatAppearance.BorderSize = 0;
-            this.debugBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.debugBtn.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Bold);
-            this.debugBtn.ForeColor = System.Drawing.Color.White;
-            this.debugBtn.Location = new System.Drawing.Point(13, 358);
-            this.debugBtn.Margin = new System.Windows.Forms.Padding(4);
-            this.debugBtn.Name = "debugBtn";
-            this.debugBtn.Size = new System.Drawing.Size(100, 25);
-            this.debugBtn.TabIndex = 226;
-            this.debugBtn.Text = "Debug";
-            this.debugBtn.UseVisualStyleBackColor = false;
-            this.debugBtn.Click += new System.EventHandler(this.debugBtn_Click);
-            // 
             // label2
             // 
             this.label2.AutoSize = true;
@@ -529,23 +508,23 @@ namespace ACNHPoker
             this.logGridView.AllowUserToResizeRows = false;
             this.logGridView.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(47)))), ((int)(((byte)(49)))), ((int)(((byte)(54)))));
             this.logGridView.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(57)))), ((int)(((byte)(60)))), ((int)(((byte)(67)))));
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Bold);
-            dataGridViewCellStyle1.ForeColor = System.Drawing.Color.White;
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(57)))), ((int)(((byte)(60)))), ((int)(((byte)(67)))));
-            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.logGridView.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle9.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(57)))), ((int)(((byte)(60)))), ((int)(((byte)(67)))));
+            dataGridViewCellStyle9.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Bold);
+            dataGridViewCellStyle9.ForeColor = System.Drawing.Color.White;
+            dataGridViewCellStyle9.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(57)))), ((int)(((byte)(60)))), ((int)(((byte)(67)))));
+            dataGridViewCellStyle9.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle9.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.logGridView.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle9;
             this.logGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(47)))), ((int)(((byte)(49)))), ((int)(((byte)(54)))));
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Bold);
-            dataGridViewCellStyle2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(114)))), ((int)(((byte)(105)))), ((int)(((byte)(110)))));
-            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(57)))), ((int)(((byte)(60)))), ((int)(((byte)(67)))));
-            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.logGridView.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle10.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(47)))), ((int)(((byte)(49)))), ((int)(((byte)(54)))));
+            dataGridViewCellStyle10.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Bold);
+            dataGridViewCellStyle10.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(114)))), ((int)(((byte)(105)))), ((int)(((byte)(110)))));
+            dataGridViewCellStyle10.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(57)))), ((int)(((byte)(60)))), ((int)(((byte)(67)))));
+            dataGridViewCellStyle10.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle10.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.logGridView.DefaultCellStyle = dataGridViewCellStyle10;
             this.logGridView.EnableHeadersVisualStyles = false;
             this.logGridView.Location = new System.Drawing.Point(4, 36);
             this.logGridView.MultiSelect = false;
@@ -663,88 +642,19 @@ namespace ACNHPoker
             this.xCoordinate.TabIndex = 236;
             this.xCoordinate.Text = "";
             // 
-            // readDodoBtn
-            // 
-            this.readDodoBtn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(114)))), ((int)(((byte)(137)))), ((int)(((byte)(218)))));
-            this.readDodoBtn.FlatAppearance.BorderSize = 0;
-            this.readDodoBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.readDodoBtn.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Bold);
-            this.readDodoBtn.ForeColor = System.Drawing.Color.White;
-            this.readDodoBtn.Location = new System.Drawing.Point(13, 391);
-            this.readDodoBtn.Margin = new System.Windows.Forms.Padding(4);
-            this.readDodoBtn.Name = "readDodoBtn";
-            this.readDodoBtn.Size = new System.Drawing.Size(65, 25);
-            this.readDodoBtn.TabIndex = 236;
-            this.readDodoBtn.Text = "Dodo";
-            this.readDodoBtn.UseVisualStyleBackColor = false;
-            this.readDodoBtn.Click += new System.EventHandler(this.readDodoBtn_Click);
-            // 
-            // clearBtn
-            // 
-            this.clearBtn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(114)))), ((int)(((byte)(137)))), ((int)(((byte)(218)))));
-            this.clearBtn.FlatAppearance.BorderSize = 0;
-            this.clearBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.clearBtn.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Bold);
-            this.clearBtn.ForeColor = System.Drawing.Color.White;
-            this.clearBtn.Location = new System.Drawing.Point(86, 391);
-            this.clearBtn.Margin = new System.Windows.Forms.Padding(4);
-            this.clearBtn.Name = "clearBtn";
-            this.clearBtn.Size = new System.Drawing.Size(65, 25);
-            this.clearBtn.TabIndex = 237;
-            this.clearBtn.Text = "Clear";
-            this.clearBtn.UseVisualStyleBackColor = false;
-            this.clearBtn.Click += new System.EventHandler(this.clearBtn_Click);
-            // 
-            // clear
-            // 
-            this.clear.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(114)))), ((int)(((byte)(137)))), ((int)(((byte)(218)))));
-            this.clear.FlatAppearance.BorderSize = 0;
-            this.clear.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.clear.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Bold);
-            this.clear.ForeColor = System.Drawing.Color.White;
-            this.clear.Location = new System.Drawing.Point(121, 358);
-            this.clear.Margin = new System.Windows.Forms.Padding(4);
-            this.clear.Name = "clear";
-            this.clear.Size = new System.Drawing.Size(100, 25);
-            this.clear.TabIndex = 239;
-            this.clear.Text = "clear";
-            this.clear.UseVisualStyleBackColor = false;
-            this.clear.Click += new System.EventHandler(this.clear_Click);
-            // 
-            // slowBtn
-            // 
-            this.slowBtn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(114)))), ((int)(((byte)(137)))), ((int)(((byte)(218)))));
-            this.slowBtn.FlatAppearance.BorderSize = 0;
-            this.slowBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.slowBtn.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Bold);
-            this.slowBtn.ForeColor = System.Drawing.Color.White;
-            this.slowBtn.Location = new System.Drawing.Point(13, 424);
-            this.slowBtn.Margin = new System.Windows.Forms.Padding(4);
-            this.slowBtn.Name = "slowBtn";
-            this.slowBtn.Size = new System.Drawing.Size(100, 25);
-            this.slowBtn.TabIndex = 242;
-            this.slowBtn.Text = "slow";
-            this.slowBtn.UseVisualStyleBackColor = false;
-            this.slowBtn.Click += new System.EventHandler(this.slowBtn_Click);
-            // 
             // MapRegenerator
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(54)))), ((int)(((byte)(57)))), ((int)(((byte)(63)))));
             this.ClientSize = new System.Drawing.Size(234, 356);
-            this.Controls.Add(this.slowBtn);
             this.Controls.Add(this.changeDodoBtn);
             this.Controls.Add(this.dodoSetupBtn);
-            this.Controls.Add(this.clear);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.backBtn);
             this.Controls.Add(this.logBtn);
             this.Controls.Add(this.hideBtn);
-            this.Controls.Add(this.clearBtn);
-            this.Controls.Add(this.readDodoBtn);
             this.Controls.Add(this.visitorNameBox);
             this.Controls.Add(this.label2);
-            this.Controls.Add(this.debugBtn);
             this.Controls.Add(this.timeLabel);
             this.Controls.Add(this.ms);
             this.Controls.Add(this.delay);
@@ -802,7 +712,6 @@ namespace ACNHPoker
         private System.Windows.Forms.RichTextBox delay;
         private System.Windows.Forms.Label ms;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Button debugBtn;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.RichTextBox visitorNameBox;
         private System.Windows.Forms.ToolTip formToolTip;
@@ -821,12 +730,8 @@ namespace ACNHPoker
         private System.Windows.Forms.RichTextBox yCoordinate;
         private System.Windows.Forms.RichTextBox xCoordinate;
         private System.Windows.Forms.Button startBtn;
-        private System.Windows.Forms.Button readDodoBtn;
-        private System.Windows.Forms.Button clearBtn;
         private System.Windows.Forms.CheckBox keepVillagerBox;
-        private System.Windows.Forms.Button clear;
         private System.Windows.Forms.Button dodoSetupBtn;
         private System.Windows.Forms.Button changeDodoBtn;
-        private System.Windows.Forms.Button slowBtn;
     }
 }

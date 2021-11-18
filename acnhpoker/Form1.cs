@@ -1,4 +1,5 @@
-﻿using NAudio.Wave;
+﻿//modded by ELY M.
+using NAudio.Wave;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -19,7 +20,7 @@ namespace ACNHPoker
     {
         #region variable
         private static Socket s;
-        private string version = "ACNH Poker R18 for v2.0.0";
+        private string version = "ACNH Poker R18.4 for v2.0.0";
         private inventorySlot selectedButton;
         private Villager[] V = null;
         private Button[] villagerButton = null;
@@ -49,6 +50,7 @@ namespace ACNHPoker
         private variation selection = null;
         public map Map = null;
         public MapRegenerator R = null;
+        public Freezer F = null;
         private miniMap MiniMap = null;
         private USBBot bot = null;
         private bool offline = true;
@@ -101,9 +103,10 @@ namespace ACNHPoker
         private void Form1_Load(object sender, EventArgs e)
         {
             this.Text = version;
+            
 			//elys mod
             this.Icon = Properties.Resources.ACLeaf;
-
+			
             this.ipBox.Text = ConfigurationManager.AppSettings["ipAddress"];
 
             Configuration config = ConfigurationManager.OpenExeConfiguration(Application.ExecutablePath);
@@ -127,6 +130,21 @@ namespace ACNHPoker
             setting = new Setting(this, overrideSetting, disableValidation, sound);
             if (overrideSetting)
                 setting.overrideAddresses();
+
+            if (!Directory.Exists(Directory.GetCurrentDirectory() + "\\" + "img") || config.AppSettings.Settings["ForcedImageDownload"].Value == "true")
+            {
+                config.AppSettings.Settings["ForcedImageDownload"].Value = "false";
+                config.Save(ConfigurationSaveMode.Minimal);
+                ImageDownloader imageDownloader = new ImageDownloader();
+                imageDownloader.ShowDialog();
+            }
+
+            if (config.AppSettings.Settings["RestartRequired"].Value == "true")
+            {
+                config.AppSettings.Settings["RestartRequired"].Value = "false";
+                config.Save(ConfigurationSaveMode.Minimal);
+                Application.Restart();
+            }
 
             if (File.Exists(Utilities.itemPath))
             {
@@ -399,15 +417,12 @@ namespace ACNHPoker
             favGridView.Columns["Image"].Width = 128;
 
 
-            if (!Directory.Exists(Directory.GetCurrentDirectory() + "\\" + "img"))
-            {
-                ImageDownloader imageDownloader = new ImageDownloader();
-                imageDownloader.ShowDialog();
-            }
-
             currentPanel = itemModePanel;
 
             LanguageSetup(config.AppSettings.Settings["language"].Value);
+
+            Utilities.buildDictionary();
+
             this.KeyPreview = true;
         }
         private Dictionary<string, string> CreateOverride(string path)
@@ -861,6 +876,15 @@ namespace ACNHPoker
                 R = new MapRegenerator(s, this, sound);
                 //this.Hide();
                 R.Show();
+            }
+        }
+
+        private void freezerBtn_Click(object sender, EventArgs e)
+        {
+            if (R == null)
+            {
+                F = new Freezer(s, this, sound);
+                F.Show();
             }
         }
 

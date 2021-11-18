@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Configuration;
+using System.Data;
 using System.Diagnostics;
 using System.IO;
 using System.Threading;
@@ -28,11 +29,11 @@ namespace ACNHPoker
 
         private void PokeBtn_Click(object sender, EventArgs e)
         {
-            Utilities.pokeAddress(s, bot, "0x" + debugAddress.Text, debugAmount.Text);
+            Utilities.pokeAddress(s, bot, debugAddress.Text, debugAmount.Text);
         }
         private void PeekBtn_Click(object sender, EventArgs e)
         {
-            byte[] AddressBank = Utilities.peekAddress(s, bot, Convert.ToInt64(debugAddress.Text, 16), 160);
+            byte[] AddressBank = Utilities.peekAddress(s, bot, Convert.ToInt32(debugAddress.Text, 16), 160);
 
             byte[] firstBytes = new byte[4];
             byte[] secondBytes = new byte[4];
@@ -559,6 +560,147 @@ namespace ACNHPoker
             config.Save(ConfigurationSaveMode.Minimal);
 
             File.WriteAllBytes(file.FileName, save);
+            if (sound)
+                System.Media.SystemSounds.Asterisk.Play();
+        }
+
+        private void button13_Click_1(object sender, EventArgs e)
+        {
+            string bank = "";
+            recipeGridView.Sort(recipeGridView.Columns["eng"], ListSortDirection.Ascending);
+
+            for (int i = 0; i < recipeGridView.Rows.Count; i++)
+            {
+                string recipeid = recipeGridView.Rows[i].Cells["id"].Value.ToString();
+
+                bank = bank + Utilities.flip("16A2") + "0000" + Utilities.flip(recipeid) + "0000";
+            }
+
+            byte[] save = Utilities.stringToByte(bank);
+
+
+            SaveFileDialog file = new SaveFileDialog()
+            {
+                Filter = "New Horizons Bulk Spawn (*.nhbs)|*.nhbs",
+            };
+
+            Configuration config = ConfigurationManager.OpenExeConfiguration(Application.ExecutablePath);
+
+            string savepath;
+
+            if (config.AppSettings.Settings["LastSave"].Value.Equals(string.Empty))
+                savepath = Directory.GetCurrentDirectory() + @"\save";
+            else
+                savepath = config.AppSettings.Settings["LastSave"].Value;
+
+            if (Directory.Exists(savepath))
+            {
+                file.InitialDirectory = savepath;
+            }
+            else
+            {
+                file.InitialDirectory = @"C:\";
+            }
+
+            if (file.ShowDialog() != DialogResult.OK)
+                return;
+
+            string[] temp = file.FileName.Split('\\');
+            string path = "";
+            for (int i = 0; i < temp.Length - 1; i++)
+                path = path + temp[i] + "\\";
+
+            config.AppSettings.Settings["LastSave"].Value = path;
+            config.Save(ConfigurationSaveMode.Minimal);
+
+            File.WriteAllBytes(file.FileName, save);
+            if (sound)
+                System.Media.SystemSounds.Asterisk.Play();
+        }
+
+        private void button18_Click_1(object sender, EventArgs e)
+        {
+            OpenFileDialog loadfile = new OpenFileDialog()
+            {
+                Filter = "All files (*.*)|*.*",
+            };
+
+            if (loadfile.ShowDialog() != DialogResult.OK)
+                return;
+
+            string[] temp = loadfile.FileName.Split('\\');
+            string path = "";
+            for (int i = 0; i < temp.Length - 1; i++)
+                path = path + temp[i] + "\\";
+
+            DataTable tempSource = loadItemCSV(loadfile.FileName);
+
+            string bank = "";
+            tempSource.DefaultView.Sort = "id ASC";
+            tempSource.DefaultView.ToTable();
+
+            for (int i = 0; i < tempSource.DefaultView.ToTable().Rows.Count; i++)
+            {
+                string recipeid = tempSource.DefaultView.ToTable().Rows[i].ItemArray[0].ToString();
+
+                bank = bank + Utilities.flip("16A2") + "0000" + Utilities.flip(recipeid) + "0000";
+            }
+
+            byte[] save = Utilities.stringToByte(bank);
+
+
+            SaveFileDialog savefile = new SaveFileDialog()
+            {
+                Filter = "New Horizons Bulk Spawn (*.nhbs)|*.nhbs",
+            };
+
+            if (savefile.ShowDialog() != DialogResult.OK)
+                return;
+
+            File.WriteAllBytes(savefile.FileName, save);
+            if (sound)
+                System.Media.SystemSounds.Asterisk.Play();
+        }
+
+        private void button19_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog loadfile = new OpenFileDialog()
+            {
+                Filter = "All files (*.*)|*.*",
+            };
+
+            if (loadfile.ShowDialog() != DialogResult.OK)
+                return;
+
+            string[] temp = loadfile.FileName.Split('\\');
+            string path = "";
+            for (int i = 0; i < temp.Length - 1; i++)
+                path = path + temp[i] + "\\";
+
+            DataTable tempSource = loadItemCSV(loadfile.FileName);
+
+            string bank = "";
+            tempSource.DefaultView.Sort = "eng ASC";
+
+            for (int i = 0; i < tempSource.DefaultView.ToTable().Rows.Count; i++)
+            {
+                string recipeid = tempSource.DefaultView.ToTable().Rows[i].ItemArray[0].ToString();
+
+                bank = bank + Utilities.flip("16A2") + "0000" + Utilities.flip(recipeid) + "0000";
+            }
+
+            byte[] save = Utilities.stringToByte(bank);
+
+
+            SaveFileDialog savefile = new SaveFileDialog()
+            {
+                Filter = "New Horizons Bulk Spawn (*.nhbs)|*.nhbs",
+            };
+
+            if (savefile.ShowDialog() != DialogResult.OK)
+                return;
+
+            File.WriteAllBytes(savefile.FileName, save);
             if (sound)
                 System.Media.SystemSounds.Asterisk.Play();
         }

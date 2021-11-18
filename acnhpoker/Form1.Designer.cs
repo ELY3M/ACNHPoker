@@ -1,4 +1,5 @@
-﻿namespace ACNHPoker
+﻿//modded by ELY M.
+namespace ACNHPoker
 {
     partial class Form1
     {
@@ -180,6 +181,12 @@
             this.animationSpdx5 = new System.Windows.Forms.Button();
             this.setMaxBtn = new System.Windows.Forms.Button();
             this.pokeMainCheatPanel = new System.Windows.Forms.Panel();
+            this.maxSpeedX100Btn = new System.Windows.Forms.Button();
+            this.maxSpeedX2Btn = new System.Windows.Forms.Button();
+            this.maxSpeedX3Btn = new System.Windows.Forms.Button();
+            this.maxSpeedX5Btn = new System.Windows.Forms.Button();
+            this.maxSpeedX1Btn = new System.Windows.Forms.Button();
+            this.label30 = new System.Windows.Forms.Label();
             this.timePanel = new System.Windows.Forms.Panel();
             this.label28 = new System.Windows.Forms.Label();
             this.label27 = new System.Windows.Forms.Label();
@@ -191,16 +198,17 @@
             this.hourTextbox = new System.Windows.Forms.RichTextBox();
             this.monthTextbox = new System.Windows.Forms.RichTextBox();
             this.dayTextbox = new System.Windows.Forms.RichTextBox();
-            this.label20 = new System.Windows.Forms.Label();
             this.label23 = new System.Windows.Forms.Label();
             this.Label21 = new System.Windows.Forms.Label();
             this.label22 = new System.Windows.Forms.Label();
             this.selectedItem = new ACNHPoker.inventorySlot();
+            this.label20 = new System.Windows.Forms.Label();
             this.playerSelectorOther = new System.Windows.Forms.ComboBox();
             this.playerSelectorInventory = new System.Windows.Forms.ComboBox();
             this.saveBtn = new System.Windows.Forms.Button();
             this.loadBtn = new System.Windows.Forms.Button();
             this.inventoryLargePanel = new System.Windows.Forms.Panel();
+            this.freezerBtn = new System.Windows.Forms.Button();
             this.dodoHelperBtn = new System.Windows.Forms.Button();
             this.regeneratorBtn = new System.Windows.Forms.Button();
             this.favModeBtn = new System.Windows.Forms.Button();
@@ -293,6 +301,7 @@
             this.riverFishGridView = new System.Windows.Forms.DataGridView();
             this.btnToolTip = new System.Windows.Forms.ToolTip(this.components);
             this.villagerLargePanel = new System.Windows.Forms.Panel();
+            this.button7 = new System.Windows.Forms.Button();
             this.ignoreHeader = new System.Windows.Forms.CheckBox();
             this.overlay = new ACNHPoker.ExtendedPanel();
             this.PleaseWaitPanel = new System.Windows.Forms.Panel();
@@ -300,6 +309,7 @@
             this.VillagerProgressBar = new System.Windows.Forms.ProgressBar();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.label29 = new System.Windows.Forms.Label();
+            this.button20 = new System.Windows.Forms.Button();
             this.MysteryIslandToursLabel = new System.Windows.Forms.Label();
             this.RefreshVillagerBtn = new System.Windows.Forms.Button();
             this.CatchphraseLabel = new System.Windows.Forms.Label();
@@ -350,14 +360,13 @@
             this.createBtn = new System.Windows.Forms.Button();
             this.button6 = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
-            this.freezeBtn = new System.Windows.Forms.Button();
-            this.button7 = new System.Windows.Forms.Button();
-            this.button8 = new System.Windows.Forms.Button();
-            this.button9 = new System.Windows.Forms.Button();
             this.debugBtn = new System.Windows.Forms.Button();
             this.button5 = new System.Windows.Forms.Button();
             this.button14 = new System.Windows.Forms.Button();
             this.button16 = new System.Windows.Forms.Button();
+            this.button13 = new System.Windows.Forms.Button();
+            this.button18 = new System.Windows.Forms.Button();
+            this.button19 = new System.Windows.Forms.Button();
 			//elys mod
             this.Converttocheat = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -536,6 +545,7 @@
             this.customAmountTxt.Size = new System.Drawing.Size(243, 56);
             this.customAmountTxt.TabIndex = 35;
             this.customAmountTxt.Text = "1";
+            this.customAmountTxt.DoubleClick += new System.EventHandler(this.customAmountTxt_DoubleClick);
             this.customAmountTxt.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.customAmountTxt_KeyPress);
             this.customAmountTxt.KeyUp += new System.Windows.Forms.KeyEventHandler(this.customAmountTxt_KeyUp);
             // 
@@ -2412,7 +2422,7 @@
             this.speedX4Btn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.speedX4Btn.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.speedX4Btn.ForeColor = System.Drawing.Color.White;
-            this.speedX4Btn.Location = new System.Drawing.Point(8, 30);
+            this.speedX4Btn.Location = new System.Drawing.Point(1111, 902);
             this.speedX4Btn.Name = "speedX4Btn";
             this.speedX4Btn.Size = new System.Drawing.Size(75, 24);
             this.speedX4Btn.TabIndex = 150;
@@ -2430,7 +2440,7 @@
             this.speedX1Btn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.speedX1Btn.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.speedX1Btn.ForeColor = System.Drawing.Color.White;
-            this.speedX1Btn.Location = new System.Drawing.Point(251, 30);
+            this.speedX1Btn.Location = new System.Drawing.Point(1354, 902);
             this.speedX1Btn.Name = "speedX1Btn";
             this.speedX1Btn.Size = new System.Drawing.Size(75, 24);
             this.speedX1Btn.TabIndex = 151;
@@ -2442,7 +2452,6 @@
             // disableCollisionBtn
             // 
             this.disableCollisionBtn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(114)))), ((int)(((byte)(137)))), ((int)(((byte)(218)))));
-            this.disableCollisionBtn.Enabled = false;
             this.disableCollisionBtn.FlatAppearance.BorderSize = 0;
             this.disableCollisionBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.disableCollisionBtn.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -2460,7 +2469,6 @@
             // enableCollisionBtn
             // 
             this.enableCollisionBtn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(80)))), ((int)(((byte)(80)))), ((int)(((byte)(255)))));
-            this.enableCollisionBtn.Enabled = false;
             this.enableCollisionBtn.FlatAppearance.BorderSize = 0;
             this.enableCollisionBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.enableCollisionBtn.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -2709,7 +2717,7 @@
             this.LoadHouseBtn.TabIndex = 207;
             this.LoadHouseBtn.Tag = "";
             this.LoadHouseBtn.Text = "Load House";
-            this.formToolTip.SetToolTip(this.LoadHouseBtn, "Load house from a .nhvh file and replace the selected villager\'s one.\r\n");
+            this.formToolTip.SetToolTip(this.LoadHouseBtn, "Load house from a .nhvh2 file and replace the selected villager\'s one.\r\n");
             this.LoadHouseBtn.UseVisualStyleBackColor = false;
             this.LoadHouseBtn.Click += new System.EventHandler(this.LoadHouseBtn_Click);
             // 
@@ -2831,7 +2839,7 @@
             this.DumpHouseBtn.TabIndex = 200;
             this.DumpHouseBtn.Tag = "";
             this.DumpHouseBtn.Text = "Dump House";
-            this.formToolTip.SetToolTip(this.DumpHouseBtn, "Save the selected villager\'s house to a .nhvh file.\r\n");
+            this.formToolTip.SetToolTip(this.DumpHouseBtn, "Save the selected villager\'s house to a .nhvh2 file.\r\n");
             this.DumpHouseBtn.UseVisualStyleBackColor = false;
             this.DumpHouseBtn.Click += new System.EventHandler(this.DumpHouseBtn_Click);
             // 
@@ -2843,7 +2851,7 @@
             this.speedX2Btn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.speedX2Btn.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.speedX2Btn.ForeColor = System.Drawing.Color.White;
-            this.speedX2Btn.Location = new System.Drawing.Point(170, 30);
+            this.speedX2Btn.Location = new System.Drawing.Point(1273, 902);
             this.speedX2Btn.Name = "speedX2Btn";
             this.speedX2Btn.Size = new System.Drawing.Size(75, 24);
             this.speedX2Btn.TabIndex = 168;
@@ -2860,7 +2868,7 @@
             this.speedX3Btn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.speedX3Btn.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.speedX3Btn.ForeColor = System.Drawing.Color.White;
-            this.speedX3Btn.Location = new System.Drawing.Point(89, 30);
+            this.speedX3Btn.Location = new System.Drawing.Point(1192, 902);
             this.speedX3Btn.Name = "speedX3Btn";
             this.speedX3Btn.Size = new System.Drawing.Size(75, 24);
             this.speedX3Btn.TabIndex = 169;
@@ -2904,17 +2912,18 @@
             // 
             // pokeMainCheatPanel
             // 
+            this.pokeMainCheatPanel.Controls.Add(this.maxSpeedX100Btn);
+            this.pokeMainCheatPanel.Controls.Add(this.maxSpeedX2Btn);
+            this.pokeMainCheatPanel.Controls.Add(this.maxSpeedX3Btn);
+            this.pokeMainCheatPanel.Controls.Add(this.maxSpeedX5Btn);
+            this.pokeMainCheatPanel.Controls.Add(this.maxSpeedX1Btn);
+            this.pokeMainCheatPanel.Controls.Add(this.label30);
             this.pokeMainCheatPanel.Controls.Add(this.animationSpdx5);
-            this.pokeMainCheatPanel.Controls.Add(this.speedX3Btn);
-            this.pokeMainCheatPanel.Controls.Add(this.speedX2Btn);
             this.pokeMainCheatPanel.Controls.Add(this.timePanel);
-            this.pokeMainCheatPanel.Controls.Add(this.label20);
             this.pokeMainCheatPanel.Controls.Add(this.label23);
             this.pokeMainCheatPanel.Controls.Add(this.unfreezeTimeBtn);
-            this.pokeMainCheatPanel.Controls.Add(this.speedX4Btn);
             this.pokeMainCheatPanel.Controls.Add(this.animationSpdx50);
             this.pokeMainCheatPanel.Controls.Add(this.freezeTimeBtn);
-            this.pokeMainCheatPanel.Controls.Add(this.speedX1Btn);
             this.pokeMainCheatPanel.Controls.Add(this.animationSpdx2);
             this.pokeMainCheatPanel.Controls.Add(this.Label21);
             this.pokeMainCheatPanel.Controls.Add(this.animationSpdx1);
@@ -2927,6 +2936,101 @@
             this.pokeMainCheatPanel.Size = new System.Drawing.Size(702, 197);
             this.pokeMainCheatPanel.TabIndex = 161;
             this.formToolTip.SetToolTip(this.pokeMainCheatPanel, resources.GetString("pokeMainCheatPanel.ToolTip"));
+            // 
+            // maxSpeedX100Btn
+            // 
+            this.maxSpeedX100Btn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(114)))), ((int)(((byte)(137)))), ((int)(((byte)(218)))));
+            this.maxSpeedX100Btn.FlatAppearance.BorderSize = 0;
+            this.maxSpeedX100Btn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.maxSpeedX100Btn.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.maxSpeedX100Btn.ForeColor = System.Drawing.Color.White;
+            this.maxSpeedX100Btn.Location = new System.Drawing.Point(6, 30);
+            this.maxSpeedX100Btn.Name = "maxSpeedX100Btn";
+            this.maxSpeedX100Btn.Size = new System.Drawing.Size(60, 24);
+            this.maxSpeedX100Btn.TabIndex = 176;
+            this.maxSpeedX100Btn.Text = "x100";
+            this.formToolTip.SetToolTip(this.maxSpeedX100Btn, "Change maximum walk speed to x100.\r\nYou can still hold the B button to move at no" +
+        "rmal run speed.\r\n\r\nSonic Boom! (Save the planet from disaster)");
+            this.maxSpeedX100Btn.UseVisualStyleBackColor = false;
+            this.maxSpeedX100Btn.Click += new System.EventHandler(this.maxSpeedX100Btn_Click);
+            // 
+            // maxSpeedX2Btn
+            // 
+            this.maxSpeedX2Btn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(114)))), ((int)(((byte)(137)))), ((int)(((byte)(218)))));
+            this.maxSpeedX2Btn.FlatAppearance.BorderSize = 0;
+            this.maxSpeedX2Btn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.maxSpeedX2Btn.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.maxSpeedX2Btn.ForeColor = System.Drawing.Color.White;
+            this.maxSpeedX2Btn.Location = new System.Drawing.Point(201, 30);
+            this.maxSpeedX2Btn.Name = "maxSpeedX2Btn";
+            this.maxSpeedX2Btn.Size = new System.Drawing.Size(60, 24);
+            this.maxSpeedX2Btn.TabIndex = 174;
+            this.maxSpeedX2Btn.Text = "x2";
+            this.formToolTip.SetToolTip(this.maxSpeedX2Btn, "Change maximum walk speed to x2.\r\nYou can still hold the B button to move at norm" +
+        "al run speed.\r\n\r\nMovin\' at speed of sound!");
+            this.maxSpeedX2Btn.UseVisualStyleBackColor = false;
+            this.maxSpeedX2Btn.Click += new System.EventHandler(this.maxSpeedX2Btn_Click);
+            // 
+            // maxSpeedX3Btn
+            // 
+            this.maxSpeedX3Btn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(114)))), ((int)(((byte)(137)))), ((int)(((byte)(218)))));
+            this.maxSpeedX3Btn.FlatAppearance.BorderSize = 0;
+            this.maxSpeedX3Btn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.maxSpeedX3Btn.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.maxSpeedX3Btn.ForeColor = System.Drawing.Color.White;
+            this.maxSpeedX3Btn.Location = new System.Drawing.Point(136, 30);
+            this.maxSpeedX3Btn.Name = "maxSpeedX3Btn";
+            this.maxSpeedX3Btn.Size = new System.Drawing.Size(60, 24);
+            this.maxSpeedX3Btn.TabIndex = 175;
+            this.maxSpeedX3Btn.Text = "x3";
+            this.formToolTip.SetToolTip(this.maxSpeedX3Btn, "Change maximum walk speed to x3.\r\nYou can still hold the B button to move at norm" +
+        "al run speed.\r\n\r\nGotta go fast, gotta go fast!");
+            this.maxSpeedX3Btn.UseVisualStyleBackColor = false;
+            this.maxSpeedX3Btn.Click += new System.EventHandler(this.maxSpeedX3Btn_Click);
+            // 
+            // maxSpeedX5Btn
+            // 
+            this.maxSpeedX5Btn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(114)))), ((int)(((byte)(137)))), ((int)(((byte)(218)))));
+            this.maxSpeedX5Btn.FlatAppearance.BorderSize = 0;
+            this.maxSpeedX5Btn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.maxSpeedX5Btn.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.maxSpeedX5Btn.ForeColor = System.Drawing.Color.White;
+            this.maxSpeedX5Btn.Location = new System.Drawing.Point(71, 30);
+            this.maxSpeedX5Btn.Name = "maxSpeedX5Btn";
+            this.maxSpeedX5Btn.Size = new System.Drawing.Size(60, 24);
+            this.maxSpeedX5Btn.TabIndex = 172;
+            this.maxSpeedX5Btn.Text = "x5";
+            this.formToolTip.SetToolTip(this.maxSpeedX5Btn, "Change maximum walk speed to x5.\r\nYou can still hold the B button to move at norm" +
+        "al run speed.\r\n\r\nGotta go faster, faster, faster, faster, faster!");
+            this.maxSpeedX5Btn.UseVisualStyleBackColor = false;
+            this.maxSpeedX5Btn.Click += new System.EventHandler(this.maxSpeedX5Btn_Click);
+            // 
+            // maxSpeedX1Btn
+            // 
+            this.maxSpeedX1Btn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(80)))), ((int)(((byte)(80)))), ((int)(((byte)(255)))));
+            this.maxSpeedX1Btn.FlatAppearance.BorderSize = 0;
+            this.maxSpeedX1Btn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.maxSpeedX1Btn.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.maxSpeedX1Btn.ForeColor = System.Drawing.Color.White;
+            this.maxSpeedX1Btn.Location = new System.Drawing.Point(266, 30);
+            this.maxSpeedX1Btn.Name = "maxSpeedX1Btn";
+            this.maxSpeedX1Btn.Size = new System.Drawing.Size(60, 24);
+            this.maxSpeedX1Btn.TabIndex = 173;
+            this.maxSpeedX1Btn.Text = "x1";
+            this.formToolTip.SetToolTip(this.maxSpeedX1Btn, "Reset maximum walk speed to normal.\r\n\r\nWhen life is going way too fast...");
+            this.maxSpeedX1Btn.UseVisualStyleBackColor = false;
+            this.maxSpeedX1Btn.Click += new System.EventHandler(this.maxSpeedX1Btn_Click);
+            // 
+            // label30
+            // 
+            this.label30.AutoSize = true;
+            this.label30.Font = new System.Drawing.Font("Arial", 14F, System.Drawing.FontStyle.Bold);
+            this.label30.ForeColor = System.Drawing.Color.Gainsboro;
+            this.label30.Location = new System.Drawing.Point(4, 4);
+            this.label30.Name = "label30";
+            this.label30.Size = new System.Drawing.Size(173, 22);
+            this.label30.TabIndex = 171;
+            this.label30.Text = "Max Walk Speed :";
             // 
             // timePanel
             // 
@@ -3079,17 +3183,6 @@
             this.dayTextbox.TabIndex = 164;
             this.dayTextbox.Text = "Day";
             // 
-            // label20
-            // 
-            this.label20.AutoSize = true;
-            this.label20.Font = new System.Drawing.Font("Arial", 14F, System.Drawing.FontStyle.Bold);
-            this.label20.ForeColor = System.Drawing.Color.Gainsboro;
-            this.label20.Location = new System.Drawing.Point(3, 4);
-            this.label20.Name = "label20";
-            this.label20.Size = new System.Drawing.Size(129, 22);
-            this.label20.TabIndex = 149;
-            this.label20.Text = "Walk Speed :";
-            // 
             // label23
             // 
             this.label23.AutoSize = true;
@@ -3143,6 +3236,17 @@
             this.formToolTip.SetToolTip(this.selectedItem, "Click to spawn selected item.");
             this.selectedItem.UseVisualStyleBackColor = false;
             this.selectedItem.Click += new System.EventHandler(this.selectedItem_Click);
+            // 
+            // label20
+            // 
+            this.label20.AutoSize = true;
+            this.label20.Font = new System.Drawing.Font("Arial", 14F, System.Drawing.FontStyle.Bold);
+            this.label20.ForeColor = System.Drawing.Color.Gainsboro;
+            this.label20.Location = new System.Drawing.Point(1106, 876);
+            this.label20.Name = "label20";
+            this.label20.Size = new System.Drawing.Size(129, 22);
+            this.label20.TabIndex = 149;
+            this.label20.Text = "Walk Speed :";
             // 
             // playerSelectorOther
             // 
@@ -3237,6 +3341,7 @@
             this.inventoryLargePanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(54)))), ((int)(((byte)(57)))), ((int)(((byte)(63)))));
             //elys mod
 			this.inventoryLargePanel.Controls.Add(this.Converttocheat);
+            this.inventoryLargePanel.Controls.Add(this.freezerBtn);
             this.inventoryLargePanel.Controls.Add(this.dodoHelperBtn);
             this.inventoryLargePanel.Controls.Add(this.regeneratorBtn);
             this.inventoryLargePanel.Controls.Add(this.favModeBtn);
@@ -3281,6 +3386,22 @@
             this.inventoryLargePanel.Size = new System.Drawing.Size(1225, 550);
             this.inventoryLargePanel.TabIndex = 91;
             // 
+            // freezerBtn
+            // 
+            this.freezerBtn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(114)))), ((int)(((byte)(137)))), ((int)(((byte)(218)))));
+            this.freezerBtn.FlatAppearance.BorderSize = 0;
+            this.freezerBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.freezerBtn.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Bold);
+            this.freezerBtn.ForeColor = System.Drawing.Color.White;
+            this.freezerBtn.Location = new System.Drawing.Point(365, 25);
+            this.freezerBtn.Name = "freezerBtn";
+            this.freezerBtn.Size = new System.Drawing.Size(98, 24);
+            this.freezerBtn.TabIndex = 241;
+            this.freezerBtn.Text = "Freezer";
+            this.freezerBtn.UseVisualStyleBackColor = false;
+            this.freezerBtn.Visible = false;
+            this.freezerBtn.Click += new System.EventHandler(this.freezerBtn_Click);
+            // 
             // dodoHelperBtn
             // 
             this.dodoHelperBtn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(114)))), ((int)(((byte)(137)))), ((int)(((byte)(218)))));
@@ -3288,9 +3409,9 @@
             this.dodoHelperBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.dodoHelperBtn.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Bold);
             this.dodoHelperBtn.ForeColor = System.Drawing.Color.White;
-            this.dodoHelperBtn.Location = new System.Drawing.Point(371, 2);
+            this.dodoHelperBtn.Location = new System.Drawing.Point(464, 25);
             this.dodoHelperBtn.Name = "dodoHelperBtn";
-            this.dodoHelperBtn.Size = new System.Drawing.Size(99, 23);
+            this.dodoHelperBtn.Size = new System.Drawing.Size(99, 24);
             this.dodoHelperBtn.TabIndex = 171;
             this.dodoHelperBtn.Text = "Dodo Helper";
             this.dodoHelperBtn.UseVisualStyleBackColor = false;
@@ -3378,9 +3499,9 @@
             this.mapDropperBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.mapDropperBtn.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Bold);
             this.mapDropperBtn.ForeColor = System.Drawing.Color.White;
-            this.mapDropperBtn.Location = new System.Drawing.Point(265, 1);
+            this.mapDropperBtn.Location = new System.Drawing.Point(265, 0);
             this.mapDropperBtn.Name = "mapDropperBtn";
-            this.mapDropperBtn.Size = new System.Drawing.Size(99, 23);
+            this.mapDropperBtn.Size = new System.Drawing.Size(99, 24);
             this.mapDropperBtn.TabIndex = 169;
             this.mapDropperBtn.Text = "Map Dropper";
             this.mapDropperBtn.UseVisualStyleBackColor = false;
@@ -3861,17 +3982,49 @@
             "44: Ta-da",
             "45: Wave Goodbye",
             "46: Excited",
-            "47: Confetti",
-            "48: Viva",
-            "49: Let\'s Go",
-            "4A: Feelin\' It",
-            "4B: Gulliver (Unused)",
-            "4C: Wasp (Unused)",
+            "47: Confetti (Festivale)",
+            "48: Viva (Festivale)",
+            "49: Let\'s Go (Festivale)",
+            "4A: Feelin\' It (Festivale)",
+            "4B: Raised Fist (Unused) ",
+            "4C: Say Cheese ",
+            "4D: Eager ",
+            "4E: Posture Warm-Up ",
+            "4F: Arm Circles ",
+            "50: Side Bends ",
+            "51: Body Twists ",
+            "52: Wide Arm Stretch ",
+            "53: Upper-Body Circles ",
+            "54: Jump ",
+            "55: Hula ",
+            "56: Double Wave ",
+            "57: Listening Ears ",
+            "58: Flex ",
+            "59: Jammin\' ",
+            "5A: Stretch ",
+            "5B: Behold ",
+            "5C: Work It ",
+            "5D: Act Natural ",
+            "5E: Grooving Hop ",
+            "5F: Groove Right ",
+            "60: Groove Left ",
+            "61: Soak It In ",
+            "62: Shimmy ",
+            "63: Airplane ",
+            "64: Twisty Dance ",
+            "65: Arm-Swing Dance ",
+            "66: Island Stomp ",
+            "67: Side-To-Side ",
+            "68: Turnip Patch ",
+            "69: Laughing (Unused) ",
+            "6A: Content (Unused) ",
+            "6B: Gulliver (Unused)",
+            "6C: Wasp (Unused)",
             "4D: Forehead (Unused)",
             "4E: Orville (Unused)",
-            "4F: K.K. Slider Sitting (Unused)",
-            "50: K.K. nodding while sitting (Unused)",
-            "51: K.K. thinking while sitting (Unused)"});
+            "6F: K.K. Slider Sitting (Unused)",
+            "70: K.K. nodding while sitting (Unused)",
+            "71: K.K. thinking while sitting (Unused)"});
             this.reactionSlot2.Location = new System.Drawing.Point(807, 82);
             this.reactionSlot2.Name = "reactionSlot2";
             this.reactionSlot2.Size = new System.Drawing.Size(255, 24);
@@ -3957,17 +4110,49 @@
             "44: Ta-da",
             "45: Wave Goodbye",
             "46: Excited",
-            "47: Confetti",
-            "48: Viva",
-            "49: Let\'s Go",
-            "4A: Feelin\' It",
-            "4B: Gulliver (Unused)",
-            "4C: Wasp (Unused)",
+            "47: Confetti (Festivale)",
+            "48: Viva (Festivale)",
+            "49: Let\'s Go (Festivale)",
+            "4A: Feelin\' It (Festivale)",
+            "4B: Raised Fist (Unused) ",
+            "4C: Say Cheese ",
+            "4D: Eager ",
+            "4E: Posture Warm-Up ",
+            "4F: Arm Circles ",
+            "50: Side Bends ",
+            "51: Body Twists ",
+            "52: Wide Arm Stretch ",
+            "53: Upper-Body Circles ",
+            "54: Jump ",
+            "55: Hula ",
+            "56: Double Wave ",
+            "57: Listening Ears ",
+            "58: Flex ",
+            "59: Jammin\' ",
+            "5A: Stretch ",
+            "5B: Behold ",
+            "5C: Work It ",
+            "5D: Act Natural ",
+            "5E: Grooving Hop ",
+            "5F: Groove Right ",
+            "60: Groove Left ",
+            "61: Soak It In ",
+            "62: Shimmy ",
+            "63: Airplane ",
+            "64: Twisty Dance ",
+            "65: Arm-Swing Dance ",
+            "66: Island Stomp ",
+            "67: Side-To-Side ",
+            "68: Turnip Patch ",
+            "69: Laughing (Unused) ",
+            "6A: Content (Unused) ",
+            "6B: Gulliver (Unused)",
+            "6C: Wasp (Unused)",
             "4D: Forehead (Unused)",
             "4E: Orville (Unused)",
-            "4F: K.K. Slider Sitting (Unused)",
-            "50: K.K. nodding while sitting (Unused)",
-            "51: K.K. thinking while sitting (Unused)"});
+            "6F: K.K. Slider Sitting (Unused)",
+            "70: K.K. nodding while sitting (Unused)",
+            "71: K.K. thinking while sitting (Unused)"});
             this.reactionSlot3.Location = new System.Drawing.Point(872, 124);
             this.reactionSlot3.Name = "reactionSlot3";
             this.reactionSlot3.Size = new System.Drawing.Size(255, 24);
@@ -4053,17 +4238,49 @@
             "44: Ta-da",
             "45: Wave Goodbye",
             "46: Excited",
-            "47: Confetti",
-            "48: Viva",
-            "49: Let\'s Go",
-            "4A: Feelin\' It",
-            "4B: Gulliver (Unused)",
-            "4C: Wasp (Unused)",
+            "47: Confetti (Festivale)",
+            "48: Viva (Festivale)",
+            "49: Let\'s Go (Festivale)",
+            "4A: Feelin\' It (Festivale)",
+            "4B: Raised Fist (Unused) ",
+            "4C: Say Cheese ",
+            "4D: Eager ",
+            "4E: Posture Warm-Up ",
+            "4F: Arm Circles ",
+            "50: Side Bends ",
+            "51: Body Twists ",
+            "52: Wide Arm Stretch ",
+            "53: Upper-Body Circles ",
+            "54: Jump ",
+            "55: Hula ",
+            "56: Double Wave ",
+            "57: Listening Ears ",
+            "58: Flex ",
+            "59: Jammin\' ",
+            "5A: Stretch ",
+            "5B: Behold ",
+            "5C: Work It ",
+            "5D: Act Natural ",
+            "5E: Grooving Hop ",
+            "5F: Groove Right ",
+            "60: Groove Left ",
+            "61: Soak It In ",
+            "62: Shimmy ",
+            "63: Airplane ",
+            "64: Twisty Dance ",
+            "65: Arm-Swing Dance ",
+            "66: Island Stomp ",
+            "67: Side-To-Side ",
+            "68: Turnip Patch ",
+            "69: Laughing (Unused) ",
+            "6A: Content (Unused) ",
+            "6B: Gulliver (Unused)",
+            "6C: Wasp (Unused)",
             "4D: Forehead (Unused)",
             "4E: Orville (Unused)",
-            "4F: K.K. Slider Sitting (Unused)",
-            "50: K.K. nodding while sitting (Unused)",
-            "51: K.K. thinking while sitting (Unused)"});
+            "6F: K.K. Slider Sitting (Unused)",
+            "70: K.K. nodding while sitting (Unused)",
+            "71: K.K. thinking while sitting (Unused)"});
             this.reactionSlot4.Location = new System.Drawing.Point(807, 166);
             this.reactionSlot4.Name = "reactionSlot4";
             this.reactionSlot4.Size = new System.Drawing.Size(255, 24);
@@ -4149,17 +4366,49 @@
             "44: Ta-da",
             "45: Wave Goodbye",
             "46: Excited",
-            "47: Confetti",
-            "48: Viva",
-            "49: Let\'s Go",
-            "4A: Feelin\' It",
-            "4B: Gulliver (Unused)",
-            "4C: Wasp (Unused)",
+            "47: Confetti (Festivale)",
+            "48: Viva (Festivale)",
+            "49: Let\'s Go (Festivale)",
+            "4A: Feelin\' It (Festivale)",
+            "4B: Raised Fist (Unused) ",
+            "4C: Say Cheese ",
+            "4D: Eager ",
+            "4E: Posture Warm-Up ",
+            "4F: Arm Circles ",
+            "50: Side Bends ",
+            "51: Body Twists ",
+            "52: Wide Arm Stretch ",
+            "53: Upper-Body Circles ",
+            "54: Jump ",
+            "55: Hula ",
+            "56: Double Wave ",
+            "57: Listening Ears ",
+            "58: Flex ",
+            "59: Jammin\' ",
+            "5A: Stretch ",
+            "5B: Behold ",
+            "5C: Work It ",
+            "5D: Act Natural ",
+            "5E: Grooving Hop ",
+            "5F: Groove Right ",
+            "60: Groove Left ",
+            "61: Soak It In ",
+            "62: Shimmy ",
+            "63: Airplane ",
+            "64: Twisty Dance ",
+            "65: Arm-Swing Dance ",
+            "66: Island Stomp ",
+            "67: Side-To-Side ",
+            "68: Turnip Patch ",
+            "69: Laughing (Unused) ",
+            "6A: Content (Unused) ",
+            "6B: Gulliver (Unused)",
+            "6C: Wasp (Unused)",
             "4D: Forehead (Unused)",
             "4E: Orville (Unused)",
-            "4F: K.K. Slider Sitting (Unused)",
-            "50: K.K. nodding while sitting (Unused)",
-            "51: K.K. thinking while sitting (Unused)"});
+            "6F: K.K. Slider Sitting (Unused)",
+            "70: K.K. nodding while sitting (Unused)",
+            "71: K.K. thinking while sitting (Unused)"});
             this.reactionSlot1.Location = new System.Drawing.Point(638, 37);
             this.reactionSlot1.Name = "reactionSlot1";
             this.reactionSlot1.Size = new System.Drawing.Size(255, 24);
@@ -4245,17 +4494,49 @@
             "44: Ta-da",
             "45: Wave Goodbye",
             "46: Excited",
-            "47: Confetti",
-            "48: Viva",
-            "49: Let\'s Go",
-            "4A: Feelin\' It",
-            "4B: Gulliver (Unused)",
-            "4C: Wasp (Unused)",
+            "47: Confetti (Festivale)",
+            "48: Viva (Festivale)",
+            "49: Let\'s Go (Festivale)",
+            "4A: Feelin\' It (Festivale)",
+            "4B: Raised Fist (Unused) ",
+            "4C: Say Cheese ",
+            "4D: Eager ",
+            "4E: Posture Warm-Up ",
+            "4F: Arm Circles ",
+            "50: Side Bends ",
+            "51: Body Twists ",
+            "52: Wide Arm Stretch ",
+            "53: Upper-Body Circles ",
+            "54: Jump ",
+            "55: Hula ",
+            "56: Double Wave ",
+            "57: Listening Ears ",
+            "58: Flex ",
+            "59: Jammin\' ",
+            "5A: Stretch ",
+            "5B: Behold ",
+            "5C: Work It ",
+            "5D: Act Natural ",
+            "5E: Grooving Hop ",
+            "5F: Groove Right ",
+            "60: Groove Left ",
+            "61: Soak It In ",
+            "62: Shimmy ",
+            "63: Airplane ",
+            "64: Twisty Dance ",
+            "65: Arm-Swing Dance ",
+            "66: Island Stomp ",
+            "67: Side-To-Side ",
+            "68: Turnip Patch ",
+            "69: Laughing (Unused) ",
+            "6A: Content (Unused) ",
+            "6B: Gulliver (Unused)",
+            "6C: Wasp (Unused)",
             "4D: Forehead (Unused)",
             "4E: Orville (Unused)",
-            "4F: K.K. Slider Sitting (Unused)",
-            "50: K.K. nodding while sitting (Unused)",
-            "51: K.K. thinking while sitting (Unused)"});
+            "6F: K.K. Slider Sitting (Unused)",
+            "70: K.K. nodding while sitting (Unused)",
+            "71: K.K. thinking while sitting (Unused)"});
             this.reactionSlot8.Location = new System.Drawing.Point(482, 82);
             this.reactionSlot8.Name = "reactionSlot8";
             this.reactionSlot8.Size = new System.Drawing.Size(255, 24);
@@ -4341,17 +4622,49 @@
             "44: Ta-da",
             "45: Wave Goodbye",
             "46: Excited",
-            "47: Confetti",
-            "48: Viva",
-            "49: Let\'s Go",
-            "4A: Feelin\' It",
-            "4B: Gulliver (Unused)",
-            "4C: Wasp (Unused)",
+            "47: Confetti (Festivale)",
+            "48: Viva (Festivale)",
+            "49: Let\'s Go (Festivale)",
+            "4A: Feelin\' It (Festivale)",
+            "4B: Raised Fist (Unused) ",
+            "4C: Say Cheese ",
+            "4D: Eager ",
+            "4E: Posture Warm-Up ",
+            "4F: Arm Circles ",
+            "50: Side Bends ",
+            "51: Body Twists ",
+            "52: Wide Arm Stretch ",
+            "53: Upper-Body Circles ",
+            "54: Jump ",
+            "55: Hula ",
+            "56: Double Wave ",
+            "57: Listening Ears ",
+            "58: Flex ",
+            "59: Jammin\' ",
+            "5A: Stretch ",
+            "5B: Behold ",
+            "5C: Work It ",
+            "5D: Act Natural ",
+            "5E: Grooving Hop ",
+            "5F: Groove Right ",
+            "60: Groove Left ",
+            "61: Soak It In ",
+            "62: Shimmy ",
+            "63: Airplane ",
+            "64: Twisty Dance ",
+            "65: Arm-Swing Dance ",
+            "66: Island Stomp ",
+            "67: Side-To-Side ",
+            "68: Turnip Patch ",
+            "69: Laughing (Unused) ",
+            "6A: Content (Unused) ",
+            "6B: Gulliver (Unused)",
+            "6C: Wasp (Unused)",
             "4D: Forehead (Unused)",
             "4E: Orville (Unused)",
-            "4F: K.K. Slider Sitting (Unused)",
-            "50: K.K. nodding while sitting (Unused)",
-            "51: K.K. thinking while sitting (Unused)"});
+            "6F: K.K. Slider Sitting (Unused)",
+            "70: K.K. nodding while sitting (Unused)",
+            "71: K.K. thinking while sitting (Unused)"});
             this.reactionSlot7.Location = new System.Drawing.Point(425, 125);
             this.reactionSlot7.Name = "reactionSlot7";
             this.reactionSlot7.Size = new System.Drawing.Size(255, 24);
@@ -4437,17 +4750,49 @@
             "44: Ta-da",
             "45: Wave Goodbye",
             "46: Excited",
-            "47: Confetti",
-            "48: Viva",
-            "49: Let\'s Go",
-            "4A: Feelin\' It",
-            "4B: Gulliver (Unused)",
-            "4C: Wasp (Unused)",
+            "47: Confetti (Festivale)",
+            "48: Viva (Festivale)",
+            "49: Let\'s Go (Festivale)",
+            "4A: Feelin\' It (Festivale)",
+            "4B: Raised Fist (Unused) ",
+            "4C: Say Cheese ",
+            "4D: Eager ",
+            "4E: Posture Warm-Up ",
+            "4F: Arm Circles ",
+            "50: Side Bends ",
+            "51: Body Twists ",
+            "52: Wide Arm Stretch ",
+            "53: Upper-Body Circles ",
+            "54: Jump ",
+            "55: Hula ",
+            "56: Double Wave ",
+            "57: Listening Ears ",
+            "58: Flex ",
+            "59: Jammin\' ",
+            "5A: Stretch ",
+            "5B: Behold ",
+            "5C: Work It ",
+            "5D: Act Natural ",
+            "5E: Grooving Hop ",
+            "5F: Groove Right ",
+            "60: Groove Left ",
+            "61: Soak It In ",
+            "62: Shimmy ",
+            "63: Airplane ",
+            "64: Twisty Dance ",
+            "65: Arm-Swing Dance ",
+            "66: Island Stomp ",
+            "67: Side-To-Side ",
+            "68: Turnip Patch ",
+            "69: Laughing (Unused) ",
+            "6A: Content (Unused) ",
+            "6B: Gulliver (Unused)",
+            "6C: Wasp (Unused)",
             "4D: Forehead (Unused)",
             "4E: Orville (Unused)",
-            "4F: K.K. Slider Sitting (Unused)",
-            "50: K.K. nodding while sitting (Unused)",
-            "51: K.K. thinking while sitting (Unused)"});
+            "6F: K.K. Slider Sitting (Unused)",
+            "70: K.K. nodding while sitting (Unused)",
+            "71: K.K. thinking while sitting (Unused)"});
             this.reactionSlot6.Location = new System.Drawing.Point(482, 166);
             this.reactionSlot6.Name = "reactionSlot6";
             this.reactionSlot6.Size = new System.Drawing.Size(255, 24);
@@ -4533,17 +4878,49 @@
             "44: Ta-da",
             "45: Wave Goodbye",
             "46: Excited",
-            "47: Confetti",
-            "48: Viva",
-            "49: Let\'s Go",
-            "4A: Feelin\' It",
-            "4B: Gulliver (Unused)",
-            "4C: Wasp (Unused)",
+            "47: Confetti (Festivale)",
+            "48: Viva (Festivale)",
+            "49: Let\'s Go (Festivale)",
+            "4A: Feelin\' It (Festivale)",
+            "4B: Raised Fist (Unused) ",
+            "4C: Say Cheese ",
+            "4D: Eager ",
+            "4E: Posture Warm-Up ",
+            "4F: Arm Circles ",
+            "50: Side Bends ",
+            "51: Body Twists ",
+            "52: Wide Arm Stretch ",
+            "53: Upper-Body Circles ",
+            "54: Jump ",
+            "55: Hula ",
+            "56: Double Wave ",
+            "57: Listening Ears ",
+            "58: Flex ",
+            "59: Jammin\' ",
+            "5A: Stretch ",
+            "5B: Behold ",
+            "5C: Work It ",
+            "5D: Act Natural ",
+            "5E: Grooving Hop ",
+            "5F: Groove Right ",
+            "60: Groove Left ",
+            "61: Soak It In ",
+            "62: Shimmy ",
+            "63: Airplane ",
+            "64: Twisty Dance ",
+            "65: Arm-Swing Dance ",
+            "66: Island Stomp ",
+            "67: Side-To-Side ",
+            "68: Turnip Patch ",
+            "69: Laughing (Unused) ",
+            "6A: Content (Unused) ",
+            "6B: Gulliver (Unused)",
+            "6C: Wasp (Unused)",
             "4D: Forehead (Unused)",
             "4E: Orville (Unused)",
-            "4F: K.K. Slider Sitting (Unused)",
-            "50: K.K. nodding while sitting (Unused)",
-            "51: K.K. thinking while sitting (Unused)"});
+            "6F: K.K. Slider Sitting (Unused)",
+            "70: K.K. nodding while sitting (Unused)",
+            "71: K.K. thinking while sitting (Unused)"});
             this.reactionSlot5.Location = new System.Drawing.Point(638, 209);
             this.reactionSlot5.Name = "reactionSlot5";
             this.reactionSlot5.Size = new System.Drawing.Size(255, 24);
@@ -5297,9 +5674,11 @@
             // 
             // villagerLargePanel
             // 
+            this.villagerLargePanel.Controls.Add(this.button7);
             this.villagerLargePanel.Controls.Add(this.ignoreHeader);
             this.villagerLargePanel.Controls.Add(this.overlay);
             this.villagerLargePanel.Controls.Add(this.PleaseWaitPanel);
+            this.villagerLargePanel.Controls.Add(this.button20);
             this.villagerLargePanel.Controls.Add(this.MysteryIslandToursLabel);
             this.villagerLargePanel.Controls.Add(this.RefreshVillagerBtn);
             this.villagerLargePanel.Controls.Add(this.CatchphraseLabel);
@@ -5328,10 +5707,25 @@
             this.villagerLargePanel.Size = new System.Drawing.Size(1220, 550);
             this.villagerLargePanel.TabIndex = 164;
             // 
+            // button7
+            // 
+            this.button7.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(114)))), ((int)(((byte)(137)))), ((int)(((byte)(218)))));
+            this.button7.FlatAppearance.BorderSize = 0;
+            this.button7.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button7.Font = new System.Drawing.Font("Arial", 7F, System.Drawing.FontStyle.Bold);
+            this.button7.ForeColor = System.Drawing.Color.White;
+            this.button7.Location = new System.Drawing.Point(915, 520);
+            this.button7.Name = "button7";
+            this.button7.Size = new System.Drawing.Size(66, 23);
+            this.button7.TabIndex = 247;
+            this.button7.Text = "UpHouse";
+            this.button7.UseVisualStyleBackColor = false;
+            this.button7.Click += new System.EventHandler(this.house_Click);
+            // 
             // ignoreHeader
             // 
             this.ignoreHeader.AutoSize = true;
-            this.ignoreHeader.Location = new System.Drawing.Point(1162, 526);
+            this.ignoreHeader.Location = new System.Drawing.Point(822, 525);
             this.ignoreHeader.Name = "ignoreHeader";
             this.ignoreHeader.Size = new System.Drawing.Size(15, 14);
             this.ignoreHeader.TabIndex = 216;
@@ -5406,6 +5800,21 @@
             this.label29.Text = "Please Wait...";
             this.label29.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
+            // button20
+            // 
+            this.button20.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(114)))), ((int)(((byte)(137)))), ((int)(((byte)(218)))));
+            this.button20.FlatAppearance.BorderSize = 0;
+            this.button20.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button20.Font = new System.Drawing.Font("Arial", 7F, System.Drawing.FontStyle.Bold);
+            this.button20.ForeColor = System.Drawing.Color.White;
+            this.button20.Location = new System.Drawing.Point(843, 520);
+            this.button20.Name = "button20";
+            this.button20.Size = new System.Drawing.Size(66, 23);
+            this.button20.TabIndex = 246;
+            this.button20.Text = "UpVillager";
+            this.button20.UseVisualStyleBackColor = false;
+            this.button20.Click += new System.EventHandler(this.villager_Click);
+            // 
             // MysteryIslandToursLabel
             // 
             this.MysteryIslandToursLabel.AutoSize = true;
@@ -5450,7 +5859,7 @@
             this.MoveInFlagLabel.AutoSize = true;
             this.MoveInFlagLabel.Font = new System.Drawing.Font("Arial", 14F, System.Drawing.FontStyle.Bold);
             this.MoveInFlagLabel.ForeColor = System.Drawing.Color.White;
-            this.MoveInFlagLabel.Location = new System.Drawing.Point(560, 526);
+            this.MoveInFlagLabel.Location = new System.Drawing.Point(404, 525);
             this.MoveInFlagLabel.Name = "MoveInFlagLabel";
             this.MoveInFlagLabel.Size = new System.Drawing.Size(59, 22);
             this.MoveInFlagLabel.TabIndex = 202;
@@ -5463,10 +5872,10 @@
             this.MoveInFlag.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.MoveInFlag.Font = new System.Drawing.Font("Arial", 14F, System.Drawing.FontStyle.Bold);
             this.MoveInFlag.ForeColor = System.Drawing.Color.White;
-            this.MoveInFlag.Location = new System.Drawing.Point(620, 518);
+            this.MoveInFlag.Location = new System.Drawing.Point(463, 517);
             this.MoveInFlag.Multiline = false;
             this.MoveInFlag.Name = "MoveInFlag";
-            this.MoveInFlag.Size = new System.Drawing.Size(174, 30);
+            this.MoveInFlag.Size = new System.Drawing.Size(114, 30);
             this.MoveInFlag.TabIndex = 194;
             this.MoveInFlag.Text = "";
             // 
@@ -5477,10 +5886,10 @@
             this.MysRealName.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.MysRealName.Font = new System.Drawing.Font("Arial", 14F, System.Drawing.FontStyle.Bold);
             this.MysRealName.ForeColor = System.Drawing.Color.White;
-            this.MysRealName.Location = new System.Drawing.Point(981, 518);
+            this.MysRealName.Location = new System.Drawing.Point(702, 517);
             this.MysRealName.Multiline = false;
             this.MysRealName.Name = "MysRealName";
-            this.MysRealName.Size = new System.Drawing.Size(174, 30);
+            this.MysRealName.Size = new System.Drawing.Size(114, 30);
             this.MysRealName.TabIndex = 193;
             this.MysRealName.Text = "";
             // 
@@ -5491,10 +5900,10 @@
             this.MysIName.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.MysIName.Font = new System.Drawing.Font("Arial", 14F, System.Drawing.FontStyle.Bold);
             this.MysIName.ForeColor = System.Drawing.Color.White;
-            this.MysIName.Location = new System.Drawing.Point(800, 518);
+            this.MysIName.Location = new System.Drawing.Point(582, 517);
             this.MysIName.Multiline = false;
             this.MysIName.Name = "MysIName";
-            this.MysIName.Size = new System.Drawing.Size(174, 30);
+            this.MysIName.Size = new System.Drawing.Size(114, 30);
             this.MysIName.TabIndex = 192;
             this.MysIName.Text = "";
             // 
@@ -5543,10 +5952,10 @@
             this.ForceMoveOutValue.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.ForceMoveOutValue.Font = new System.Drawing.Font("Arial", 14F, System.Drawing.FontStyle.Bold);
             this.ForceMoveOutValue.ForeColor = System.Drawing.Color.White;
-            this.ForceMoveOutValue.Location = new System.Drawing.Point(383, 518);
+            this.ForceMoveOutValue.Location = new System.Drawing.Point(284, 517);
             this.ForceMoveOutValue.Multiline = false;
             this.ForceMoveOutValue.Name = "ForceMoveOutValue";
-            this.ForceMoveOutValue.Size = new System.Drawing.Size(174, 30);
+            this.ForceMoveOutValue.Size = new System.Drawing.Size(114, 30);
             this.ForceMoveOutValue.TabIndex = 181;
             this.ForceMoveOutValue.Text = "";
             // 
@@ -5557,10 +5966,10 @@
             this.MoveOutValue.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.MoveOutValue.Font = new System.Drawing.Font("Arial", 14F, System.Drawing.FontStyle.Bold);
             this.MoveOutValue.ForeColor = System.Drawing.Color.White;
-            this.MoveOutValue.Location = new System.Drawing.Point(133, 518);
+            this.MoveOutValue.Location = new System.Drawing.Point(98, 517);
             this.MoveOutValue.Multiline = false;
             this.MoveOutValue.Name = "MoveOutValue";
-            this.MoveOutValue.Size = new System.Drawing.Size(174, 30);
+            this.MoveOutValue.Size = new System.Drawing.Size(114, 30);
             this.MoveOutValue.TabIndex = 180;
             this.MoveOutValue.Text = "";
             // 
@@ -5569,7 +5978,7 @@
             this.ForceMoveOutLabel.AutoSize = true;
             this.ForceMoveOutLabel.Font = new System.Drawing.Font("Arial", 14F, System.Drawing.FontStyle.Bold);
             this.ForceMoveOutLabel.ForeColor = System.Drawing.Color.White;
-            this.ForceMoveOutLabel.Location = new System.Drawing.Point(310, 526);
+            this.ForceMoveOutLabel.Location = new System.Drawing.Point(213, 525);
             this.ForceMoveOutLabel.Name = "ForceMoveOutLabel";
             this.ForceMoveOutLabel.Size = new System.Drawing.Size(76, 22);
             this.ForceMoveOutLabel.TabIndex = 179;
@@ -5580,7 +5989,7 @@
             this.MoveOutLabel.AutoSize = true;
             this.MoveOutLabel.Font = new System.Drawing.Font("Arial", 14F, System.Drawing.FontStyle.Bold);
             this.MoveOutLabel.ForeColor = System.Drawing.Color.White;
-            this.MoveOutLabel.Location = new System.Drawing.Point(34, 526);
+            this.MoveOutLabel.Location = new System.Drawing.Point(-1, 525);
             this.MoveOutLabel.Name = "MoveOutLabel";
             this.MoveOutLabel.Size = new System.Drawing.Size(103, 22);
             this.MoveOutLabel.TabIndex = 178;
@@ -7385,73 +7794,9 @@
             this.button1.Size = new System.Drawing.Size(85, 23);
             this.button1.TabIndex = 230;
             this.button1.Tag = "";
-            this.button1.Text = "nhbs";
+            this.button1.Text = "nhbs ID";
             this.button1.UseVisualStyleBackColor = false;
             this.button1.Click += new System.EventHandler(this.button1_Click_1);
-            // 
-            // freezeBtn
-            // 
-            this.freezeBtn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(114)))), ((int)(((byte)(137)))), ((int)(((byte)(218)))));
-            this.freezeBtn.FlatAppearance.BorderSize = 0;
-            this.freezeBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.freezeBtn.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Bold);
-            this.freezeBtn.ForeColor = System.Drawing.Color.White;
-            this.freezeBtn.Location = new System.Drawing.Point(12, 751);
-            this.freezeBtn.Name = "freezeBtn";
-            this.freezeBtn.Size = new System.Drawing.Size(108, 23);
-            this.freezeBtn.TabIndex = 233;
-            this.freezeBtn.Tag = "";
-            this.freezeBtn.Text = "Freeze";
-            this.freezeBtn.UseVisualStyleBackColor = false;
-            this.freezeBtn.Click += new System.EventHandler(this.freezeBtn_Click);
-            // 
-            // button7
-            // 
-            this.button7.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(114)))), ((int)(((byte)(137)))), ((int)(((byte)(218)))));
-            this.button7.FlatAppearance.BorderSize = 0;
-            this.button7.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button7.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Bold);
-            this.button7.ForeColor = System.Drawing.Color.White;
-            this.button7.Location = new System.Drawing.Point(12, 780);
-            this.button7.Name = "button7";
-            this.button7.Size = new System.Drawing.Size(108, 23);
-            this.button7.TabIndex = 234;
-            this.button7.Tag = "";
-            this.button7.Text = "unFreeze";
-            this.button7.UseVisualStyleBackColor = false;
-            this.button7.Click += new System.EventHandler(this.button7_Click);
-            // 
-            // button8
-            // 
-            this.button8.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(114)))), ((int)(((byte)(137)))), ((int)(((byte)(218)))));
-            this.button8.FlatAppearance.BorderSize = 0;
-            this.button8.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button8.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Bold);
-            this.button8.ForeColor = System.Drawing.Color.White;
-            this.button8.Location = new System.Drawing.Point(4, 900);
-            this.button8.Name = "button8";
-            this.button8.Size = new System.Drawing.Size(107, 23);
-            this.button8.TabIndex = 235;
-            this.button8.Tag = "";
-            this.button8.Text = "freezeCount";
-            this.button8.UseVisualStyleBackColor = false;
-            this.button8.Click += new System.EventHandler(this.button8_Click);
-            // 
-            // button9
-            // 
-            this.button9.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(114)))), ((int)(((byte)(137)))), ((int)(((byte)(218)))));
-            this.button9.FlatAppearance.BorderSize = 0;
-            this.button9.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button9.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Bold);
-            this.button9.ForeColor = System.Drawing.Color.White;
-            this.button9.Location = new System.Drawing.Point(12, 809);
-            this.button9.Name = "button9";
-            this.button9.Size = new System.Drawing.Size(108, 23);
-            this.button9.TabIndex = 236;
-            this.button9.Tag = "";
-            this.button9.Text = "freezeClear";
-            this.button9.UseVisualStyleBackColor = false;
-            this.button9.Click += new System.EventHandler(this.button9_Click);
             // 
             // debugBtn
             // 
@@ -7516,6 +7861,55 @@
             this.button16.Text = "villager head";
             this.button16.UseVisualStyleBackColor = true;
             this.button16.Click += new System.EventHandler(this.button16_Click);
+            // 
+            // button13
+            // 
+            this.button13.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(114)))), ((int)(((byte)(137)))), ((int)(((byte)(218)))));
+            this.button13.FlatAppearance.BorderSize = 0;
+            this.button13.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button13.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Bold);
+            this.button13.ForeColor = System.Drawing.Color.White;
+            this.button13.Location = new System.Drawing.Point(1080, 644);
+            this.button13.Name = "button13";
+            this.button13.Size = new System.Drawing.Size(85, 23);
+            this.button13.TabIndex = 243;
+            this.button13.Tag = "";
+            this.button13.Text = "nhbs A-Z";
+            this.button13.UseVisualStyleBackColor = false;
+            this.button13.Click += new System.EventHandler(this.button13_Click_1);
+            // 
+            // button18
+            // 
+            this.button18.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(114)))), ((int)(((byte)(137)))), ((int)(((byte)(218)))));
+            this.button18.FlatAppearance.BorderSize = 0;
+            this.button18.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button18.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Bold);
+            this.button18.ForeColor = System.Drawing.Color.White;
+            this.button18.Location = new System.Drawing.Point(1081, 673);
+            this.button18.Name = "button18";
+            this.button18.Size = new System.Drawing.Size(85, 23);
+            this.button18.TabIndex = 244;
+            this.button18.Tag = "";
+            this.button18.Text = "Diff ID";
+            this.button18.UseVisualStyleBackColor = false;
+            this.button18.Click += new System.EventHandler(this.button18_Click_1);
+            // 
+            // button19
+            // 
+            this.button19.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(114)))), ((int)(((byte)(137)))), ((int)(((byte)(218)))));
+            this.button19.FlatAppearance.BorderSize = 0;
+            this.button19.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button19.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Bold);
+            this.button19.ForeColor = System.Drawing.Color.White;
+            this.button19.Location = new System.Drawing.Point(1080, 702);
+            this.button19.Name = "button19";
+            this.button19.Size = new System.Drawing.Size(85, 23);
+            this.button19.TabIndex = 245;
+            this.button19.Tag = "";
+            this.button19.Text = "Diff A-Z";
+            this.button19.UseVisualStyleBackColor = false;
+            this.button19.Click += new System.EventHandler(this.button19_Click);
+			//
             // elys mod
             // Converttocheat
             // 
@@ -7538,17 +7932,21 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(54)))), ((int)(((byte)(57)))), ((int)(((byte)(63)))));
             this.ClientSize = new System.Drawing.Size(1204, 516);
+            this.Controls.Add(this.button19);
+            this.Controls.Add(this.button18);
+            this.Controls.Add(this.button13);
+            this.Controls.Add(this.speedX2Btn);
+            this.Controls.Add(this.speedX3Btn);
             this.Controls.Add(this.button17);
             this.Controls.Add(this.button16);
+            this.Controls.Add(this.label20);
             this.Controls.Add(this.button12);
             this.Controls.Add(this.button15);
+            this.Controls.Add(this.speedX4Btn);
             this.Controls.Add(this.button14);
             this.Controls.Add(this.button11);
             this.Controls.Add(this.button5);
-            this.Controls.Add(this.button9);
-            this.Controls.Add(this.button8);
-            this.Controls.Add(this.button7);
-            this.Controls.Add(this.freezeBtn);
+            this.Controls.Add(this.speedX1Btn);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.button6);
             this.Controls.Add(this.ReadBtn);
@@ -7586,6 +7984,7 @@
             this.MaximumSize = new System.Drawing.Size(1500, 1000);
             this.MinimumSize = new System.Drawing.Size(1220, 555);
             this.Name = "Form1";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Form1_FormClosed);
             this.Load += new System.EventHandler(this.Form1_Load);
             this.LocationChanged += new System.EventHandler(this.Form1_LocationChanged);
@@ -7633,6 +8032,7 @@
             this.VillagerControl.ResumeLayout(false);
             this.VillagerControl.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -7942,10 +8342,6 @@
         private System.Windows.Forms.Button button6;
         private System.Windows.Forms.CheckBox ignoreHeader;
         private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Button freezeBtn;
-        private System.Windows.Forms.Button button7;
-        private System.Windows.Forms.Button button8;
-        private System.Windows.Forms.Button button9;
         private System.Windows.Forms.Button button10;
         private System.Windows.Forms.Button debugBtn;
         private System.Windows.Forms.Button button5;
@@ -7961,6 +8357,18 @@
         private System.Windows.Forms.Button StayMoveAllBtn;
         private System.Windows.Forms.Button MoveOutAllBtn;
         private System.Windows.Forms.Button dodoHelperBtn;
+        private System.Windows.Forms.Button maxSpeedX2Btn;
+        private System.Windows.Forms.Button maxSpeedX3Btn;
+        private System.Windows.Forms.Button maxSpeedX5Btn;
+        private System.Windows.Forms.Button maxSpeedX1Btn;
+        private System.Windows.Forms.Label label30;
+        private System.Windows.Forms.Button maxSpeedX100Btn;
+        private System.Windows.Forms.Button freezerBtn;
+        private System.Windows.Forms.Button button13;
+        private System.Windows.Forms.Button button18;
+        private System.Windows.Forms.Button button19;
+        private System.Windows.Forms.Button button7;
+        private System.Windows.Forms.Button button20;		
 		//elys mod
         private System.Windows.Forms.Button Converttocheat;
     }

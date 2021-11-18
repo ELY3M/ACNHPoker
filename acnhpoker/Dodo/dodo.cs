@@ -996,15 +996,15 @@ namespace ACNHPoker
                     return;
                 }
 
-                string IHpath = Utilities.villagerPath + CurrentOrder.InternalName + ".nhvh";
-                string RHpath = Utilities.villagerPath + CurrentOrder.RealName + ".nhvh";
+                string IHpath = Utilities.villagerPath + CurrentOrder.InternalName + ".nhvh2";
+                string RHpath = Utilities.villagerPath + CurrentOrder.RealName + ".nhvh2";
                 if (File.Exists(IHpath))
                     houseData = File.ReadAllBytes(IHpath);
                 else if (File.Exists(RHpath))
                     houseData = File.ReadAllBytes(RHpath);
                 else
                 {
-                    WriteLog("Villager house files \"" + CurrentOrder.InternalName + ".nhvh\" " + "/ \"" + CurrentOrder.RealName + ".nhvh\" " + "not found!", true);
+                    WriteLog("Villager house files \"" + CurrentOrder.InternalName + ".nhvh2\" " + "/ \"" + CurrentOrder.RealName + ".nhvh2\" " + "not found!", true);
                     VillagerOrderList.RemoveAt(0);
                     return;
                 }
@@ -1409,9 +1409,10 @@ namespace ACNHPoker
 
                     if (mytimer != null)
                     {
+                        int visitorNum = GetVisitorNumber();
                         if (resetSession && mytimer.isDone())
                         {
-                            if (GetVisitorNumber() >= 1)
+                            if (visitorNum >= 1)
                             {
                                 WriteLog("Time's up! Resetting session!", true);
                                 EndSession();
@@ -1539,10 +1540,43 @@ namespace ACNHPoker
                     }
                 }
 
+                if (wasLoading)
+                {
+                    MapRegenerator.prepareVillager(s);
+                    GetVisitorList();
+                }
                 idleNum++;
                 Thread.Sleep(2000);
 
             } while (standaloneRunning);
+        }
+
+        private void GetVisitorList()
+        {
+            string[] namelist = new string[8];
+            int num = 0;
+            using (StreamWriter sw = File.CreateText(Utilities.CurrentVisitorPath))
+            {
+                for (int i = 0; i < 8; i++)
+                {
+                    if (i == 0)
+                        continue;
+                    namelist[i] = Utilities.GetVisitorName(s, null, i);
+                    if (namelist[i].Equals(String.Empty))
+                        sw.WriteLine("[Empty]");
+                    else
+                    {
+                        sw.WriteLine(namelist[i]);
+                        num++;
+                    }
+                }
+                sw.WriteLine("Num of Visitor : " + num);
+                /*if (num >= 7)
+                {
+                    sw.WriteLine(" [Island Full] ");
+                }*/
+            }
+            //Debug.Print("Visitor Update");
         }
 
         private void TimerBtn_Click(object sender, EventArgs e)

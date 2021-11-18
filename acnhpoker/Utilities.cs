@@ -21,7 +21,7 @@ namespace ACNHPoker
         public static UInt32 ItemSlotBase = masterAddress;
         public static UInt32 ItemSlot21Base = masterAddress - 0xB8;
 
-
+        //AE6022CC
 
         public static UInt32 MasterRecyclingBase = 0xAEA5E978;
         public static UInt32 MasterRecycling21Base = MasterRecyclingBase + 0xA0;
@@ -48,8 +48,8 @@ namespace ACNHPoker
         public static UInt32 VillagerCatchphraseOffset = 0x10794;
 
         public static UInt32 VillagerHouseAddress = 0xAE5F46A4;
-        public static UInt32 VillagerHouseSize = 0x1D4;
-        public static UInt32 VillagerHousePadding = 0x1114;
+        public static UInt32 VillagerHouseSize = 0x12E8;
+        public static UInt32 VillagerHouseOldSize = 0x1D4;
         public static UInt32 VillagerHouseBufferDiff = 0x8F1BD0;
         public static UInt32 VillagerHouseOwnerOffset = 0x1C4;
 
@@ -166,24 +166,30 @@ namespace ACNHPoker
         public static Int32 SeaCreatureNumRecords = 41 * 2;
         // ----
 
-        // ---- Main
         public static UInt32 staminaAddress = 0xB6861358;
+        public static UInt32 readTimeAddress = 0x0BD29188;
 
+        public static readonly UInt32 MaxSpeedAddress = 0x0BF4834C;
+        public static readonly string MaxSpeedX1 = "0000A03F";
+        public static readonly string MaxSpeedX2 = "00002040";
+        public static readonly string MaxSpeedX3 = "00007040";
+        public static readonly string MaxSpeedX5 = "0000C840";
+        public static readonly string MaxSpeedX100 = "0000FA42";
+
+        // ---- Main
         public static UInt32 freezeTimeAddress = 0x00328530; 
         public static readonly string freezeTimeValue = "D503201F";
         public static readonly string unfreezeTimeValue = "F9203260";
 
-        public static UInt32 readTimeAddress = 0x0BD29188;
-
-        public static UInt32 wSpeedAddress = 0x0114A670; //0x01134780; //0x01115CE0;
-        public static readonly string wSpeedX1 = "BD530E61";
+        public static UInt32 wSpeedAddress = 0x01605DF0;
+        public static readonly string wSpeedX1 = "BD578661";
         public static readonly string wSpeedX2 = "1E201001";
         public static readonly string wSpeedX3 = "1E211001";
         public static readonly string wSpeedX4 = "1E221001";
 
-        public static UInt32 CollisionAddress = 0x010B7420; //0x010A1D80; //0x01084140;
+        public static UInt32 CollisionAddress = 0x01554D50;
         public static readonly string CollisionDisable = "12800014";
-        public static readonly string CollisionEnable = "B9572814";
+        public static readonly string CollisionEnable = "B95BA014";
 
         public static UInt32 aSpeedAddress = 0x043A4B30;
         public static readonly string aSpeedX1 = "3F800000";
@@ -212,9 +218,10 @@ namespace ACNHPoker
         public static string variationPath = csvFolder + variationFile;
         public static string favFile = @"fav.csv";
         public static string favPath = csvFolder + favFile;
-
         public static string fieldFile = @"field.csv";
         public static string fieldPath = csvFolder + fieldFile;
+        public static string kindFile = @"kind.csv";
+        public static string kindPath = csvFolder + kindFile;
 
         public static string dodoFile = @"dodo.txt";
         public static string dodoPath = saveFolder + dodoFile;
@@ -241,10 +248,35 @@ namespace ACNHPoker
         public static string RecipeOverlayFile = @"PaperRecipe.png";
         public static string RecipeOverlayPath = imagePath + RecipeOverlayFile;
 
+        public static Dictionary<string, string> itemkind = new Dictionary<string, string>();
+
         private static Object botLock = new Object();
 
         public Utilities()
         {
+
+        }
+
+        public static void buildDictionary()
+        {
+            if (File.Exists(kindPath))
+            {
+                string[] lines = File.ReadAllLines(kindPath);
+
+                foreach (string line in lines)
+                {
+                    string[] parts = line.Split(new[] { " ; " }, StringSplitOptions.RemoveEmptyEntries);
+                    if (line.Contains("Kind_"))
+                    {
+                        if (parts[1].Contains("Fake"))
+                        {
+                            itemkind.Add(parts[0], parts[1].Replace("Fake",""));
+                        }
+                        else
+                            itemkind.Add(parts[0], parts[1]);
+                    }
+                }
+            }
         }
 
         private static int Clamp(int value, int min, int max)
@@ -304,11 +336,11 @@ namespace ACNHPoker
         {
             if (slot <= 20)
             {
-                return "0x" + (0x3 + ItemSlotBase + ((Clamp(slot, 1, 20) - 1) * 0x8)).ToString("X");
+                return (0x3 + ItemSlotBase + ((Clamp(slot, 1, 20) - 1) * 0x8)).ToString("X");
             }
             else
             {
-                return "0x" + (0x3 + ItemSlot21Base + ((Clamp(slot, 21, 40) - 21) * 0x8)).ToString("X");
+                return (0x3 + ItemSlot21Base + ((Clamp(slot, 21, 40) - 21) * 0x8)).ToString("X");
             }
         }
 
@@ -815,7 +847,7 @@ namespace ACNHPoker
                 {
                     if (bot == null)
                     {
-                        string msg = String.Format("poke {0:X8} {1}\r\n", address, "0x" + value);
+                        string msg = String.Format("poke 0x{0:X8} {1}\r\n", address, "0x" + value);
                         Debug.Print("Poke : " + msg);
                         SendString(socket, Encoding.UTF8.GetBytes(msg));
                     }
@@ -918,7 +950,7 @@ namespace ACNHPoker
 
         public static void setStamina(Socket socket, USBBot bot, string value)
         {
-            pokeAddress(socket, bot, "0x" + staminaAddress.ToString("X"), value);
+            pokeAddress(socket, bot, staminaAddress.ToString("X"), value);
         }
 
         public static void setFlag1(Socket socket, USBBot bot, int slot, string flag)
@@ -1656,9 +1688,9 @@ namespace ACNHPoker
             {
                 if (bot == null)
                 {
-                    Debug.Print("[Sys] Peek : House " + (VillagerHouseAddress + (num * (VillagerHouseSize + VillagerHousePadding)) + diff).ToString("X") + " " + (int)VillagerHouseSize);
+                    Debug.Print("[Sys] Peek : House " + (VillagerHouseAddress + (num * (VillagerHouseSize)) + diff).ToString("X") + " " + (int)VillagerHouseSize);
 
-                    byte[] b = ReadByteArray(socket, VillagerHouseAddress + (num * (VillagerHouseSize + VillagerHousePadding)) + diff, (int)VillagerHouseSize, ref counter);
+                    byte[] b = ReadByteArray(socket, VillagerHouseAddress + (num * (VillagerHouseSize)) + diff, (int)VillagerHouseSize, ref counter);
 
                     if (b == null)
                     {
@@ -1669,9 +1701,9 @@ namespace ACNHPoker
                 }
                 else
                 {
-                    Debug.Print("[Usb] Peek : House " + (VillagerHouseAddress + (num * (VillagerHouseSize + VillagerHousePadding)) + diff).ToString("X") + " " + (int)VillagerHouseSize);
+                    Debug.Print("[Usb] Peek : House " + (VillagerHouseAddress + (num * (VillagerHouseSize)) + diff).ToString("X") + " " + (int)VillagerHouseSize);
 
-                    byte[] b = ReadLargeBytes(bot, (uint)(VillagerHouseAddress + (num * (VillagerHouseSize + VillagerHousePadding)) + diff), (int)VillagerHouseSize);
+                    byte[] b = ReadLargeBytes(bot, (uint)(VillagerHouseAddress + (num * (VillagerHouseSize)) + diff), (int)VillagerHouseSize);
 
                     if (b == null)
                     {
@@ -1689,15 +1721,15 @@ namespace ACNHPoker
             {
                 if (bot == null)
                 {
-                    SendByteArray(socket, VillagerHouseAddress + (num * (VillagerHouseSize + VillagerHousePadding)), house, (int)VillagerHouseSize, ref counter);
+                    SendByteArray(socket, VillagerHouseAddress + (num * (VillagerHouseSize)), house, (int)VillagerHouseSize, ref counter);
 
-                    SendByteArray(socket, VillagerHouseAddress + (num * (VillagerHouseSize + VillagerHousePadding)) + VillagerHouseBufferDiff, house, (int)VillagerHouseSize, ref counter);
+                    SendByteArray(socket, VillagerHouseAddress + (num * (VillagerHouseSize)) + VillagerHouseBufferDiff, house, (int)VillagerHouseSize, ref counter);
                 }
                 else
                 {
-                    WriteLargeBytes(bot, VillagerHouseAddress + (num * (VillagerHouseSize + VillagerHousePadding)), house, (int)VillagerHouseSize, ref counter);
+                    WriteLargeBytes(bot, VillagerHouseAddress + (num * (VillagerHouseSize)), house, (int)VillagerHouseSize, ref counter);
 
-                    WriteLargeBytes(bot, VillagerHouseAddress + (num * (VillagerHouseSize + VillagerHousePadding)) + VillagerHouseBufferDiff, house, (int)VillagerHouseSize, ref counter);
+                    WriteLargeBytes(bot, VillagerHouseAddress + (num * (VillagerHouseSize)) + VillagerHouseBufferDiff, house, (int)VillagerHouseSize, ref counter);
                 }
             }
         }
@@ -1708,9 +1740,9 @@ namespace ACNHPoker
             {
                 if (bot == null)
                 {
-                    Debug.Print("[Sys] Peek : HouseOwner " + (VillagerHouseAddress + (num * (VillagerHouseSize + VillagerHousePadding)) + VillagerHouseOwnerOffset).ToString("X"));
+                    Debug.Print("[Sys] Peek : HouseOwner " + (VillagerHouseAddress + (num * (VillagerHouseSize)) + VillagerHouseOwnerOffset).ToString("X"));
 
-                    byte[] b = ReadByteArray(socket, VillagerHouseAddress + (num * (VillagerHouseSize + VillagerHousePadding)) + VillagerHouseOwnerOffset, 1, ref counter);
+                    byte[] b = ReadByteArray(socket, VillagerHouseAddress + (num * (VillagerHouseSize)) + VillagerHouseOwnerOffset, 1, ref counter);
 
                     if (b == null)
                     {
@@ -1722,9 +1754,9 @@ namespace ACNHPoker
                 }
                 else
                 {
-                    Debug.Print("[Usb] Peek : HouseOwner " + (VillagerHouseAddress + (num * (VillagerHouseSize + VillagerHousePadding)) + VillagerHouseOwnerOffset).ToString("X"));
+                    Debug.Print("[Usb] Peek : HouseOwner " + (VillagerHouseAddress + (num * (VillagerHouseSize)) + VillagerHouseOwnerOffset).ToString("X"));
 
-                    byte[] b = ReadLargeBytes(bot, (uint)(VillagerHouseAddress + (num * (VillagerHouseSize + VillagerHousePadding)) + VillagerHouseOwnerOffset), 1, ref counter);
+                    byte[] b = ReadLargeBytes(bot, (uint)(VillagerHouseAddress + (num * (VillagerHouseSize)) + VillagerHouseOwnerOffset), 1, ref counter);
 
                     if (b == null)
                     {
@@ -1743,7 +1775,7 @@ namespace ACNHPoker
             {
                 if (bot == null)
                 {
-                    byte[] b = ReadByteArray(socket, VillagerHouseAddress + (num * (VillagerHouseSize + VillagerHousePadding)) + VillagerHouseOwnerOffset, 1);
+                    byte[] b = ReadByteArray(socket, VillagerHouseAddress + (num * (VillagerHouseSize)) + VillagerHouseOwnerOffset, 1);
 
                     if (b == null)
                     {
@@ -1755,7 +1787,7 @@ namespace ACNHPoker
                 }
                 else
                 {
-                    byte[] b = ReadLargeBytes(bot, (uint)(VillagerHouseAddress + (num * (VillagerHouseSize + VillagerHousePadding)) + VillagerHouseOwnerOffset), 1);
+                    byte[] b = ReadLargeBytes(bot, (uint)(VillagerHouseAddress + (num * (VillagerHouseSize)) + VillagerHouseOwnerOffset), 1);
 
                     if (b == null)
                     {
@@ -1872,9 +1904,9 @@ namespace ACNHPoker
             {
                 if (bot == null)
                 {
-                    Debug.Print("[Sys] Peek : VillagerHouseFlag " + (VillagerHouseAddress + (num * (VillagerHouseSize + VillagerHousePadding)) + offset).ToString("X"));
+                    Debug.Print("[Sys] Peek : VillagerHouseFlag " + (VillagerHouseAddress + (num * (VillagerHouseSize)) + offset).ToString("X"));
 
-                    byte[] b = ReadByteArray(socket, VillagerHouseAddress + (num * (VillagerHouseSize + VillagerHousePadding)) + offset, 1, ref counter);
+                    byte[] b = ReadByteArray(socket, VillagerHouseAddress + (num * (VillagerHouseSize)) + offset, 1, ref counter);
 
                     if (b == null)
                     {
@@ -1885,9 +1917,9 @@ namespace ACNHPoker
                 }
                 else
                 {
-                    Debug.Print("[Usb] Peek : VillagerHouseFlag " + (VillagerHouseAddress + (num * (VillagerHouseSize + VillagerHousePadding)) + offset).ToString("X"));
+                    Debug.Print("[Usb] Peek : VillagerHouseFlag " + (VillagerHouseAddress + (num * (VillagerHouseSize)) + offset).ToString("X"));
 
-                    byte[] b = ReadLargeBytes(bot, (uint)(VillagerHouseAddress + (num * (VillagerHouseSize + VillagerHousePadding)) + offset), 1, ref counter);
+                    byte[] b = ReadLargeBytes(bot, (uint)(VillagerHouseAddress + (num * (VillagerHouseSize)) + offset), 1, ref counter);
 
                     if (b == null)
                     {
@@ -2540,7 +2572,7 @@ namespace ACNHPoker
 
                 if (bot == null)
                 {
-                    //Debug.Print("[Sys] Peek : Dodo " + dodoAddress.ToString("X"));
+                    Debug.Print("[Sys] Peek : Dodo " + dodoAddress.ToString("X"));
                     if (chi)
                         b = ReadByteArray(socket, dodoAddress + ChineseLanguageOffset, 5);
                     else
@@ -2579,7 +2611,7 @@ namespace ACNHPoker
             }
         }
 
-        public static void SetTextSpeed(Socket socket, USBBot bot)
+        public static void SetTextSpeed(Socket socket, USBBot bot, bool chi)
         {
             lock (botLock)
             {
@@ -2589,18 +2621,29 @@ namespace ACNHPoker
                     {
                         string msg;
 
-                        msg = String.Format("poke 0x{0:X8} 0x{1}\r\n", TextSpeedAddress.ToString("X"), "3");
-                        Debug.Print("Poke TextSpeed: " + msg);
-                        SendString(socket, Encoding.UTF8.GetBytes(msg));
-
-                        msg = String.Format("poke 0x{0:X8} 0x{1}\r\n", (TextSpeedAddress + ChineseLanguageOffset).ToString("X"), "3");
-                        Debug.Print("Poke TextSpeedChi: " + msg);
-                        SendString(socket, Encoding.UTF8.GetBytes(msg));
+                        if (chi)
+                        {
+                            msg = String.Format("poke 0x{0:X8} 0x{1}\r\n", (TextSpeedAddress + ChineseLanguageOffset).ToString("X"), "3");
+                            Debug.Print("Poke TextSpeedChi: " + msg);
+                            SendString(socket, Encoding.UTF8.GetBytes(msg));
+                        }
+                        else
+                        {
+                            msg = String.Format("poke 0x{0:X8} 0x{1}\r\n", TextSpeedAddress.ToString("X"), "3");
+                            Debug.Print("Poke TextSpeed: " + msg);
+                            SendString(socket, Encoding.UTF8.GetBytes(msg));
+                        }
                     }
                     else
                     {
-                        bot.WriteBytes(stringToByte("3"), TextSpeedAddress);
-                        bot.WriteBytes(stringToByte("3"), TextSpeedAddress + ChineseLanguageOffset);
+                        if (chi)
+                        {
+                            bot.WriteBytes(stringToByte("3"), TextSpeedAddress);
+                        }
+                        else
+                        {
+                            bot.WriteBytes(stringToByte("3"), TextSpeedAddress + ChineseLanguageOffset);
+                        }
                     }
                 }
                 catch
@@ -2737,7 +2780,7 @@ namespace ACNHPoker
 
         public static byte[] FreezeClear() => Encode("freezeClear");
 
-        public static byte[] FreezeRate() => Encode("configure freezeRate 500");
+        public static byte[] FreezeRate(string rate) => Encode("configure freezeRate " + rate);
 
         public static string getVersion(Socket socket)
         {
@@ -2930,8 +2973,8 @@ namespace ACNHPoker
 
         public static async Task loadBoth(Socket socket, int villagerIndex, byte[] villager, int houseIndex, byte[] house)
         {
-            await Task.Run(() => SendByteArray(socket, VillagerAddress + (villagerIndex * (VillagerHouseSize + VillagerHousePadding)), villager, (int)VillagerSize));
-            await Task.Run(() => SendByteArray(socket, VillagerHouseAddress + (houseIndex * (VillagerHouseSize + VillagerHousePadding)), house, (int)VillagerHouseSize));
+            await Task.Run(() => SendByteArray(socket, VillagerAddress + (villagerIndex * VillagerSize), villager, (int)VillagerSize));
+            await Task.Run(() => SendByteArray(socket, VillagerHouseAddress + (houseIndex * (VillagerHouseSize)), house, (int)VillagerHouseSize));
         }
 
         public static async Task SetMoveout(Socket socket, int villagerIndex, string MoveoutFlag = "2", string ForceMoveoutFlag = "1")
@@ -2948,6 +2991,39 @@ namespace ACNHPoker
                 msg = String.Format("poke 0x{0:X8} 0x{1}\r\n", (VillagerAddress + (villagerIndex * VillagerSize) + VillagerAbandonHouseOffset).ToString("X"), "0");
                 SendString(socket, Encoding.UTF8.GetBytes(msg));
             });
+        }
+
+        public static bool isChinese(Socket s, USBBot bot = null)
+        {
+            byte[] b = Utilities.peekAddress(s, bot, Utilities.readTimeAddress, 6);
+            string time = Utilities.ByteToHexString(b);
+
+            Debug.Print(time);
+
+            Int32 year = Convert.ToInt32(Utilities.flip(time.Substring(0, 4)), 16);
+            Int32 month = Convert.ToInt32((time.Substring(4, 2)), 16);
+            Int32 day = Convert.ToInt32((time.Substring(6, 2)), 16);
+            Int32 hour = Convert.ToInt32((time.Substring(8, 2)), 16);
+            Int32 min = Convert.ToInt32((time.Substring(10, 2)), 16);
+
+            if (year > 3000 || month > 12 || day > 31 || hour > 24 || min > 60) //Try for Chineses
+            {
+                b = Utilities.peekAddress(s, bot, Utilities.readTimeAddress + Utilities.ChineseLanguageOffset, 6);
+                time = Utilities.ByteToHexString(b);
+
+                year = Convert.ToInt32(Utilities.flip(time.Substring(0, 4)), 16);
+                month = Convert.ToInt32((time.Substring(4, 2)), 16);
+                day = Convert.ToInt32((time.Substring(6, 2)), 16);
+                hour = Convert.ToInt32((time.Substring(8, 2)), 16);
+                min = Convert.ToInt32((time.Substring(10, 2)), 16);
+
+                if (!(year > 3000 || month > 12 || day > 31 || hour > 24 || min > 60))
+                    return true;
+                else
+                    return false;
+            }
+            else
+                return false;
         }
 
         #region Villager
@@ -3460,6 +3536,188 @@ namespace ACNHPoker
                 {"wol12", "Audie"},
                 {"non00", "Empty" }
             };
+
+        public static readonly Dictionary<string, int> CountByKind = new Dictionary<string, int>
+        {
+            {"Kind_Ftr", 1},
+            {"Kind_Dishes", 1},
+            {"Kind_Drink", 1},
+            {"Kind_CookingMaterial", 50},
+            {"Kind_RoomWall", 1},
+            {"Kind_RoomFloor", 1},
+            {"Kind_Rug", 1},
+            {"Kind_RugMyDesign", 1},
+            {"Kind_Socks", 1},
+            {"Kind_Cap", 1},
+            {"Kind_Helmet", 1},
+            {"Kind_Accessory", 1},
+            {"Kind_Bag", 1},
+            {"Kind_Umbrella", 1},
+            {"Kind_FtrWall", 1},
+            {"Kind_Counter", 1},
+            {"Kind_Pillar", 1},
+            {"Kind_FishingRod", 1},
+            {"Kind_Net", 1},
+            {"Kind_Shovel", 1},
+            {"Kind_Axe", 1},
+            {"Kind_Watering", 1},
+            {"Kind_Slingshot", 1},
+            {"Kind_ChangeStick", 1},
+            {"Kind_WoodenStickTool", 1},
+            {"Kind_Ladder", 1},
+            {"Kind_GroundMaker", 1},
+            {"Kind_RiverMaker", 1},
+            {"Kind_CliffMaker", 1},
+            {"Kind_HandBag", 1},
+            {"Kind_PartyPopper", 10},
+            {"Kind_Ocarina", 1},
+            {"Kind_Panflute", 1},
+            {"Kind_Tambourine", 1},
+            {"Kind_MaracasCarnival", 1},
+            {"Kind_StickLight", 1},
+            {"Kind_StickLightColorful", 1},
+            {"Kind_Uchiwa", 1},
+            {"Kind_SubToolSensu", 1},
+            {"Kind_Windmill", 1},
+            {"Kind_Partyhorn", 1},
+            {"Kind_BlowBubble", 10},
+            {"Kind_FierworkHand", 10},
+            {"Kind_Balloon", 1},
+            {"Kind_HandheldPennant", 1},
+            {"Kind_BigbagPresent", 1},
+            {"Kind_JuiceFuzzyapple", 1},
+            {"Kind_Megaphone", 1},
+            {"Kind_SoySet", 1},
+            {"Kind_FlowerShower", 1},
+            {"Kind_Candyfloss", 1},
+            {"Kind_SubToolDonut", 1},
+            {"Kind_SubToolEat", 1},
+            {"Kind_SubToolEatRemakeable", 1},
+            {"Kind_Tapioca", 1},
+            {"Kind_SubToolCan", 1},
+            {"Kind_Icecandy", 1},
+            {"Kind_SubToolIcecream", 1},
+            {"Kind_SubToolIcesoft", 1},
+            {"Kind_SubToolEatDrop", 1},
+            {"Kind_SubToolGeneric", 1},
+            {"Kind_Basket", 1},
+            {"Kind_Lantern", 1},
+            {"Kind_SubToolRemakeable", 1},
+            {"Kind_Timer", 1},
+            {"Kind_Gyroid", 1},
+            {"Kind_GyroidScrap", 1},
+            {"Kind_TreeSeedling", 10},
+            {"Kind_Tree", 1},
+            {"Kind_BushSeedling", 10},
+            {"Kind_Bush", 1},
+            {"Kind_VegeSeedling", 10},
+            {"Kind_VegeTree", 1},
+            {"Kind_Vegetable", 10},
+            {"Kind_Weed", 99},
+            {"Kind_WeedLight", 50},
+            {"Kind_FlowerSeed", 10},
+            {"Kind_FlowerBud", 1},
+            {"Kind_Flower", 10},
+            {"Kind_Fruit", 10},
+            {"Kind_Mushroom", 10},
+            {"Kind_Turnip", 10},
+            {"Kind_TurnipExpired", 1},
+            {"Kind_FishBait", 10},
+            {"Kind_PitFallSeed", 10},
+            {"Kind_Medicine", 10},
+            {"Kind_CraftMaterial", 30},
+            {"Kind_CraftRemake", 50},
+            {"Kind_Ore", 30},
+            {"Kind_CraftPhoneCase", 1},
+            {"Kind_Honeycomb", 10},
+            {"Kind_Trash", 1},
+            {"Kind_SnowCrystal", 10},
+            {"Kind_AutumnLeaf", 10},
+            {"Kind_Sakurapetal", 10},
+            {"Kind_XmasDeco", 10},
+            {"Kind_StarPiece", 10},
+            {"Kind_Insect", 1},
+            {"Kind_Fish", 1},
+            {"Kind_DiveFish", 1},
+            {"Kind_ShellDrift", 10},
+            {"Kind_ShellFish", 1},
+            {"Kind_FishToy", 1},
+            {"Kind_InsectToy", 1},
+            {"Kind_Fossil", 1},
+            {"Kind_FossilUnknown", 1},
+            {"Kind_Music", 1},
+            {"Kind_MusicMiss", 1},
+            {"Kind_Bromide", 1},
+            {"Kind_Poster", 1},
+            {"Kind_HousePost", 1},
+            {"Kind_DoorDeco", 1},
+            {"Kind_Fence", 50},
+            {"Kind_DummyRecipe", 1},
+            {"Kind_DummyDIYRecipe", 1},
+            {"Kind_DummyHowtoBook", 1},
+            {"Kind_LicenseItem", 1},
+            {"Kind_BridgeItem", 1},
+            {"Kind_SlopeItem", 1},
+            {"Kind_DIYRecipe", 1},
+            {"Kind_MessageBottle", 1},
+            {"Kind_WrappingPaper", 10},
+            {"Kind_Otoshidama", 10},
+            {"Kind_HousingKit", 1},
+            {"Kind_HousingKitRcoQuest", 1},
+            {"Kind_HousingKitBirdge", 1},
+            {"Kind_Money", 10},
+            {"Kind_FireworkM", 1},
+            {"Kind_BdayCupcake", 10},
+            {"Kind_YutaroWisp", 5},
+            {"Kind_JohnnyQuest", 10},
+            {"Kind_JohnnyQuestDust", 10},
+            {"Kind_PirateQuest", 10},
+            {"Kind_QuestWrapping", 1},
+            {"Kind_QuestChristmasPresentbox", 1},
+            {"Kind_LostQuest", 1},
+            {"Kind_LostQuestDust", 1},
+            {"Kind_TailorTicket", 10},
+            {"Kind_TreasureQuest", 1},
+            {"Kind_TreasureQuestDust", 1},
+            {"Kind_MilePlaneTicket", 10},
+            {"Kind_RollanTicket", 5},
+            {"Kind_EasterEgg", 30},
+            {"Kind_LoveCrystal", 30},
+            {"Kind_Candy", 30},
+            {"Kind_HarvestDish", 1},
+            {"Kind_Feather", 00003},
+            {"Kind_RainbowFeather", 1},
+            {"Kind_Vine", 30},
+            {"Kind_SettingLadder", 1},
+            {"Kind_SincerityTowel", 1},
+            {"Kind_SouvenirChocolate", 10},
+            {"Kind_Giftbox", 1},
+            {"Kind_PinataStick", 1},
+            {"Kind_NpcOutfit", 1},
+            {"Kind_PlayerDemoOutfit", 1},
+            {"Kind_Picture", 1},
+            {"Kind_Sculpture", 1},
+            {"Kind_PictureFake", 1},
+            {"Kind_SculptureFake", 1},
+            {"Kind_SmartPhone", 1},
+            {"Kind_DummyFtr", 1},
+            {"Kind_SequenceOnly", 1},
+            {"Kind_MyDesignObject", 1},
+            {"Kind_MyDesignTexture", 1},
+            {"Kind_CommonFabricRug", 1},
+            {"Kind_CommonFabricObject", 1},
+            {"Kind_CommonFabricTexture", 1},
+            {"Kind_OneRoomBox", 1},
+            {"Kind_DummyWrapping", 1},
+            {"Kind_DummyPresentbox", 1},
+            {"Kind_DummyCardboard", 1},
+            {"Kind_EventObjFtr", 1},
+            {"Kind_NnpcRoomMarker", 1},
+            {"Kind_PhotoStudioList", 1},
+            {"Kind_ShopTorso", 1},
+            {"Kind_DummyWrappingOtoshidama", 1},
+            {"Kind_GardenEditList", 1},
+        };
         #endregion
     }
 }

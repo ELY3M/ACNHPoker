@@ -220,7 +220,7 @@ namespace ACNHPoker
                 {
                     string name = "";
                     string num = "0";
-                    string message = e.Message.Replace('’', '\'').Trim();
+                    string message = e.Message.Replace('’', '\'').Replace('`', '\'').Trim();
                     if (message.Contains(","))
                     {
                         string[] temp = message.Split(',');
@@ -246,7 +246,7 @@ namespace ACNHPoker
                 }
                 else
                 {
-                    string name = e.Message.Replace('’', '\'').Trim();
+                    string name = e.Message.Replace('’', '\'').Replace('`', '\'').Trim();
                     await CheckAndAddRecipe(name, e.DisplayName);
                 }
             }
@@ -391,6 +391,8 @@ namespace ACNHPoker
                     {
                         if (name.Contains("[") && name.Contains("]"))
                             await MyTwitchBot.SendMessage($"Sorry, I am unable to find an item with the name \"{name}\". Did you forget the comma \",\" before the Brackets \"[ ]\"?");
+                        else if (name.Contains("poster") || name.Contains("photo"))
+                            await MyTwitchBot.SendMessage($"Sorry, I am unable to find an item with the name \"{name}\". Did you forget the comma \"\'s \" after the name?");
                         else if (name.Contains("0") || name.Contains("1") || name.Contains("2") || name.Contains("3") || name.Contains("4") || name.Contains("5") || name.Contains("6") || name.Contains("7") || name.Contains("8") || name.Contains("9"))
                             await MyTwitchBot.SendMessage($"Sorry, I am unable to find an item with the name \"{name}\". Did you forget the comma \",\" before the number?");
                         else
@@ -500,7 +502,7 @@ namespace ACNHPoker
 
                 if (Iname.Equals("cbr18") || Iname.Equals("der10") || Iname.Equals("elp11") || Iname.Equals("gor11") || Iname.Equals("rbt20") || Iname.Equals("shp14"))
                 {
-                    await MyTwitchBot.SendMessage($"Sorry, but Sanrio Villagers cannot be invited. Amiibo is the only way to get them legitimately.");
+                    await MyTwitchBot.SendMessage($"Sorry, but Sanrio Villagers require special care. Talk to @MyShiLingStar if you really want them.");
                     return;
                 }
 

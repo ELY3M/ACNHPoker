@@ -557,7 +557,7 @@ namespace ACNHPoker
             for (int i = 0; i < 10; i++)
             {
                 byte[] house = Utilities.GetHouse(s, bot, i, ref counter);
-                File.WriteAllBytes("House" + i + ".nhvh", house);
+                File.WriteAllBytes("House" + i + ".nhvh2", house);
             }
         }
 
@@ -566,7 +566,7 @@ namespace ACNHPoker
             for (int i = 0; i < 10; i++)
             {
                 byte[] house = Utilities.GetHouse(s, bot, i, ref counter, Utilities.VillagerHouseBufferDiff);
-                File.WriteAllBytes("HouseBuffer" + i + ".nhvh", house);
+                File.WriteAllBytes("HouseBuffer" + i + ".nhvh2", house);
             }
         }
 
@@ -583,8 +583,8 @@ namespace ACNHPoker
 
             SaveFileDialog file = new SaveFileDialog()
             {
-                Filter = "New Horizons Villager House (*.nhvh)|*.nhvh",
-                FileName = V[i].GetInternalName() + ".nhvh",
+                Filter = "New Horizons Villager House (*.nhvh2)|*.nhvh2",
+                FileName = V[i].GetInternalName() + ".nhvh2",
             };
 
             Configuration config = ConfigurationManager.OpenExeConfiguration(Application.ExecutablePath);
@@ -873,8 +873,8 @@ namespace ACNHPoker
 
             OpenFileDialog file = new OpenFileDialog()
             {
-                Filter = "New Horizons Villager House (*.nhvh)|*.nhvh",
-                //FileName = V[i].GetInternalName() + ".nhvh",
+                Filter = "New Horizons Villager House (*.nhvh2)|*.nhvh2",
+                //FileName = V[i].GetInternalName() + ".nhvh2",
             };
 
             Configuration config = ConfigurationManager.OpenExeConfiguration(Application.ExecutablePath);
@@ -1002,8 +1002,8 @@ namespace ACNHPoker
                 return;
             }
 
-            string IHpath = Utilities.villagerPath + IName + ".nhvh";
-            string RHpath = Utilities.villagerPath + RealName + ".nhvh";
+            string IHpath = Utilities.villagerPath + IName + ".nhvh2";
+            string RHpath = Utilities.villagerPath + RealName + ".nhvh2";
             if (File.Exists(IHpath))
             {
                 Debug.Print("FOUND: " + IHpath);
@@ -1016,7 +1016,7 @@ namespace ACNHPoker
             }
             else
             {
-                MessageBox.Show("Villager house files \"" + IName + ".nhvh\" " + "/ \"" + RealName + ".nhvh\" " + "not found!", "House file not found");
+                MessageBox.Show("Villager house files \"" + IName + ".nhvh2\" " + "/ \"" + RealName + ".nhvh2\" " + "not found!", "House file not found");
                 return;
             }
 
@@ -1088,7 +1088,7 @@ namespace ACNHPoker
             {
                 try
                 {
-                    Utilities.pokeAddress(s, bot, "0x0BA1E858", "3");
+                    Utilities.pokeAddress(s, bot, Utilities.TextSpeedAddress.ToString("X"), "3");
                 }
                 catch
                 {
@@ -1224,7 +1224,7 @@ namespace ACNHPoker
             }
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private void villager_Click(object sender, EventArgs e)
         {
             string folderPath = @"villager/";
             foreach (string file in Directory.EnumerateFiles(folderPath, "*.nhv"))
@@ -1233,7 +1233,7 @@ namespace ACNHPoker
 
                 if (data.Length != Utilities.VillagerOldSize)
                 {
-                    MessageBox.Show("Villager file size incorrect!", "Villager file invalid");
+                    MessageBox.Show("Villager file size incorrect!" + file, "Villager file invalid");
                 }
                 else
                 {
@@ -1262,34 +1262,54 @@ namespace ACNHPoker
             return newVillager;
         }
 
-        /*
-        private void loadFriendship(int player)
+        private void house_Click(object sender, EventArgs e)
         {
-            showVillagerWait(10, "Acquiring Friendship data...");
-
-            if ((s == null || s.Connected == false) & bot == null)
-                return;
-
-            blocker = true;
-
-            for (int i = 0; i < 10; i++)
+            string folderPath = @"villager/";
+            foreach (string file in Directory.EnumerateFiles(folderPath, "*.nhvh"))
             {
-                //byte[] b = Utilities.GetVillager(s, bot, i, (int)(Utilities.VillagerMemoryTinySize), ref counter);
-                byte[] b = Utilities.GetPlayerDataVillager(s, bot, i, player, (int)(Utilities.VillagerMemoryTinySize), ref counter);
-                V[i].TempData[player] = b;
-                V[i].Friendship[player] = b[70];
+                byte[] data = File.ReadAllBytes(file);
+
+                if (data.Length != Utilities.VillagerHouseOldSize)
+                {
+                    MessageBox.Show("Villager house file size incorrect! " + file, "Villager house file invalid");
+                }
+                else
+                {
+                    byte[] newdata = ConvertToNewHouse(data);
+                    File.WriteAllBytes(file + "2", newdata);
+                }
+            }
+        }
+
+        public static byte[] ConvertToNewHouse(byte[] oldHouse)
+        {
+            byte[] newHouse = new byte[Utilities.VillagerHouseSize];
+
+            byte[] NoItem = { 0xFE, 0xFF };
+
+            byte[] NewHouseFooter =
+            {
+                0x4B, 0x13, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x4B, 0x13, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                0x9B, 0x13, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xF8, 0x00, 0xF8, 0x00, 0xF8, 0x00, 0x40,
+                0x10, 0x00, 0x00, 0x00, 0x01, 0x01, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x80, 0x3F,
+                0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xFE, 0xFF, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                0xFE, 0xFF, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xFE, 0xFF, 0x00, 0x00,
+                0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+            };
+
+            Array.Copy(oldHouse, 0, newHouse, 0, Utilities.VillagerHouseOldSize);
+
+            for (int i = 0; i < 236; i++)
+            {
+                Array.Copy(NoItem, 0x0, newHouse, 0x1D8 + (i * 0xC), NoItem.Length);
             }
 
-            this.Invoke((MethodInvoker)delegate
-            {
-                RefreshVillagerUI(false);
-            });
+            Array.Copy(NewHouseFooter, 0x0, newHouse, 0x1270, NewHouseFooter.Length);
 
-            blocker = false;
-
-            hideVillagerWait();
+            return newHouse;
         }
-        */
 
         public void loadFriendship(byte[] b, int i, int player)
         {

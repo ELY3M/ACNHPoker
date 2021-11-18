@@ -1,4 +1,5 @@
-﻿using NAudio.Wave;
+﻿//modded by ELY M.
+using NAudio.Wave;
 using System;
 using System.Configuration;
 using System.Data;
@@ -180,11 +181,6 @@ namespace ACNHPoker
                 string path;
                 if (VarRow != null & source != recipeSource)
                 {
-                    path = Utilities.imagePath + VarRow["iName"] + ".png";
-                    if (File.Exists(path))
-                    {
-                        return path;
-                    }
                     string main = (data & 0xF).ToString();
                     string sub = (((data & 0xFF) - (data & 0xF)) / 0x20).ToString();
                     //Debug.Print("data " + data.ToString("X") + " Main " + main + " Sub " + sub);
@@ -194,6 +190,11 @@ namespace ACNHPoker
                         return path;
                     }
 
+                    path = Utilities.imagePath + VarRow["iName"] + ".png";
+                    if (File.Exists(path))
+                    {
+                        return path;
+                    }
                 }
 
                 string imageName = row[1].ToString();
@@ -207,14 +208,14 @@ namespace ACNHPoker
                     }
                 }
 
-                path = Utilities.imagePath + imageName + ".png";
+                path = Utilities.imagePath + imageName + "_Remake_0_0.png";
                 if (File.Exists(path))
                 {
                     return path;
                 }
                 else
                 {
-                    path = Utilities.imagePath + imageName + "_Remake_0_0.png";
+                    path = Utilities.imagePath + imageName + ".png";
                     if (File.Exists(path))
                     {
                         return path;
@@ -256,12 +257,9 @@ namespace ACNHPoker
                         hexMode_Click(sender, e);
                     }
                     var btn = (inventorySlot)owner.SourceControl;
+
                     selectedItem.setup(btn);
-                    if (selection != null)
-                    {
-                        selection.receiveID(Utilities.precedingZeros(selectedItem.fillItemID(), 4), languageSetting);
-                    }
-                    updateSelectedItemInfo(selectedItem.displayItemName(), selectedItem.displayItemID(), selectedItem.displayItemData());
+
                     if (selectedItem.fillItemID() == "FFFE")
                     {
                         hexMode_Click(sender, e);
@@ -273,6 +271,14 @@ namespace ACNHPoker
                         customAmountTxt.Text = Utilities.precedingZeros(selectedItem.fillItemData(), 8);
                         customIdTextbox.Text = Utilities.precedingZeros(selectedItem.fillItemID(), 4);
                     }
+
+                    string hexValue = Utilities.precedingZeros(customAmountTxt.Text, 8);
+
+                    if (selection != null)
+                    {
+                        selection.receiveID(Utilities.precedingZeros(selectedItem.fillItemID(), 4), languageSetting, Utilities.precedingZeros(hexValue, 8));
+                    }
+                    updateSelectedItemInfo(selectedItem.displayItemName(), selectedItem.displayItemID(), selectedItem.displayItemData());
                     if (sound)
                         System.Media.SystemSounds.Asterisk.Play();
                 }
@@ -1204,7 +1210,7 @@ namespace ACNHPoker
             }
             string hexValue = reaction;
             int decValue = Convert.ToInt32(hexValue, 16) - 1;
-            if (decValue > 76)
+            if (decValue > 113)
                 box.SelectedIndex = -1;
             else
                 box.SelectedIndex = decValue;
@@ -1269,6 +1275,71 @@ namespace ACNHPoker
             speedX4Btn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(114)))), ((int)(((byte)(137)))), ((int)(((byte)(218)))));
 
             Utilities.pokeMainAddress(s, bot, Utilities.wSpeedAddress.ToString("X"), Utilities.wSpeedX1);
+            if (sound)
+                System.Media.SystemSounds.Asterisk.Play();
+        }
+
+        private void maxSpeedX1Btn_Click(object sender, EventArgs e)
+        {
+            maxSpeedX1Btn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(80)))), ((int)(((byte)(80)))), ((int)(((byte)(255)))));
+            maxSpeedX2Btn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(114)))), ((int)(((byte)(137)))), ((int)(((byte)(218)))));
+            maxSpeedX3Btn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(114)))), ((int)(((byte)(137)))), ((int)(((byte)(218)))));
+            maxSpeedX5Btn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(114)))), ((int)(((byte)(137)))), ((int)(((byte)(218)))));
+            maxSpeedX100Btn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(114)))), ((int)(((byte)(137)))), ((int)(((byte)(218)))));
+
+            Utilities.pokeAddress(s, bot, Utilities.MaxSpeedAddress.ToString("X"), Utilities.MaxSpeedX1);
+            if (sound)
+                System.Media.SystemSounds.Asterisk.Play();
+        }
+
+        private void maxSpeedX2Btn_Click(object sender, EventArgs e)
+        {
+            maxSpeedX1Btn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(114)))), ((int)(((byte)(137)))), ((int)(((byte)(218)))));
+            maxSpeedX2Btn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(80)))), ((int)(((byte)(80)))), ((int)(((byte)(255)))));
+            maxSpeedX3Btn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(114)))), ((int)(((byte)(137)))), ((int)(((byte)(218)))));
+            maxSpeedX5Btn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(114)))), ((int)(((byte)(137)))), ((int)(((byte)(218)))));
+            maxSpeedX100Btn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(114)))), ((int)(((byte)(137)))), ((int)(((byte)(218)))));
+
+            Utilities.pokeAddress(s, bot, Utilities.MaxSpeedAddress.ToString("X"), Utilities.MaxSpeedX2);
+            if (sound)
+                System.Media.SystemSounds.Asterisk.Play();
+        }
+
+        private void maxSpeedX3Btn_Click(object sender, EventArgs e)
+        {
+            maxSpeedX1Btn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(114)))), ((int)(((byte)(137)))), ((int)(((byte)(218)))));
+            maxSpeedX2Btn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(114)))), ((int)(((byte)(137)))), ((int)(((byte)(218)))));
+            maxSpeedX3Btn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(80)))), ((int)(((byte)(80)))), ((int)(((byte)(255)))));
+            maxSpeedX5Btn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(114)))), ((int)(((byte)(137)))), ((int)(((byte)(218)))));
+            maxSpeedX100Btn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(114)))), ((int)(((byte)(137)))), ((int)(((byte)(218)))));
+
+            Utilities.pokeAddress(s, bot, Utilities.MaxSpeedAddress.ToString("X"), Utilities.MaxSpeedX3);
+            if (sound)
+                System.Media.SystemSounds.Asterisk.Play();
+        }
+
+        private void maxSpeedX5Btn_Click(object sender, EventArgs e)
+        {
+            maxSpeedX1Btn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(114)))), ((int)(((byte)(137)))), ((int)(((byte)(218)))));
+            maxSpeedX2Btn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(114)))), ((int)(((byte)(137)))), ((int)(((byte)(218)))));
+            maxSpeedX3Btn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(114)))), ((int)(((byte)(137)))), ((int)(((byte)(218)))));
+            maxSpeedX5Btn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(80)))), ((int)(((byte)(80)))), ((int)(((byte)(255)))));
+            maxSpeedX100Btn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(114)))), ((int)(((byte)(137)))), ((int)(((byte)(218)))));
+
+            Utilities.pokeAddress(s, bot, Utilities.MaxSpeedAddress.ToString("X"), Utilities.MaxSpeedX5);
+            if (sound)
+                System.Media.SystemSounds.Asterisk.Play();
+        }
+
+        private void maxSpeedX100Btn_Click(object sender, EventArgs e)
+        {
+            maxSpeedX1Btn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(114)))), ((int)(((byte)(137)))), ((int)(((byte)(218)))));
+            maxSpeedX2Btn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(114)))), ((int)(((byte)(137)))), ((int)(((byte)(218)))));
+            maxSpeedX3Btn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(114)))), ((int)(((byte)(137)))), ((int)(((byte)(218)))));
+            maxSpeedX5Btn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(114)))), ((int)(((byte)(137)))), ((int)(((byte)(218)))));
+            maxSpeedX100Btn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(80)))), ((int)(((byte)(80)))), ((int)(((byte)(255)))));
+
+            Utilities.pokeAddress(s, bot, Utilities.MaxSpeedAddress.ToString("X"), Utilities.MaxSpeedX100);
             if (sound)
                 System.Media.SystemSounds.Asterisk.Play();
         }
@@ -1386,38 +1457,49 @@ namespace ACNHPoker
         {
             byte[] b = Utilities.peekAddress(s, bot, Utilities.readTimeAddress, 6);
             string time = Utilities.ByteToHexString(b);
-            
-            if (time.Equals("000000000000")) //Try for Chineses
+
+            Debug.Print(time);
+
+            Int32 year = Convert.ToInt32(Utilities.flip(time.Substring(0, 4)), 16);
+            Int32 month = Convert.ToInt32((time.Substring(4, 2)), 16);
+            Int32 day = Convert.ToInt32((time.Substring(6, 2)), 16);
+            Int32 hour = Convert.ToInt32((time.Substring(8, 2)), 16);
+            Int32 min = Convert.ToInt32((time.Substring(10, 2)), 16);
+
+            if (year > 3000 || month > 12 || day > 31 || hour > 24 || min > 60) //Try for Chineses
             {
                 b = Utilities.peekAddress(s, bot, Utilities.readTimeAddress + Utilities.ChineseLanguageOffset, 6);
                 time = Utilities.ByteToHexString(b);
 
-                if (!time.Equals("000000000000"))
+                year = Convert.ToInt32(Utilities.flip(time.Substring(0, 4)), 16);
+                month = Convert.ToInt32((time.Substring(4, 2)), 16);
+                day = Convert.ToInt32((time.Substring(6, 2)), 16);
+                hour = Convert.ToInt32((time.Substring(8, 2)), 16);
+                min = Convert.ToInt32((time.Substring(10, 2)), 16);
+
+                if (!(year > 3000 || month > 12 || day > 31 || hour > 24 || min > 60))
                     ChineseFlag = true;
             }
 
-            Debug.Print(time);
-
             yearTextbox.Clear();
             yearTextbox.SelectionAlignment = HorizontalAlignment.Center;
-            yearTextbox.Text = Convert.ToInt32(Utilities.flip(time.Substring(0, 4)), 16).ToString();
+            yearTextbox.Text = year.ToString();
 
             monthTextbox.Clear();
             monthTextbox.SelectionAlignment = HorizontalAlignment.Center;
-            monthTextbox.Text = Convert.ToInt32((time.Substring(4, 2)), 16).ToString();
+            monthTextbox.Text = month.ToString();
 
             dayTextbox.Clear();
             dayTextbox.SelectionAlignment = HorizontalAlignment.Center;
-            dayTextbox.Text = Convert.ToInt32((time.Substring(6, 2)), 16).ToString();
+            dayTextbox.Text = day.ToString();
 
             hourTextbox.Clear();
             hourTextbox.SelectionAlignment = HorizontalAlignment.Center;
-            hourTextbox.Text = Convert.ToInt32((time.Substring(8, 2)), 16).ToString();
+            hourTextbox.Text = hour.ToString();
 
             minTextbox.Clear();
             minTextbox.SelectionAlignment = HorizontalAlignment.Center;
-            minTextbox.Text = Convert.ToInt32((time.Substring(10, 2)), 16).ToString();
-
+            minTextbox.Text = min.ToString();
         }
 
         private void settimeBtn_Click(object sender, EventArgs e)
@@ -1485,13 +1567,13 @@ namespace ACNHPoker
 
             if (ChineseFlag)
             {
-                Utilities.pokeAddress(s, bot, "0x" + (Utilities.readTimeAddress + Utilities.ChineseLanguageOffset).ToString("X"), Utilities.flip(Utilities.precedingZeros(hexYear, 4)));
-                Utilities.pokeAddress(s, bot, "0x" + (Utilities.readTimeAddress + 0x2 + Utilities.ChineseLanguageOffset).ToString("X"), Utilities.precedingZeros(hexMonth, 2) + Utilities.precedingZeros(hexDay, 2) + Utilities.precedingZeros(hexHour, 2) + Utilities.precedingZeros(hexMin, 2));
+                Utilities.pokeAddress(s, bot, (Utilities.readTimeAddress + Utilities.ChineseLanguageOffset).ToString("X"), Utilities.flip(Utilities.precedingZeros(hexYear, 4)));
+                Utilities.pokeAddress(s, bot, (Utilities.readTimeAddress + 0x2 + Utilities.ChineseLanguageOffset).ToString("X"), Utilities.precedingZeros(hexMonth, 2) + Utilities.precedingZeros(hexDay, 2) + Utilities.precedingZeros(hexHour, 2) + Utilities.precedingZeros(hexMin, 2));
             }
             else
             {
-                Utilities.pokeAddress(s, bot, "0x" + Utilities.readTimeAddress.ToString("X"), Utilities.flip(Utilities.precedingZeros(hexYear, 4)));
-                Utilities.pokeAddress(s, bot, "0x" + (Utilities.readTimeAddress + 0x2).ToString("X"), Utilities.precedingZeros(hexMonth, 2) + Utilities.precedingZeros(hexDay, 2) + Utilities.precedingZeros(hexHour, 2) + Utilities.precedingZeros(hexMin, 2));
+                Utilities.pokeAddress(s, bot, Utilities.readTimeAddress.ToString("X"), Utilities.flip(Utilities.precedingZeros(hexYear, 4)));
+                Utilities.pokeAddress(s, bot, (Utilities.readTimeAddress + 0x2).ToString("X"), Utilities.precedingZeros(hexMonth, 2) + Utilities.precedingZeros(hexDay, 2) + Utilities.precedingZeros(hexHour, 2) + Utilities.precedingZeros(hexMin, 2));
             }
 
             if (sound)
@@ -1509,17 +1591,17 @@ namespace ACNHPoker
                 int decDay = int.Parse(dayTextbox.Text) - 1;
                 string hexDay = decDay.ToString("X");
                 if (ChineseFlag)
-                    Utilities.pokeAddress(s, bot, "0x" + (Utilities.readTimeAddress + 0x3 + Utilities.ChineseLanguageOffset).ToString("X"), Utilities.precedingZeros(hexDay, 2) + Utilities.precedingZeros(hexHour, 2));
+                    Utilities.pokeAddress(s, bot, (Utilities.readTimeAddress + 0x3 + Utilities.ChineseLanguageOffset).ToString("X"), Utilities.precedingZeros(hexDay, 2) + Utilities.precedingZeros(hexHour, 2));
                 else
-                    Utilities.pokeAddress(s, bot, "0x" + (Utilities.readTimeAddress + 0x3).ToString("X"), Utilities.precedingZeros(hexDay, 2) + Utilities.precedingZeros(hexHour, 2));
+                    Utilities.pokeAddress(s, bot, (Utilities.readTimeAddress + 0x3).ToString("X"), Utilities.precedingZeros(hexDay, 2) + Utilities.precedingZeros(hexHour, 2));
             }
             else
             {
                 string hexHour = decHour.ToString("X");
                 if (ChineseFlag)
-                    Utilities.pokeAddress(s, bot, "0x" + (Utilities.readTimeAddress + 0x4 + Utilities.ChineseLanguageOffset).ToString("X"), Utilities.precedingZeros(hexHour, 2));
+                    Utilities.pokeAddress(s, bot, (Utilities.readTimeAddress + 0x4 + Utilities.ChineseLanguageOffset).ToString("X"), Utilities.precedingZeros(hexHour, 2));
                 else
-                    Utilities.pokeAddress(s, bot, "0x" + (Utilities.readTimeAddress + 0x4).ToString("X"), Utilities.precedingZeros(hexHour, 2));
+                    Utilities.pokeAddress(s, bot, (Utilities.readTimeAddress + 0x4).ToString("X"), Utilities.precedingZeros(hexHour, 2));
             }
             readtime();
             if (sound)
@@ -1537,17 +1619,17 @@ namespace ACNHPoker
                 int decDay = int.Parse(dayTextbox.Text) + 1;
                 string hexDay = decDay.ToString("X");
                 if (ChineseFlag)
-                    Utilities.pokeAddress(s, bot, "0x" + (Utilities.readTimeAddress + 0x3 + Utilities.ChineseLanguageOffset).ToString("X"), Utilities.precedingZeros(hexDay, 2) + Utilities.precedingZeros(hexHour, 2));
+                    Utilities.pokeAddress(s, bot, (Utilities.readTimeAddress + 0x3 + Utilities.ChineseLanguageOffset).ToString("X"), Utilities.precedingZeros(hexDay, 2) + Utilities.precedingZeros(hexHour, 2));
                 else
-                    Utilities.pokeAddress(s, bot, "0x" + (Utilities.readTimeAddress + 0x3).ToString("X"), Utilities.precedingZeros(hexDay, 2) + Utilities.precedingZeros(hexHour, 2));
+                    Utilities.pokeAddress(s, bot, (Utilities.readTimeAddress + 0x3).ToString("X"), Utilities.precedingZeros(hexDay, 2) + Utilities.precedingZeros(hexHour, 2));
             }
             else
             {
                 string hexHour = decHour.ToString("X");
                 if (ChineseFlag)
-                    Utilities.pokeAddress(s, bot, "0x" + (Utilities.readTimeAddress + 0x4 + Utilities.ChineseLanguageOffset).ToString("X"), Utilities.precedingZeros(hexHour, 2));
+                    Utilities.pokeAddress(s, bot, (Utilities.readTimeAddress + 0x4 + Utilities.ChineseLanguageOffset).ToString("X"), Utilities.precedingZeros(hexHour, 2));
                 else
-                    Utilities.pokeAddress(s, bot, "0x" + (Utilities.readTimeAddress + 0x4).ToString("X"), Utilities.precedingZeros(hexHour, 2));
+                    Utilities.pokeAddress(s, bot, (Utilities.readTimeAddress + 0x4).ToString("X"), Utilities.precedingZeros(hexHour, 2));
             }
             readtime();
             if (sound)

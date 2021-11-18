@@ -49,17 +49,6 @@ namespace ACNHPoker
             return input.Replace(" ", String.Empty);
         }
 
-        private Boolean hasVar(string path)
-        {
-            if (path.IndexOf("_0_0") > 0)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
         protected override Point ScrollToControl(Control activeControl)
         {
             return this.AutoScrollPosition;
@@ -75,18 +64,19 @@ namespace ACNHPoker
             }
             else
             {
-                //row found set the index and find the file
-                string path = Utilities.imagePath + row["iName"] + ".png";
+                string path = Utilities.imagePath + row["iName"] + "_Remake_0_0" + ".png";
                 if (File.Exists(path))
                 {
                     return path;
                 }
 
-                path = Utilities.imagePath + row["iName"] + "_Remake_0_0" + ".png";
+                //row found set the index and find the file
+                path = Utilities.imagePath + row["iName"] + ".png";
                 if (File.Exists(path))
                 {
                     return path;
                 }
+
                 return "";
             }
 
@@ -202,16 +192,10 @@ namespace ACNHPoker
 
                 selectedItem.setup(name, id, data, path, true);
                 //updateSelectedItemInfo(selectedItem.displayItemName(), selectedItem.displayItemID(), selectedItem.displayItemData());
-                if (hasVar(path))
-                {
-                    //Debug.Print(findMaxVariation(category, iName).ToString());
-                    //Debug.Print(findMaxSubVariation(category, iName).ToString());
-                    //showVariation(name, id, findMaxVariation(category, iName), findMaxSubVariation(category, iName), category, iName);
-                }
             }
         }
 
-        private void showVariation(string name, UInt16 id, int main, int sub, string iName)
+        private void showVariation(string name, UInt16 id, int main, int sub, string iName, string value)
         {
             selection = new inventorySlot[main + 1, sub + 1];
 
@@ -237,7 +221,18 @@ namespace ACNHPoker
                     selection[j, k].Size = new System.Drawing.Size(80, 80);
                     selection[j, k].Font = new System.Drawing.Font("Arial", 10F, System.Drawing.FontStyle.Bold);
                     //selection[j, k].setHide(true);
-                    selection[j, k].setup(name, id, (uint)(j + (0x20 * k)), path, true);
+
+                    if (ItemAttr.hasFenceWithVariation(id)) // Fence with Variation
+                    {
+                        string front = Utilities.precedingZeros((j + (0x20 * k)).ToString("X"), 4);
+                        string back = Utilities.turn2bytes(value);
+                        uint newValue = Convert.ToUInt32(front + back, 16);
+                        selection[j, k].setup(name, id, newValue, path, true);
+                    }
+                    else
+                    {
+                        selection[j, k].setup(name, id, (uint)(j + (0x20 * k)), path, true);
+                    }
                     selection[j, k].MouseDown += new System.Windows.Forms.MouseEventHandler(this.variation_MouseClick);
                     this.Controls.Add(selection[j, k]);
 
@@ -363,7 +358,7 @@ namespace ACNHPoker
             return -1;
         }
 
-        public void receiveID(string id, string language)
+        public void receiveID(string id, string language, string value = "00000000")
         {
             removeVariation();
             this.itemIDLabel.Text = id;
@@ -380,24 +375,25 @@ namespace ACNHPoker
                 string path = GetImagePathFromID(idString, itemSource);
 
                 //updateSelectedItemInfo(selectedItem.displayItemName(), selectedItem.displayItemID(), selectedItem.displayItemData());
-                if (hasVar(path))
-                {
-                    //Debug.Print(row[0].ToString() + " " + row[1].ToString() + " " + row[2].ToString() + " " + row[3].ToString() + " ");
-                    showVariation(name, itemID, findMaxVariation(iName), findMaxSubVariation(iName), iName);
-                }
+                //Debug.Print(row[0].ToString() + " " + row[1].ToString() + " " + row[2].ToString() + " " + row[3].ToString() + " ");
+                int MaxVariation = findMaxVariation(iName);
+                int MaxSubxVariation = findMaxSubVariation(iName);
+
+                if (MaxVariation >= 0 && MaxSubxVariation >= 0)
+                    showVariation(name, itemID, findMaxVariation(iName), findMaxSubVariation(iName), iName, value);
                 else
-                {
-                    this.infoLabel.Text = "No variation found. Did you forget the image pack?";
-                }
+                    this.infoLabel.Text = "Did you forget the image pack?";
             }
             else
             {
-                this.infoLabel.Text = "No variation found. Did you forget the image pack?";
+                this.infoLabel.Text = "No variation found.";
             }
         }
 
         public DataRow GetRowFromID(string id)
         {
+            if (itemSource == null)
+                return null;
             DataRow row = itemSource.Rows.Find(id);
 
             return row;

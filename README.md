@@ -247,6 +247,27 @@ https://youtu.be/-zztRgmtXig
 	* Try to fix "Dodo Helper" for Chinese.
 * R18
 	* Update for Game version number 2.0.0
+* R18.1
+	* Fixed a nasty bug that cause the application window to shrink.
+	* Fixed the display for multiple-use items. (LikeBoba tea)
+	* Added the new reactions to the reaction wheel.
+	* Added a [!] to PhotoStudio items that would be stuck if dropped.
+	* Added the "Max Walk Speed" to the "Other" tab. Function similar to the old "Walk speed". Thanks to Red.
+* R18.2
+	* Added the "Ceiling Furniture Display".
+	* Fixed the spawning bug of fence variation.
+	* Rework on the ImageDownloader to hopefully mitigate crash.
+	* Finally added the freezer menu.
+* R18.3
+	* Added double click to get max stack.
+	* Change the Auto-save time detection number. Hopefully detect it better.
+	* Minor bugfix here and there for the map dropper.
+	* Added right-click to flag to 20 or 00 in map dropper. Also works with area select.	
+* R18.4
+	* Update to use v2 villager house (.nhv2)
+	* Fixed a bug where interacting with the villager house might crash the game.
+	* Fixed the Twitch villager inject.
+
 ## Contributing
 
 1. Fork it (<https://github.com/KingLycosa/acnhpoker/fork>)

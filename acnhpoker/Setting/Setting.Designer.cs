@@ -738,6 +738,7 @@
             this.Name = "Setting";
             this.ShowInTaskbar = false;
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Configuration";
             this.addresses.ResumeLayout(false);
             this.addresses.PerformLayout();

@@ -137,7 +137,7 @@ namespace ACNHPoker
                     else
                         return (Image)(new Bitmap(background, new Size(128, 128)));
                 }
-                else if (itemID == 0x315A || itemID == 0x1618) // Wall-Mount
+                else if (itemID == 0x315A || itemID == 0x1618 || itemID == 0x342F) // Wall-Mount
                 {
                     if (File.Exists(containItemPath))
                     {
@@ -170,7 +170,7 @@ namespace ACNHPoker
                 {
                     return (Image)(new Bitmap(ACNHPoker.Properties.Resources.ACLeaf.ToBitmap(), new Size(64, 64)));
                 }
-                else if (itemID == 0x315A || itemID == 0x1618) // Wall-Mount
+                else if (itemID == 0x315A || itemID == 0x1618 || itemID == 0x342F) // Wall-Mount
                 {
                     if (File.Exists(containItemPath))
                     {
@@ -395,6 +395,12 @@ namespace ACNHPoker
                     this.Text = "Dur: " + itemDurability.ToString();
                     return;
                 }
+                else if (ItemAttr.hasUse(itemID)) // Food/Drink
+                {
+                    this.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+                    this.Text = "Use: " + itemDurability.ToString();
+                    return;
+                }
                 else if (ItemAttr.isFlower(itemID)) //Flowers
                 {
                     this.TextAlign = System.Drawing.ContentAlignment.BottomRight;
@@ -470,7 +476,7 @@ namespace ACNHPoker
                     this.TextAlign = System.Drawing.ContentAlignment.BottomRight;
                 }
                 */
-                else if (itemID == 0x315A || itemID == 0x1618) // Wall-Mounted
+                else if (itemID == 0x315A || itemID == 0x1618 || itemID == 0x342F) // Wall-Mounted
                 {
 
                 }

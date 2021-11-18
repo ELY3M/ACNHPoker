@@ -324,29 +324,16 @@ namespace ACNHPoker
                 this.BackColor = miniMap.GetBackgroundColor(mapX, mapY, false);
             }
 
-            if (flag1 != "00") //Wrapped
-            {
-                if (itemID == 0x16A1) //Inside Bottle
-                {
-                    this.BackColor = Color.LightSalmon;
-                }
-                else if (itemID == 0x16A2) // Recipe
-                {
-                    this.BackColor = Color.LightSalmon;
-                }
-                else
-                {
-                    this.BackColor = Color.LightSalmon;
-                }
-            }
-            else if (flag2 == "04" || flag2 == "24") //Bury
-            {
-                this.BackColor = Color.DarkKhaki;
-            }
-            else if (ItemAttr.hasDurability(itemID)) //Tools
+
+            if (ItemAttr.hasDurability(itemID)) //Tools
             {
                 this.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
                 this.Text = "Dur: " + itemDurability.ToString();
+            }
+            else if (ItemAttr.hasUse(itemID)) // Food/Drink
+            {
+                this.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+                this.Text = "Use: " + itemDurability.ToString();
             }
             else if (ItemAttr.isFlower(itemID)) //Flowers
             {
@@ -386,6 +373,30 @@ namespace ACNHPoker
                     this.Text = HexToBinary(secondByte) + "-" + HexToBinary(firstByte);
                     //System.Diagnostics.Debug.Print(secondByte + " " + firstByte + " " + HexToBinary(secondByte) + " " + HexToBinary(firstByte));
                 }
+            }
+
+            if (flag1 != "00") //Wrapped
+            {
+                if (itemID == 0x16A1) //Inside Bottle
+                {
+                    this.BackColor = Color.LightSalmon;
+                }
+                else if (itemID == 0x16A2) // Recipe
+                {
+                    this.BackColor = Color.LightSalmon;
+                }
+                else
+                {
+                    this.BackColor = Color.LightSalmon;
+                }
+            }
+            else if (flag2 == "04" || flag2 == "24") //Bury
+            {
+                this.BackColor = Color.DarkKhaki;
+            }
+            else if (flag2 == "20")
+            {
+                this.BackColor = Color.Green;
             }
             else if (locked)
             {
@@ -578,7 +589,7 @@ namespace ACNHPoker
                     Image img = PlaceImageOverImage(background, icon, background.Width - (imageSize - 5), background.Width - (imageSize - 5), 1);
                     return (Image)(new Bitmap(img, size));
                 }
-                else if (itemID == 0x315A || itemID == 0x1618) // Wall-Mount
+                else if (itemID == 0x315A || itemID == 0x1618 || itemID == 0x342F) // Wall-Mount
                 {
                     if (File.Exists(containItemPath))
                     {
@@ -703,7 +714,7 @@ namespace ACNHPoker
                     Image img = PlaceImageOverImage(background, icon, background.Width - (imageSize - 5), background.Width - (imageSize - 5), 1);
                     return (Image)(new Bitmap(img, size));
                 }
-                else if (itemID == 0x315A || itemID == 0x1618) // Wall-Mount
+                else if (itemID == 0x315A || itemID == 0x1618 || itemID == 0x342F) // Wall-Mount
                 {
                     if (File.Exists(containItemPath))
                     {

@@ -379,7 +379,7 @@ namespace ACNHPoker
                 Debug.Print("Length :" + SpawnArea.Length + " Time : " + time);
 
 
-                while (isAboutToSave(time))
+                while (isAboutToSave(time + 10))
                 {
                     Thread.Sleep(5000);
                 }

@@ -1,6 +1,7 @@
-﻿using System;
+﻿using Ionic.Zip;
+using System;
+using System.Configuration;
 using System.IO;
-using System.IO.Compression;
 using System.Net;
 using System.Threading;
 using System.Windows.Forms;
@@ -16,6 +17,8 @@ namespace ACNHPoker
 
         private void button2_Click(object sender, EventArgs e)
         {
+            Configuration config = ConfigurationManager.OpenExeConfiguration(Application.ExecutablePath);
+            config.AppSettings.Settings["RestartRequired"].Value = "false";
             this.Close();
         }
 
@@ -27,16 +30,11 @@ namespace ACNHPoker
 
             string path = Path.Combine(Application.StartupPath, "img.zip");
 
-            if (File.Exists(path))
+            if (File.Exists(@"img.zip"))
             {
-                waitmsg.Visible = true;
-                progressBar.Visible = false;
-
-                Thread unzipThread = new Thread(delegate () { extractHere(); });
-                unzipThread.Start();
+                File.Delete(@"img.zip");
             }
-            else
-            {
+
                 WebClient webClient = new WebClient();
                 webClient.Proxy = null;
 
@@ -55,18 +53,31 @@ namespace ACNHPoker
                 };
 
                 webClient.DownloadFileAsync(new Uri("https://github.com/MyShiLingStar/ACNHPoker/releases/download/ImgPack8/img.zip"), "img.zip");
-            }
 
         }
 
         private void extractHere()
         {
-            ZipFile.ExtractToDirectory(@".\img.zip", @".\");
+            Configuration config = ConfigurationManager.OpenExeConfiguration(Application.ExecutablePath);
+            config.AppSettings.Settings["RestartRequired"].Value = "true";
+
+            try
+            {
+                using (ZipFile archive = new ZipFile(@"" + System.Environment.CurrentDirectory + "\\img.zip"))
+                {
+                    archive.ExtractAll(@"" + System.Environment.CurrentDirectory, ExtractExistingFileAction.OverwriteSilently);
+                }
+            }
+            catch
+            {
+
+            }
+
             this.Invoke((MethodInvoker)delegate
             {
                 this.Close();
-                Application.Restart();
             });
         }
+
     }
 }

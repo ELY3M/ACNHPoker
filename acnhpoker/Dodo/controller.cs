@@ -331,7 +331,7 @@ namespace ACNHPoker
         public static void skip(int before = 900, int after = 500)
         {
             Thread.Sleep(before);
-            Utilities.SetTextSpeed(s, null);
+            Utilities.SetTextSpeed(s, null, Utilities.isChinese(s));
             Thread.Sleep(after);
         }
 

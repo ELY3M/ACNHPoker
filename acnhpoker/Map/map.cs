@@ -97,7 +97,7 @@ namespace ACNHPoker
                     floorSlots[i] = btn;
                 }
 
-                
+
                 if (source != null)
                 {
                     fieldGridView.DataSource = source;
@@ -166,7 +166,7 @@ namespace ACNHPoker
 
                     currentDataTable = source;
                 }
-                
+
 
                 //this.BringToFront();
                 //this.Focus();
@@ -176,7 +176,7 @@ namespace ACNHPoker
                 PasteArea = new ToolStripMenuItem("Paste Area", null, pasteAreaToolStripMenuItem_Click);
                 PasteArea.ForeColor = Color.White;
 
-                //this.KeyPreview = true;
+                this.KeyPreview = true;
                 Log.logEvent("Map", "MapForm Started Successfully");
             }
             catch (Exception ex)
@@ -245,7 +245,7 @@ namespace ACNHPoker
                         miniMapBox.BackgroundImage = MiniMap.combineMap(MiniMap.drawBackground(), MiniMap.drawItemMap());
                         displayAnchor(getMapColumns(anchorX, anchorY));
                         xCoordinate.Text = anchorX.ToString();
-                        yCoordinate.Text = anchorX.ToString();
+                        yCoordinate.Text = anchorY.ToString();
                         enableBtn();
                         fetchMapBtn.Visible = false;
                         NextSaveTimer.Start();
@@ -445,6 +445,10 @@ namespace ACNHPoker
             string Path2;
             string Path3;
             string Path4;
+            string ContainPath = "";
+
+            string front = Utilities.precedingZeros(Data.ToString("X"), 8).Substring(0, 4);
+            string back = Utilities.precedingZeros(Data.ToString("X"), 8).Substring(4, 4);
 
             if (P1Id == "FFFD")
                 Path1 = GetImagePathFromID(P1Data, source);
@@ -452,6 +456,15 @@ namespace ACNHPoker
             {
                 Path1 = GetImagePathFromID(P1Data, recipeSource, Data);
                 Name = GetNameFromID(P1Data, recipeSource);
+            }
+            else if (P1Id == "315A" || P1Id == "1618" || P1Id == "342F")
+            {
+                Path1 = GetImagePathFromID(itemID, source, Data);
+                ContainPath = GetImagePathFromID(P1Data, source);
+            }
+            else if (ItemAttr.hasFenceWithVariation(ID))  // Fence Variation
+            {
+                Path1 = GetImagePathFromID(itemID, source, Convert.ToUInt32("0x" + front, 16));
             }
             else
                 Path1 = GetImagePathFromID(itemID, source, Data);
@@ -471,7 +484,7 @@ namespace ACNHPoker
             else
                 Path4 = GetImagePathFromID(P4Id, source, IntP4Data);
 
-            btn.setup(Name, ID, Data, IntP2Id, IntP2Data, IntP3Id, IntP3Data, IntP4Id, IntP4Data, Path1, Path2, Path3, Path4, "", flag1, flag2);
+            btn.setup(Name, ID, Data, IntP2Id, IntP2Data, IntP3Id, IntP3Data, IntP4Id, IntP4Data, Path1, Path2, Path3, Path4, ContainPath, flag1, flag2);
         }
 
         #endregion
@@ -503,6 +516,10 @@ namespace ACNHPoker
             string Path2;
             string Path3;
             string Path4;
+            string ContainPath = "";
+
+            string front = Utilities.precedingZeros(Data.ToString("X"), 8).Substring(0, 4);
+            string back = Utilities.precedingZeros(Data.ToString("X"), 8).Substring(4, 4);
 
             if (P1Id == "FFFD")
                 Path1 = GetImagePathFromID(P1Data, source);
@@ -510,6 +527,15 @@ namespace ACNHPoker
             {
                 Path1 = GetImagePathFromID(P1Data, recipeSource, Data);
                 Name = GetNameFromID(P1Data, recipeSource);
+            }
+            else if (P1Id == "315A" || P1Id == "1618" || P1Id == "342F")
+            {
+                Path1 = GetImagePathFromID(itemID, source, Data);
+                ContainPath = GetImagePathFromID(P1Data, source);
+            }
+            else if (ItemAttr.hasFenceWithVariation(ID))  // Fence Variation
+            {
+                Path1 = GetImagePathFromID(itemID, source, Convert.ToUInt32("0x" + front, 16));
             }
             else
                 Path1 = GetImagePathFromID(itemID, source, Data);
@@ -529,7 +555,7 @@ namespace ACNHPoker
             else
                 Path4 = GetImagePathFromID(P4Id, source, IntP4Data);
 
-            await btn.setupAsync(Name, ID, Data, IntP2Id, IntP2Data, IntP3Id, IntP3Data, IntP4Id, IntP4Data, Path1, Path2, Path3, Path4, "", flag1, flag2);
+            await btn.setupAsync(Name, ID, Data, IntP2Id, IntP2Data, IntP3Id, IntP3Data, IntP4Id, IntP4Data, Path1, Path2, Path3, Path4, ContainPath, flag1, flag2);
         }
 
         private async Task displayAnchorAsync(byte[][] floorByte)
@@ -904,17 +930,41 @@ namespace ACNHPoker
 
                     if (OverrideDict.ContainsKey(imageName))
                     {
-                        path = imagePath + OverrideDict[imageName] + ".png";
+                        path = imagePath + OverrideDict[imageName] + "_Remake_0_0.png";
                         if (File.Exists(path))
                         {
                             return path;
                         }
                         else
                         {
-                            path = imagePath + OverrideDict[imageName] + "_Remake_0_0.png";
+                            path = imagePath + OverrideDict[imageName] + ".png";
                             if (File.Exists(path))
                             {
                                 return path;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        path = imagePath + imageName + "_Remake_0_0.png";
+                        if (File.Exists(path))
+                        {
+                            return path;
+                        }
+                        else
+                        {
+                            path = imagePath + imageName + ".png";
+                            if (File.Exists(path))
+                            {
+                                return path;
+                            }
+                            else
+                            {
+                                path = imagePath + removeNumber(imageName) + ".png";
+                                if (File.Exists(path))
+                                {
+                                    return path;
+                                }
                             }
                         }
                     }
@@ -937,11 +987,6 @@ namespace ACNHPoker
                 string path;
                 if (VarRow != null & source != recipeSource)
                 {
-                    path = imagePath + VarRow["iName"] + ".png";
-                    if (File.Exists(path))
-                    {
-                        return path;
-                    }
                     string main = (data & 0xF).ToString();
                     string sub = (((data & 0xFF) - (data & 0xF)) / 0x20).ToString();
                     //Debug.Print("data " + data.ToString("X") + " Main " + main + " Sub " + sub);
@@ -951,6 +996,11 @@ namespace ACNHPoker
                         return path;
                     }
 
+                    path = imagePath + VarRow["iName"] + ".png";
+                    if (File.Exists(path))
+                    {
+                        return path;
+                    }
                 }
 
                 string imageName = row[1].ToString();
@@ -972,14 +1022,14 @@ namespace ACNHPoker
                     }
                 }
 
-                path = imagePath + imageName + ".png";
+                path = imagePath + imageName + "_Remake_0_0.png";
                 if (File.Exists(path))
                 {
                     return path;
                 }
                 else
                 {
-                    path = imagePath + imageName + "_Remake_0_0.png";
+                    path = imagePath + imageName + ".png";
                     if (File.Exists(path))
                     {
                         return path;
@@ -1043,11 +1093,13 @@ namespace ACNHPoker
                 if (e.ColumnIndex == Grid.Columns["Image"].Index)
                 {
                     string path;
+                    if (Grid.Rows[e.RowIndex].Cells["iName"].Value == null)
+                        return;
                     string imageName = Grid.Rows[e.RowIndex].Cells["iName"].Value.ToString();
 
                     if (OverrideDict.ContainsKey(imageName))
                     {
-                        path = imagePath + OverrideDict[imageName] + ".png";
+                        path = imagePath + OverrideDict[imageName] + "_Remake_0_0.png";
                         if (File.Exists(path))
                         {
                             Image img = Image.FromFile(path);
@@ -1058,7 +1110,7 @@ namespace ACNHPoker
                         }
                         else
                         {
-                            path = imagePath + OverrideDict[imageName] + "_Remake_0_0.png";
+                            path = imagePath + OverrideDict[imageName] + ".png";
                             if (File.Exists(path))
                             {
                                 Image img = Image.FromFile(path);
@@ -1070,19 +1122,19 @@ namespace ACNHPoker
                         }
                     }
 
-                    path = imagePath + imageName + ".png";
+                    path = imagePath + imageName + "_Remake_0_0.png";
                     if (File.Exists(path))
                     {
                         Image img = Image.FromFile(path);
+                        e.CellStyle.BackColor = Color.FromArgb(((int)(((byte)(56)))), ((int)(((byte)(77)))), ((int)(((byte)(162)))));
                         e.Value = img;
                     }
                     else
                     {
-                        path = imagePath + imageName + "_Remake_0_0.png";
+                        path = imagePath + imageName + ".png";
                         if (File.Exists(path))
                         {
                             Image img = Image.FromFile(path);
-                            e.CellStyle.BackColor = Color.FromArgb(((int)(((byte)(56)))), ((int)(((byte)(77)))), ((int)(((byte)(162)))));
                             e.Value = img;
                         }
                         else
@@ -1177,7 +1229,16 @@ namespace ACNHPoker
                     }
                     if (selection != null)
                     {
-                        selection.receiveID(Utilities.precedingZeros(selectedItem.fillItemID(), 4), "eng");
+                        string hexValue = "00000000";
+
+                        if (currentDataTable == flowerSource)
+                            hexValue = fieldGridView.Rows[e.RowIndex].Cells["value"].Value.ToString();
+                        else if (currentDataTable == favSource)
+                            hexValue = fieldGridView.Rows[e.RowIndex].Cells["value"].Value.ToString();
+                        else if (currentDataTable == fieldSource)
+                            hexValue = fieldGridView.Rows[e.RowIndex].Cells["value"].Value.ToString();
+
+                        selection.receiveID(Utilities.precedingZeros(selectedItem.fillItemID(), 4), "eng", Utilities.precedingZeros(hexValue, 8));
                     }
                     //updateSelectedItemInfo(selectedItem.displayItemName(), selectedItem.displayItemID(), selectedItem.displayItemData());
 
@@ -1201,7 +1262,7 @@ namespace ACNHPoker
 
                     if (IdTextbox.Text != "")
                     {
-                        if (IdTextbox.Text == "315A" || IdTextbox.Text == "1618") // Wall-Mounted
+                        if (IdTextbox.Text == "315A" || IdTextbox.Text == "1618" || IdTextbox.Text == "342F") // Wall-Mounted
                         {
                             HexTextbox.Text = Utilities.precedingZeros("00" + fieldGridView.Rows[e.RowIndex].Cells["id"].Value.ToString(), 8);
                             selectedItem.setup(name, Convert.ToUInt16(id, 16), Convert.ToUInt32("0x" + HexTextbox.Text, 16), path, true, GetImagePathFromID(fieldGridView.Rows[e.RowIndex].Cells["id"].Value.ToString(), source));
@@ -1690,10 +1751,17 @@ namespace ACNHPoker
             HexTextbox.Text = hexValue;
             FlagTextbox.Text = flag2;
 
+            UInt16 IntId = Convert.ToUInt16("0x" + id, 16);
+            string front = Utilities.precedingZeros(hexValue, 8).Substring(0, 4);
+            string back = Utilities.precedingZeros(hexValue, 8).Substring(4, 4);
+
+
             if (id == "16A2")
                 selectedItem.setup(name, Convert.ToUInt16("0x" + id, 16), Convert.ToUInt32("0x" + hexValue, 16), GetImagePathFromID(Utilities.turn2bytes(hexValue), recipeSource), true, "", flag1, flag2);
+            else if (ItemAttr.hasFenceWithVariation(IntId))  // Fence Variation
+                selectedItem.setup(name, Convert.ToUInt16("0x" + id, 16), Convert.ToUInt32("0x" + hexValue, 16), GetImagePathFromID(id, source, Convert.ToUInt32("0x" + front, 16)), true, "", flag1, flag2);
             else
-                selectedItem.setup(name, Convert.ToUInt16("0x" + id, 16), Convert.ToUInt32("0x" + hexValue, 16), GetImagePathFromID(id, source), true, "", flag1, flag2);
+                selectedItem.setup(name, Convert.ToUInt16("0x" + id, 16), Convert.ToUInt32("0x" + hexValue, 16), GetImagePathFromID(id, source, Convert.ToUInt32("0x" + hexValue, 16)), true, "", flag1, flag2);
         }
 
         private void KeyboardKeyDown(object sender, KeyEventArgs e)
@@ -1745,6 +1813,20 @@ namespace ACNHPoker
                     fieldGridView.CurrentCell = fieldGridView.Rows[fieldGridView.CurrentRow.Index + 1].Cells[fieldGridView.CurrentCell.ColumnIndex];
                 }
 
+                if (selection != null)
+                {
+                    string hexValue = "00000000";
+
+                    if (currentDataTable == flowerSource)
+                        hexValue = fieldGridView.Rows[fieldGridView.CurrentRow.Index + 1].Cells["value"].Value.ToString();
+                    else if (currentDataTable == favSource)
+                        hexValue = fieldGridView.Rows[fieldGridView.CurrentRow.Index + 1].Cells["value"].Value.ToString();
+                    else if (currentDataTable == fieldSource)
+                        hexValue = fieldGridView.Rows[fieldGridView.CurrentRow.Index + 1].Cells["value"].Value.ToString();
+
+                    selection.receiveID(Utilities.precedingZeros(selectedItem.fillItemID(), 4), "eng", Utilities.precedingZeros(hexValue, 8));
+                }
+
             }
             else if (e.KeyCode.ToString() == "Home")
             {
@@ -1771,6 +1853,20 @@ namespace ACNHPoker
 
                     KeyPressSetup(fieldGridView.CurrentRow.Index - 1);
                     fieldGridView.CurrentCell = fieldGridView.Rows[fieldGridView.CurrentRow.Index - 1].Cells[fieldGridView.CurrentCell.ColumnIndex];
+                }
+
+                if (selection != null)
+                {
+                    string hexValue = "00000000";
+
+                    if (currentDataTable == flowerSource)
+                        hexValue = fieldGridView.Rows[fieldGridView.CurrentRow.Index - 1].Cells["value"].Value.ToString();
+                    else if (currentDataTable == favSource)
+                        hexValue = fieldGridView.Rows[fieldGridView.CurrentRow.Index - 1].Cells["value"].Value.ToString();
+                    else if (currentDataTable == fieldSource)
+                        hexValue = fieldGridView.Rows[fieldGridView.CurrentRow.Index - 1].Cells["value"].Value.ToString();
+
+                    selection.receiveID(Utilities.precedingZeros(selectedItem.fillItemID(), 4), "eng", Utilities.precedingZeros(hexValue, 8));
                 }
             }
         }
@@ -1928,7 +2024,7 @@ namespace ACNHPoker
         {
             showMapWait(2, "Spawning Item...");
 
-            while (isAboutToSave(3))
+            while (isAboutToSave(10))
             {
                 this.Invoke((MethodInvoker)delegate
                 {
@@ -2007,7 +2103,7 @@ namespace ACNHPoker
             if (Corner1X >= 0 && Corner1Y >= 0 && Corner2X >= 0 && Corner2Y >= 0)
             {
                 AreaSet = true;
-
+                ClearCopiedAreaBtn.Visible = true;
 
                 int TopLeftX;
                 int TopLeftY;
@@ -2167,7 +2263,7 @@ namespace ACNHPoker
 
                 Debug.Print("Length :" + SpawnArea.Length + " Time : " + time);
 
-                while (isAboutToSave(time))
+                while (isAboutToSave(time + 10))
                 {
                     Thread.Sleep(2000);
                 }
@@ -2398,7 +2494,7 @@ namespace ACNHPoker
                 Debug.Print("Length :" + numberOfColumn + " Time : " + time);
 
 
-                while (isAboutToSave(time))
+                while (isAboutToSave(time + 10))
                 {
                     Thread.Sleep(5000);
                 }
@@ -2496,7 +2592,7 @@ namespace ACNHPoker
         {
             showMapWait(2, "Deleting Item...");
 
-            while (isAboutToSave(3))
+            while (isAboutToSave(10))
             {
                 this.Invoke((MethodInvoker)delegate
                 {
@@ -2542,8 +2638,15 @@ namespace ACNHPoker
                     HexTextbox.Text = hexValue;
                     FlagTextbox.Text = flag2;
 
+                    UInt16 IntId = Convert.ToUInt16("0x" + id, 16);
+                    string front = Utilities.precedingZeros(hexValue, 8).Substring(0, 4);
+                    string back = Utilities.precedingZeros(hexValue, 8).Substring(4, 4);
+
+
                     if (id == "16A2")
                         selectedItem.setup(name, Convert.ToUInt16("0x" + id, 16), Convert.ToUInt32("0x" + hexValue, 16), GetImagePathFromID(Utilities.turn2bytes(hexValue), recipeSource), true, "", flag1, flag2);
+                    else if (ItemAttr.hasFenceWithVariation(IntId))  // Fence Variation
+                        selectedItem.setup(name, Convert.ToUInt16("0x" + id, 16), Convert.ToUInt32("0x" + hexValue, 16), GetImagePathFromID(id, source, Convert.ToUInt32("0x" + front, 16)), true, "", flag1, flag2);
                     else
                         selectedItem.setup(name, Convert.ToUInt16("0x" + id, 16), Convert.ToUInt32("0x" + hexValue, 16), GetImagePathFromID(id, source, Convert.ToUInt32("0x" + hexValue, 16)), true, "", flag1, flag2);
                     if (sound)
@@ -2572,13 +2675,21 @@ namespace ACNHPoker
             string itemData = Utilities.precedingZeros(HexTextbox.Text, 8);
             string flag2 = Utilities.precedingZeros(FlagTextbox.Text, 2);
 
-            if (itemID.Equals("315A") || itemID.Equals("1618"))
+            UInt16 IntId = Convert.ToUInt16("0x" + itemID, 16);
+            string front = Utilities.precedingZeros(itemData, 8).Substring(0, 4);
+            string back = Utilities.precedingZeros(itemData, 8).Substring(4, 4);
+
+            if (itemID.Equals("315A") || itemID.Equals("1618") || itemID.Equals("342F"))
             {
                 selectedItem.setup(GetNameFromID(itemID, source), Convert.ToUInt16("0x" + itemID, 16), Convert.ToUInt32("0x" + itemData, 16), GetImagePathFromID(itemID, source), true, GetImagePathFromID(Utilities.turn2bytes(itemData), source), "00", flag2);
             }
             else if (itemID.Equals("16A2"))
             {
                 selectedItem.setup(GetNameFromID(itemID, recipeSource), Convert.ToUInt16("0x" + itemID, 16), Convert.ToUInt32("0x" + itemData, 16), GetImagePathFromID(Utilities.turn2bytes(itemData), recipeSource), true, "", "00", flag2);
+            }
+            else if (ItemAttr.hasFenceWithVariation(IntId))  // Fence Variation
+            {
+                selectedItem.setup(GetNameFromID(itemID, source), Convert.ToUInt16("0x" + itemID, 16), Convert.ToUInt32("0x" + itemData, 16), GetImagePathFromID(itemID, source, Convert.ToUInt32("0x" + front, 16)), true, "", "00", flag2);
             }
             else
             {
@@ -2591,14 +2702,18 @@ namespace ACNHPoker
             if (IdTextbox.Text.Equals(string.Empty) || HexTextbox.Text.Equals(string.Empty))
                 return;
 
-            long data = Int64.Parse(((HexUpDown)(sender)).Value.ToString());
+            long data = Convert.ToUInt32(((RichTextBox)(sender)).Text.ToString(), 16);
             string hexValue = data.ToString("X");
 
             string itemID = Utilities.precedingZeros(IdTextbox.Text, 4);
             string itemData = Utilities.precedingZeros(hexValue, 8);
             string flag2 = Utilities.precedingZeros(FlagTextbox.Text, 2);
 
-            if (itemID.Equals("315A") || itemID.Equals("1618"))
+            UInt16 IntId = Convert.ToUInt16("0x" + itemID, 16);
+            string front = Utilities.precedingZeros(itemData, 8).Substring(0, 4);
+            string back = Utilities.precedingZeros(itemData, 8).Substring(4, 4);
+
+            if (itemID.Equals("315A") || itemID.Equals("1618") || itemID.Equals("342F"))
             {
                 selectedItem.setup(GetNameFromID(itemID, source), Convert.ToUInt16("0x" + itemID, 16), Convert.ToUInt32("0x" + itemData, 16), GetImagePathFromID(itemID, source), true, GetImagePathFromID(Utilities.turn2bytes(itemData), source), "00", flag2);
             }
@@ -2606,9 +2721,78 @@ namespace ACNHPoker
             {
                 selectedItem.setup(GetNameFromID(itemID, recipeSource), Convert.ToUInt16("0x" + itemID, 16), Convert.ToUInt32("0x" + itemData, 16), GetImagePathFromID(Utilities.turn2bytes(itemData), recipeSource), true, "", "00", flag2);
             }
+            else if (ItemAttr.hasFenceWithVariation(IntId))  // Fence Variation
+            {
+                selectedItem.setup(GetNameFromID(itemID, source), Convert.ToUInt16("0x" + itemID, 16), Convert.ToUInt32("0x" + itemData, 16), GetImagePathFromID(itemID, source, Convert.ToUInt32("0x" + front, 16)), true, "", "00", flag2);
+            }
             else
             {
                 selectedItem.setup(GetNameFromID(itemID, source), Convert.ToUInt16("0x" + itemID, 16), Convert.ToUInt32("0x" + itemData, 16), GetImagePathFromID(itemID, source, Convert.ToUInt32("0x" + itemData, 16)), true, "", "00", flag2);
+            }
+
+            if (selection != null)
+            {
+                //selection.Dispose();
+                string id = Utilities.precedingZeros(selectedItem.fillItemID(), 4);
+                string value = Utilities.precedingZeros(selectedItem.fillItemData(), 8);
+
+                if (ItemAttr.hasFenceWithVariation(IntId))  // Fence Variation
+                {
+                    selection.receiveID(Utilities.precedingZeros(selectedItem.fillItemID(), 4), "eng", value);
+                }
+                else if (id == "315A" || id == "1618" || id == "342F")
+                {
+                    selection.receiveID(Utilities.turn2bytes(selectedItem.fillItemData()), "eng");
+                }
+                else
+                {
+                    selection.receiveID(Utilities.precedingZeros(selectedItem.fillItemID(), 4), "eng");
+                }
+            }
+        }
+
+        private void HexTextbox_DoubleClick(object sender, EventArgs e)
+        {
+            if (currentDataTable == recipeSource || currentDataTable == flowerSource)
+                return;
+
+            if (IdTextbox.Text == "")
+                return;
+
+            string id = Utilities.precedingZeros(IdTextbox.Text, 4);
+
+            UInt16 IntId = Convert.ToUInt16("0x" + IdTextbox.Text, 16);
+
+            if (Utilities.itemkind.ContainsKey(id))
+            {
+                int value = Utilities.CountByKind[Utilities.itemkind[id]];
+
+                if (ItemAttr.hasFenceWithVariation(IntId))  // Fence Variation
+                {
+                    string hexValue = Utilities.precedingZeros(HexTextbox.Text, 8);
+
+
+                    string front = Utilities.precedingZeros(hexValue, 8).Substring(0, 4);
+                    string back = Utilities.precedingZeros(hexValue, 8).Substring(4, 4);
+
+                    int decValue = value - 1;
+                    if (decValue >= 0)
+                        HexTextbox.Text = front + Utilities.precedingZeros(decValue.ToString("X"), 4);
+                    else
+                        HexTextbox.Text = front + Utilities.precedingZeros("0", 4);
+                }
+                else
+                {
+                    int decValue = value - 1;
+                    if (decValue >= 0)
+                        HexTextbox.Text = Utilities.precedingZeros(decValue.ToString("X"), 8);
+                    else
+                        HexTextbox.Text = Utilities.precedingZeros("0", 8);
+                }
+            }
+            else
+            {
+                HexTextbox.Text = "00000000";
             }
         }
 
@@ -2714,7 +2898,7 @@ namespace ACNHPoker
                 else
                     return;
 
-                while (isAboutToSave(5))
+                while (isAboutToSave(10))
                 {
                     Thread.Sleep(2000);
                 }
@@ -2841,7 +3025,7 @@ namespace ACNHPoker
                 else
                     return;
 
-                while (isAboutToSave(5))
+                while (isAboutToSave(10))
                 {
                     Thread.Sleep(2000);
                 }
@@ -3477,6 +3661,17 @@ namespace ACNHPoker
             }
         }
 
+        private void updataData(byte[] newLayer1, byte[] newLayer2)
+        {
+            Layer1 = newLayer1;
+            Layer2 = newLayer2;
+
+            if (layer1Btn.Checked)
+                miniMapBox.BackgroundImage = MiniMap.refreshItemMap(Layer1);
+            else if (layer2Btn.Checked)
+                miniMapBox.BackgroundImage = MiniMap.refreshItemMap(Layer2);
+        }
+
         #endregion
 
         #region Layer
@@ -3541,7 +3736,13 @@ namespace ACNHPoker
             selection.Show();
             selection.Location = new System.Drawing.Point(this.Location.X + 533, this.Location.Y + 660);
             string id = Utilities.precedingZeros(selectedItem.fillItemID(), 4);
-            if (id == "315A" || id == "1618")
+            string value = Utilities.precedingZeros(selectedItem.fillItemData(), 8);
+            UInt16 IntId = Convert.ToUInt16("0x" + id, 16);
+            if (ItemAttr.hasFenceWithVariation(IntId))  // Fence Variation
+            {
+                selection.receiveID(Utilities.precedingZeros(selectedItem.fillItemID(), 4), "eng", value);
+            }
+            else if (id == "315A" || id == "1618" || id == "342F")
             {
                 selection.receiveID(Utilities.turn2bytes(selectedItem.fillItemData()), "eng");
             }
@@ -3574,7 +3775,7 @@ namespace ACNHPoker
             }
             else if (type == 1) // Right click
             {
-                if (IdTextbox.Text == "315A" || IdTextbox.Text == "1618")
+                if (IdTextbox.Text == "315A" || IdTextbox.Text == "1618" || IdTextbox.Text == "342F")
                 {
                     string count = translateVariationValue(select.fillItemData()) + Utilities.precedingZeros(select.fillItemID(), 4);
                     HexTextbox.Text = count;
@@ -4232,8 +4433,11 @@ namespace ACNHPoker
 
             byte[] empty = Utilities.stringToByte("FEFF000000000000");
 
-            byte[] processLayer = Layer1;
-            Boolean[] change = new Boolean[56];
+            byte[] processLayer1 = Layer1;
+            Boolean[] change1 = new Boolean[56];
+            byte[] processLayer2 = Layer2;
+            Boolean[] change2 = new Boolean[56];
+
             byte[] tempID = new byte[2];
             ushort itemID;
             for (int i = 0; i < 56; i++)
@@ -4244,13 +4448,21 @@ namespace ACNHPoker
                     itemID = Convert.ToUInt16(Utilities.flip(Utilities.ByteToHexString(tempID)), 16);
                     if (!itemID.Equals(0xFFFE))
                     {
-                        Buffer.BlockCopy(empty, 0, processLayer, i * 0x1800 + j * 0x8, 8);
-                        change[i] = true;
+                        Buffer.BlockCopy(empty, 0, processLayer1, i * 0x1800 + j * 0x8, 8);
+                        change1[i] = true;
+                    }
+
+                    Buffer.BlockCopy(Layer2, i * 0x1800 + j * 0x8, tempID, 0, 2);
+                    itemID = Convert.ToUInt16(Utilities.flip(Utilities.ByteToHexString(tempID)), 16);
+                    if (!itemID.Equals(0xFFFE))
+                    {
+                        Buffer.BlockCopy(empty, 0, processLayer2, i * 0x1800 + j * 0x8, 8);
+                        change2[i] = true;
                     }
                 }
             }
 
-            Thread renewThread = new Thread(delegate () { renew(processLayer, change); });
+            Thread renewThread = new Thread(delegate () { renew(processLayer1, change1, processLayer2, change2); });
             renewThread.Start();
         }
 
@@ -4271,7 +4483,7 @@ namespace ACNHPoker
 
                 Debug.Print("Length :" + num + " Time : " + (num + 3));
 
-                while (isAboutToSave(num + 3))
+                while (isAboutToSave(num))
                 {
                     Thread.Sleep(2000);
                 }
@@ -4290,6 +4502,72 @@ namespace ACNHPoker
                 this.Invoke((MethodInvoker)delegate
                 {
                     updataData(newLayer);
+                    moveAnchor(anchorX, anchorY);
+                    resetBtnColor();
+                });
+
+                this.Invoke((MethodInvoker)delegate
+                {
+                    enableBtn();
+                });
+
+                if (sound)
+                    System.Media.SystemSounds.Asterisk.Play();
+            }
+            catch (Exception ex)
+            {
+                Log.logEvent("Map", "Renew: " + ex.Message.ToString());
+                NextSaveTimer.Stop();
+                myMessageBox.Show(ex.Message.ToString(), "Fixing our most awful code. To you, true saviors, kings of men.");
+            }
+
+            hideMapWait();
+        }
+
+        private void renew(byte[] newLayer1, Boolean[] change1, byte[] newLayer2, Boolean[] change2)
+        {
+            int num = numOfWrite(change1) + numOfWrite(change2);
+            if (num == 0)
+                return;
+
+            showMapWait(num * 2, "Removing Item...");
+
+            try
+            {
+                this.Invoke((MethodInvoker)delegate
+                {
+                    disableBtn();
+                });
+
+                Debug.Print("Length :" + num + " Time : " + (num + 3));
+
+                while (isAboutToSave(num + 10))
+                {
+                    Thread.Sleep(2000);
+                }
+
+                for (int i = 0; i < 56; i++)
+                {
+                    if (change1[i])
+                    {
+                        byte[] column = new byte[0x1800];
+                        Buffer.BlockCopy(newLayer1, i * 0x1800, column, 0, 0x1800);
+                        Utilities.SendByteArray8(s, Utilities.mapZero + (i * 0x1800), column, 0x1800, ref counter);
+                        Utilities.SendByteArray8(s, Utilities.mapZero + (i * 0x1800) + Utilities.mapOffset, column, 0x1800, ref counter);
+                    }
+
+                    if (change2[i])
+                    {
+                        byte[] column = new byte[0x1800];
+                        Buffer.BlockCopy(newLayer2, i * 0x1800, column, 0, 0x1800);
+                        Utilities.SendByteArray8(s, Utilities.mapZero + Utilities.mapSize + (i * 0x1800), column, 0x1800, ref counter);
+                        Utilities.SendByteArray8(s, Utilities.mapZero + Utilities.mapSize + (i * 0x1800) + Utilities.mapOffset, column, 0x1800, ref counter);
+                    }
+                }
+
+                this.Invoke((MethodInvoker)delegate
+                {
+                    updataData(newLayer1, newLayer2);
                     moveAnchor(anchorX, anchorY);
                     resetBtnColor();
                 });
@@ -4349,7 +4627,7 @@ namespace ACNHPoker
         {
             if (ignore)
                 return false;
-            if (saveTime > 60)
+            if (saveTime > 100)
                 return false;
 
             byte[] b = Utilities.getSaving(s, bot);
@@ -4537,7 +4815,7 @@ namespace ACNHPoker
                 UInt32 address6 = (UInt32)(address + (0xC00 * (anchorX + 2)) + (0x10 * (anchorY - 3)));
                 UInt32 address7 = (UInt32)(address + (0xC00 * (anchorX + 3)) + (0x10 * (anchorY - 3)));
 
-                while (isAboutToSave(5))
+                while (isAboutToSave(10))
                 {
                     Thread.Sleep(2000);
                 }
@@ -4618,5 +4896,315 @@ namespace ACNHPoker
             }
         }
         #endregion
+
+        private void flag20ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (AreaSet || AreaCopied)
+            {
+                if (Corner1X < 0 || Corner1Y < 0 || Corner2X < 0 || Corner2Y < 0 || Corner1X > 111 || Corner1Y > 95 || Corner2X > 111 || Corner2Y > 95)
+                {
+                    myMessageBox.Show("Selected Area Out of Bounds!", "Please use your brain, My Master.", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                int TopLeftX;
+                int TopLeftY;
+                int BottomRightX;
+                int BottomRightY;
+
+                if (Corner1X <= Corner2X)
+                {
+                    if (Corner1Y <= Corner2Y) // Top Left
+                    {
+                        TopLeftX = Corner1X;
+                        TopLeftY = Corner1Y;
+                        BottomRightX = Corner2X;
+                        BottomRightY = Corner2Y;
+                    }
+                    else // Bottom Left
+                    {
+                        TopLeftX = Corner1X;
+                        TopLeftY = Corner2Y; //
+                        BottomRightX = Corner2X;
+                        BottomRightY = Corner1Y; //
+                    }
+                }
+                else
+                {
+                    if (Corner1Y <= Corner2Y) // Top Right
+                    {
+                        TopLeftX = Corner2X; //
+                        TopLeftY = Corner1Y;
+                        BottomRightX = Corner1X; //
+                        BottomRightY = Corner2Y;
+                    }
+                    else // Bottom Left
+                    {
+                        TopLeftX = Corner2X;
+                        TopLeftY = Corner2Y;
+                        BottomRightX = Corner1X;
+                        BottomRightY = Corner1Y;
+                    }
+                }
+
+                int numberOfColumn = BottomRightX - TopLeftX + 1;
+                int numberOfRow = BottomRightY - TopLeftY + 1;
+
+                int sizeOfRow = 16;
+
+                SavedArea = new byte[numberOfColumn * 2][];
+
+                for (int i = 0; i < numberOfColumn * 2; i++)
+                {
+                    SavedArea[i] = new byte[numberOfRow * sizeOfRow];
+                }
+
+                for (int i = 0; i < numberOfColumn; i++)
+                {
+                    for (int j = 0; j < numberOfRow; j++)
+                    {
+                        if (layer1Btn.Checked)
+                        {
+                            Buffer.BlockCopy(Layer1, (int)((0xC00 * (i + TopLeftX)) + (0x10 * (j + TopLeftY))), SavedArea[i * 2], 0x10 * j, 0x10);
+                            Buffer.BlockCopy(Layer1, (int)((0xC00 * (i + TopLeftX)) + (0x10 * (j + TopLeftY)) + 0x600), SavedArea[i * 2 + 1], 0x10 * j, 0x10);
+                            if (SavedArea[i * 2][0x10 * j] != 0xFE || SavedArea[i * 2][0x10 * j + 1] != 0xFF)
+                                SavedArea[i * 2][0x10 * j + 2] = 0x20;
+                        }
+                        else
+                        {
+                            Buffer.BlockCopy(Layer2, (int)((0xC00 * (i + TopLeftX)) + (0x10 * (j + TopLeftY))), SavedArea[i * 2], 0x10 * j, 0x10);
+                            Buffer.BlockCopy(Layer2, (int)((0xC00 * (i + TopLeftX)) + (0x10 * (j + TopLeftY)) + 0x600), SavedArea[i * 2 + 1], 0x10 * j, 0x10);
+                            if (SavedArea[i * 2][0x10 * j] != 0xFE || SavedArea[i * 2][0x10 * j + 1] != 0xFF)
+                                SavedArea[i * 2][0x10 * j + 2] = 0x20;
+                        }
+                    }
+                }
+
+                long address;
+
+                if (layer1Btn.Checked)
+                {
+                    address = Utilities.mapZero;
+                }
+                else if (layer2Btn.Checked)
+                {
+                    address = Utilities.mapZero + Utilities.mapSize;
+                }
+                else
+                    return;
+
+                disableBtn();
+
+                Thread pasteAreaThread = new Thread(delegate () { pasteArea(address, TopLeftX, TopLeftY, numberOfColumn, numberOfRow); });
+                pasteAreaThread.Start();
+
+                ClearCopiedAreaBtn_Click(this, e);
+            }
+            else
+            {
+                ToolStripItem item = (sender as ToolStripItem);
+                if (item != null)
+                {
+                    if (item.Owner is ContextMenuStrip owner)
+                    {
+                        var btn = (floorSlot)owner.SourceControl;
+
+                        try
+                        {
+
+                            if (anchorX < 0 || anchorY < 0)
+                            {
+                                return;
+                            }
+
+                            long address;
+
+                            if (layer1Btn.Checked)
+                            {
+                                address = getAddress(btn.mapX, btn.mapY);
+                            }
+                            else if (layer2Btn.Checked)
+                            {
+                                address = (getAddress(btn.mapX, btn.mapY) + Utilities.mapSize);
+                            }
+                            else
+                                return;
+
+                            disableBtn();
+
+                            btnToolTip.RemoveAll();
+
+                            string itemID = Utilities.precedingZeros(btn.itemID.ToString("X"), 4);
+                            string itemData = Utilities.precedingZeros(btn.itemData.ToString("X"), 8);
+                            string flag1 = btn.flag1;
+                            string flag2 = "20";
+
+                            Thread dropThread = new Thread(delegate () { dropItem(address, itemID, itemData, flag1, flag2, btn); });
+                            dropThread.Start();
+                        }
+                        catch (Exception ex)
+                        {
+                            Log.logEvent("Map", "Flag20: " + ex.Message.ToString());
+                            return;
+                        }
+                    }
+                }
+            }
+        }
+
+        private void flag00ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (AreaSet || AreaCopied)
+            {
+                if (Corner1X < 0 || Corner1Y < 0 || Corner2X < 0 || Corner2Y < 0 || Corner1X > 111 || Corner1Y > 95 || Corner2X > 111 || Corner2Y > 95)
+                {
+                    myMessageBox.Show("Selected Area Out of Bounds!", "Please use your brain, My Master.", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                int TopLeftX;
+                int TopLeftY;
+                int BottomRightX;
+                int BottomRightY;
+
+                if (Corner1X <= Corner2X)
+                {
+                    if (Corner1Y <= Corner2Y) // Top Left
+                    {
+                        TopLeftX = Corner1X;
+                        TopLeftY = Corner1Y;
+                        BottomRightX = Corner2X;
+                        BottomRightY = Corner2Y;
+                    }
+                    else // Bottom Left
+                    {
+                        TopLeftX = Corner1X;
+                        TopLeftY = Corner2Y; //
+                        BottomRightX = Corner2X;
+                        BottomRightY = Corner1Y; //
+                    }
+                }
+                else
+                {
+                    if (Corner1Y <= Corner2Y) // Top Right
+                    {
+                        TopLeftX = Corner2X; //
+                        TopLeftY = Corner1Y;
+                        BottomRightX = Corner1X; //
+                        BottomRightY = Corner2Y;
+                    }
+                    else // Bottom Left
+                    {
+                        TopLeftX = Corner2X;
+                        TopLeftY = Corner2Y;
+                        BottomRightX = Corner1X;
+                        BottomRightY = Corner1Y;
+                    }
+                }
+
+                int numberOfColumn = BottomRightX - TopLeftX + 1;
+                int numberOfRow = BottomRightY - TopLeftY + 1;
+
+                int sizeOfRow = 16;
+
+                SavedArea = new byte[numberOfColumn * 2][];
+
+                for (int i = 0; i < numberOfColumn * 2; i++)
+                {
+                    SavedArea[i] = new byte[numberOfRow * sizeOfRow];
+                }
+
+                for (int i = 0; i < numberOfColumn; i++)
+                {
+                    for (int j = 0; j < numberOfRow; j++)
+                    {
+                        if (layer1Btn.Checked)
+                        {
+                            Buffer.BlockCopy(Layer1, (int)((0xC00 * (i + TopLeftX)) + (0x10 * (j + TopLeftY))), SavedArea[i * 2], 0x10 * j, 0x10);
+                            Buffer.BlockCopy(Layer1, (int)((0xC00 * (i + TopLeftX)) + (0x10 * (j + TopLeftY)) + 0x600), SavedArea[i * 2 + 1], 0x10 * j, 0x10);
+                            if (SavedArea[i * 2][0x10 * j] != 0xFE || SavedArea[i * 2][0x10 * j + 1] != 0xFF)
+                                SavedArea[i * 2][0x10 * j + 2] = 0x00;
+                        }
+                        else
+                        {
+                            Buffer.BlockCopy(Layer2, (int)((0xC00 * (i + TopLeftX)) + (0x10 * (j + TopLeftY))), SavedArea[i * 2], 0x10 * j, 0x10);
+                            Buffer.BlockCopy(Layer2, (int)((0xC00 * (i + TopLeftX)) + (0x10 * (j + TopLeftY)) + 0x600), SavedArea[i * 2 + 1], 0x10 * j, 0x10);
+                            if (SavedArea[i * 2][0x10 * j] != 0xFE || SavedArea[i * 2][0x10 * j + 1] != 0xFF)
+                                SavedArea[i * 2][0x10 * j + 2] = 0x00;
+                        }
+                    }
+                }
+
+                long address;
+
+                if (layer1Btn.Checked)
+                {
+                    address = Utilities.mapZero;
+                }
+                else if (layer2Btn.Checked)
+                {
+                    address = Utilities.mapZero + Utilities.mapSize;
+                }
+                else
+                    return;
+
+                disableBtn();
+
+                Thread pasteAreaThread = new Thread(delegate () { pasteArea(address, TopLeftX, TopLeftY, numberOfColumn, numberOfRow); });
+                pasteAreaThread.Start();
+
+                ClearCopiedAreaBtn_Click(this, e);
+            }
+            else
+            {
+                ToolStripItem item = (sender as ToolStripItem);
+                if (item != null)
+                {
+                    if (item.Owner is ContextMenuStrip owner)
+                    {
+                        var btn = (floorSlot)owner.SourceControl;
+
+                        try
+                        {
+
+                            if (anchorX < 0 || anchorY < 0)
+                            {
+                                return;
+                            }
+
+                            long address;
+
+                            if (layer1Btn.Checked)
+                            {
+                                address = getAddress(btn.mapX, btn.mapY);
+                            }
+                            else if (layer2Btn.Checked)
+                            {
+                                address = (getAddress(btn.mapX, btn.mapY) + Utilities.mapSize);
+                            }
+                            else
+                                return;
+
+                            disableBtn();
+
+                            btnToolTip.RemoveAll();
+
+                            string itemID = Utilities.precedingZeros(btn.itemID.ToString("X"), 4);
+                            string itemData = Utilities.precedingZeros(btn.itemData.ToString("X"), 8);
+                            string flag1 = btn.flag1;
+                            string flag2 = "00";
+
+                            Thread dropThread = new Thread(delegate () { dropItem(address, itemID, itemData, flag1, flag2, btn); });
+                            dropThread.Start();
+                        }
+                        catch (Exception ex)
+                        {
+                            Log.logEvent("Map", "Flag00: " + ex.Message.ToString());
+                            return;
+                        }
+                    }
+                }
+            }
+        }
     }
 }

@@ -351,8 +351,10 @@ namespace ACNHPoker
 
         private void ImageBtn_Click(object sender, EventArgs e)
         {
-            ImageDownloader imageDownloader = new ImageDownloader();
-            imageDownloader.ShowDialog();
+            Configuration Config = ConfigurationManager.OpenExeConfiguration(Application.ExecutablePath);
+            Config.AppSettings.Settings["ForcedImageDownload"].Value = "true";
+            Config.Save(ConfigurationSaveMode.Minimal);
+            Application.Restart();
         }
     }
 }
