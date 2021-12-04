@@ -20,7 +20,7 @@ namespace ACNHPoker
     {
         #region variable
         private static Socket s;
-        private string version = "ACNH Poker R18.4 for v2.0.0";
+        private string version = "ACNH Poker R18.7 for v2.0.3";
         private inventorySlot selectedButton;
         private Villager[] V = null;
         private Button[] villagerButton = null;
@@ -858,7 +858,7 @@ namespace ACNHPoker
 
             if (Map == null)
             {
-                Map = new map(s, bot, Utilities.itemPath, Utilities.recipePath, Utilities.flowerPath, Utilities.variationPath, Utilities.favPath, this, Utilities.imagePath, OverrideDict, sound);
+                Map = new map(s, bot, Utilities.itemPath, Utilities.recipePath, Utilities.flowerPath, Utilities.variationPath, Utilities.favPath, this, Utilities.imagePath, languageSetting, OverrideDict, sound);
                 Map.Show();
             }
         }

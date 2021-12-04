@@ -9,7 +9,7 @@ namespace ACNHPoker
 {
     public partial class variation : Form
     {
-        private DataTable itemSource;
+        private static DataTable itemSource;
         private DataGridViewRow lastRow;
         private inventorySlot[,] selection;
         private int lengthX = 0;
@@ -24,7 +24,7 @@ namespace ACNHPoker
             this.Size = new Size(this.Width, height);
         }
 
-        private DataTable loadItemCSV(string filePath)
+        private static DataTable loadItemCSV(string filePath)
         {
             var dt = new DataTable();
 
@@ -333,7 +333,7 @@ namespace ACNHPoker
             this.selectedItem.UseVisualStyleBackColor = false;
          */
 
-        private int findMaxVariation(string name)
+        private static int findMaxVariation(string name)
         {
             for (int i = 9; i >= 0; i--)
             {
@@ -345,7 +345,7 @@ namespace ACNHPoker
             }
             return -1;
         }
-        private int findMaxSubVariation(string name)
+        private static int findMaxSubVariation(string name)
         {
             for (int i = 9; i >= 0; i--)
             {
@@ -367,12 +367,12 @@ namespace ACNHPoker
             {
                 this.infoLabel.Text = "";
                 string name = row[language].ToString();
-                string idString = row["id"].ToString();
+                //string idString = row["id"].ToString();
                 UInt16 itemID = Convert.ToUInt16("0x" + row["id"].ToString(), 16);
                 //UInt16 data = 0x0;
                 //string category = row[1].ToString();
                 string iName = row["iName"].ToString();
-                string path = GetImagePathFromID(idString, itemSource);
+                //string path = GetImagePathFromID(idString, itemSource);
 
                 //updateSelectedItemInfo(selectedItem.displayItemName(), selectedItem.displayItemID(), selectedItem.displayItemData());
                 //Debug.Print(row[0].ToString() + " " + row[1].ToString() + " " + row[2].ToString() + " " + row[3].ToString() + " ");
@@ -390,13 +390,66 @@ namespace ACNHPoker
             }
         }
 
-        public DataRow GetRowFromID(string id)
+        public static DataRow GetRowFromID(string id)
         {
             if (itemSource == null)
-                return null;
+            {
+                if (File.Exists(Utilities.variationPath))
+                    itemSource = loadItemCSV(Utilities.variationPath);
+                if (itemSource == null)
+                    return null;
+            }
             DataRow row = itemSource.Rows.Find(id);
 
             return row;
+        }
+
+        public static inventorySlot[,] getVariationList(string id, string flag1 = "00", string flag2 = "00", string value = "00000000", string language = "eng")
+        {
+            DataRow row = GetRowFromID(id);
+            if (row != null)
+            {
+                UInt16 itemID = Convert.ToUInt16("0x" + row["id"].ToString(), 16);
+                string iName = row["iName"].ToString();
+
+                string name = row[language].ToString();
+                int main = findMaxVariation(iName);
+                int sub = findMaxSubVariation(iName);
+
+                if (main >= 0 && sub >= 0)
+                {
+                    inventorySlot[,] variationList = new inventorySlot[main + 1, sub + 1];
+
+                    for (int j = 0; j <= main; j++)
+                    {
+                        for (int k = 0; k <= sub; k++)
+                        {
+                            variationList[j, k] = new inventorySlot();
+
+                            string path = Utilities.imagePath + iName + "_Remake_" + j.ToString() + "_" + k.ToString() + ".png";
+
+                            if (ItemAttr.hasFenceWithVariation(itemID)) // Fence with Variation
+                            {
+                                string front = Utilities.precedingZeros((j + (0x20 * k)).ToString("X"), 4);
+                                string back = Utilities.turn2bytes(value);
+                                uint newValue = Convert.ToUInt32(front + back, 16);
+                                variationList[j, k].setup(name, itemID, newValue, path, true, "", flag1, flag2);
+                            }
+                            else
+                            {
+                                variationList[j, k].setup(name, itemID, (uint)(j + (0x20 * k)), path, true, "", flag1, flag2);
+                            }
+                        }
+                    }
+                    return variationList;
+                }
+                else
+                    return null;
+            }
+            else
+            {
+                return null;
+            }
         }
     }
 }

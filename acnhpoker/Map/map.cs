@@ -38,6 +38,7 @@ namespace ACNHPoker
 
         private DataGridViewRow lastRow = null;
         private string imagePath;
+        private string languageSetting = "eng";
 
         private Dictionary<string, string> OverrideDict;
 
@@ -52,20 +53,36 @@ namespace ACNHPoker
         private ToolStripMenuItem CopyArea;
         private bool AreaCopied = false;
         private ToolStripMenuItem PasteArea;
+        private ToolStripMenuItem SaveArea;
         private byte[][] SavedArea;
 
 
         private DataTable currentDataTable;
         private bool sound;
         private bool ignore = false;
+        public static int numOfColumn = 0;
+        public static int numOfRow = 0;
 
         byte[] Layer1 = null;
         byte[] Layer2 = null;
         byte[] Acre = null;
+        byte[] Building = null;
+
+        Color[] target =
+        {
+            Color.FromArgb(252, 3, 3),
+            Color.FromArgb(252, 78, 3),
+            Color.FromArgb(252, 227, 3),
+            Color.FromArgb(0, 82, 7),
+            Color.FromArgb(3, 255, 32),
+            Color.FromArgb(5, 106, 230),
+            Color.FromArgb(157, 40, 224),
+        };
+        int targetValue = 0;
         #endregion
 
         #region Form Load
-        public map(Socket S, USBBot Bot, string itemPath, string recipePath, string flowerPath, string variationPath, string favPath, Form1 Main, string ImagePath, Dictionary<string, string> overrideDict, bool Sound)
+        public map(Socket S, USBBot Bot, string itemPath, string recipePath, string flowerPath, string variationPath, string favPath, Form1 Main, string ImagePath, string LanguageSetting, Dictionary<string, string> overrideDict, bool Sound)
         {
             try
             {
@@ -87,6 +104,7 @@ namespace ACNHPoker
                 imagePath = ImagePath;
                 OverrideDict = overrideDict;
                 sound = Sound;
+
                 floorSlots = new floorSlot[49];
 
                 InitializeComponent();
@@ -176,7 +194,22 @@ namespace ACNHPoker
                 PasteArea = new ToolStripMenuItem("Paste Area", null, pasteAreaToolStripMenuItem_Click);
                 PasteArea.ForeColor = Color.White;
 
+                SaveArea = new ToolStripMenuItem("Save Area to File", null, saveAreaToolStripMenuItem_Click);
+                SaveArea.ForeColor = Color.White;
+
                 this.KeyPreview = true;
+
+                LanguageSetup(LanguageSetting);
+                languageSetting = LanguageSetting;
+
+                if (fieldGridView.Columns.Contains(languageSetting))
+                {
+                    hideAllLanguage();
+                    fieldGridView.Columns[languageSetting].Visible = true;
+                }
+
+                FlashTimer.Start();
+
                 Log.logEvent("Map", "MapForm Started Successfully");
             }
             catch (Exception ex)
@@ -214,11 +247,12 @@ namespace ACNHPoker
                 Layer1 = Utilities.getMapLayer(s, bot, layer1Address, ref counter);
                 Layer2 = Utilities.getMapLayer(s, bot, layer2Address, ref counter);
                 Acre = Utilities.getAcre(s, bot);
+                Building = Utilities.getBuilding(s, bot);
 
                 if (Layer1 != null && Layer2 != null && Acre != null)
                 {
                     if (MiniMap == null)
-                        MiniMap = new miniMap(Layer1, Acre, 2);
+                        MiniMap = new miniMap(Layer1, Acre, Building, 2);
                 }
                 else
                     throw new NullReferenceException("Layer1/Layer2/Acre");
@@ -460,7 +494,7 @@ namespace ACNHPoker
             else if (P1Id == "315A" || P1Id == "1618" || P1Id == "342F")
             {
                 Path1 = GetImagePathFromID(itemID, source, Data);
-                ContainPath = GetImagePathFromID(P1Data, source);
+                ContainPath = GetImagePathFromID(P1Data, source, Convert.ToUInt32("0x" + Utilities.translateVariationValueBack(front), 16));
             }
             else if (ItemAttr.hasFenceWithVariation(ID))  // Fence Variation
             {
@@ -531,7 +565,7 @@ namespace ACNHPoker
             else if (P1Id == "315A" || P1Id == "1618" || P1Id == "342F")
             {
                 Path1 = GetImagePathFromID(itemID, source, Data);
-                ContainPath = GetImagePathFromID(P1Data, source);
+                ContainPath = GetImagePathFromID(P1Data, source, Convert.ToUInt32("0x" + Utilities.translateVariationValueBack(front), 16));
             }
             else if (ItemAttr.hasFenceWithVariation(ID))  // Fence Variation
             {
@@ -1075,7 +1109,7 @@ namespace ACNHPoker
             else
             {
                 //row found set the index and find the name
-                return (string)row["eng"];
+                return (string)row[languageSetting];
             }
         }
 
@@ -1175,7 +1209,7 @@ namespace ACNHPoker
                     if (currentDataTable == source)
                     {
                         string id = fieldGridView.Rows[e.RowIndex].Cells["id"].Value.ToString();
-                        string name = fieldGridView.Rows[e.RowIndex].Cells["eng"].Value.ToString();
+                        string name = fieldGridView.Rows[e.RowIndex].Cells[languageSetting].Value.ToString();
 
                         IdTextbox.Text = id;
                         HexTextbox.Text = "00000000";
@@ -1185,7 +1219,7 @@ namespace ACNHPoker
                     else if (currentDataTable == recipeSource)
                     {
                         string id = "16A2"; // Recipe;
-                        string name = fieldGridView.Rows[e.RowIndex].Cells["eng"].Value.ToString();
+                        string name = fieldGridView.Rows[e.RowIndex].Cells[languageSetting].Value.ToString();
                         string hexValue = fieldGridView.Rows[e.RowIndex].Cells["id"].Value.ToString();
 
                         IdTextbox.Text = id;
@@ -1196,7 +1230,7 @@ namespace ACNHPoker
                     else if (currentDataTable == flowerSource)
                     {
                         string id = fieldGridView.Rows[e.RowIndex].Cells["id"].Value.ToString();
-                        string name = fieldGridView.Rows[e.RowIndex].Cells["eng"].Value.ToString();
+                        string name = fieldGridView.Rows[e.RowIndex].Cells[languageSetting].Value.ToString();
                         string hexValue = fieldGridView.Rows[e.RowIndex].Cells["value"].Value.ToString();
 
                         IdTextbox.Text = id;
@@ -1227,6 +1261,7 @@ namespace ACNHPoker
 
                         selectedItem.setup(name, Convert.ToUInt16("0x" + id, 16), Convert.ToUInt32("0x" + hexValue, 16), GetImagePathFromID(id, fieldSource), true, "");
                     }
+
                     if (selection != null)
                     {
                         string hexValue = "00000000";
@@ -1238,8 +1273,9 @@ namespace ACNHPoker
                         else if (currentDataTable == fieldSource)
                             hexValue = fieldGridView.Rows[e.RowIndex].Cells["value"].Value.ToString();
 
-                        selection.receiveID(Utilities.precedingZeros(selectedItem.fillItemID(), 4), "eng", Utilities.precedingZeros(hexValue, 8));
+                        selection.receiveID(Utilities.precedingZeros(selectedItem.fillItemID(), 4), languageSetting, Utilities.precedingZeros(hexValue, 8));
                     }
+
                     //updateSelectedItemInfo(selectedItem.displayItemName(), selectedItem.displayItemID(), selectedItem.displayItemData());
 
                 }
@@ -1275,7 +1311,7 @@ namespace ACNHPoker
 
                         if (selection != null)
                         {
-                            selection.receiveID(Utilities.turn2bytes(selectedItem.fillItemData()), "eng");
+                            selection.receiveID(Utilities.turn2bytes(selectedItem.fillItemData()), languageSetting);
                         }
                     }
 
@@ -1289,7 +1325,7 @@ namespace ACNHPoker
             recipeModeBtn.BackColor = Color.FromArgb(((int)(((byte)(114)))), ((int)(((byte)(137)))), ((int)(((byte)(218)))));
             flowerModeBtn.BackColor = Color.FromArgb(((int)(((byte)(114)))), ((int)(((byte)(137)))), ((int)(((byte)(218)))));
             favModeBtn.BackColor = Color.FromArgb(((int)(((byte)(114)))), ((int)(((byte)(137)))), ((int)(((byte)(218)))));
-            fieldModeBtn.BackColor = Color.FromArgb(((int)(((byte)(114)))), ((int)(((byte)(137)))), ((int)(((byte)(218)))));
+            //fieldModeBtn.BackColor = Color.FromArgb(((int)(((byte)(114)))), ((int)(((byte)(137)))), ((int)(((byte)(218)))));
 
             if (itemSearchBox.Text != "Search")
             {
@@ -1305,17 +1341,13 @@ namespace ACNHPoker
                 //set the ID row invisible
                 fieldGridView.Columns["id"].Visible = false;
                 fieldGridView.Columns["iName"].Visible = false;
-                fieldGridView.Columns["jpn"].Visible = false;
-                fieldGridView.Columns["tchi"].Visible = false;
-                fieldGridView.Columns["schi"].Visible = false;
-                fieldGridView.Columns["kor"].Visible = false;
-                fieldGridView.Columns["fre"].Visible = false;
-                fieldGridView.Columns["ger"].Visible = false;
-                fieldGridView.Columns["spa"].Visible = false;
-                fieldGridView.Columns["ita"].Visible = false;
-                fieldGridView.Columns["dut"].Visible = false;
-                fieldGridView.Columns["rus"].Visible = false;
                 fieldGridView.Columns["color"].Visible = false;
+
+                if (fieldGridView.Columns.Contains(languageSetting))
+                {
+                    hideAllLanguage();
+                    fieldGridView.Columns[languageSetting].Visible = true;
+                }
 
                 DataGridViewImageColumn imageColumn = new DataGridViewImageColumn
                 {
@@ -1363,7 +1395,7 @@ namespace ACNHPoker
             recipeModeBtn.BackColor = Color.FromArgb(((int)(((byte)(80)))), ((int)(((byte)(80)))), ((int)(((byte)(255)))));
             flowerModeBtn.BackColor = Color.FromArgb(((int)(((byte)(114)))), ((int)(((byte)(137)))), ((int)(((byte)(218)))));
             favModeBtn.BackColor = Color.FromArgb(((int)(((byte)(114)))), ((int)(((byte)(137)))), ((int)(((byte)(218)))));
-            fieldModeBtn.BackColor = Color.FromArgb(((int)(((byte)(114)))), ((int)(((byte)(137)))), ((int)(((byte)(218)))));
+            //fieldModeBtn.BackColor = Color.FromArgb(((int)(((byte)(114)))), ((int)(((byte)(137)))), ((int)(((byte)(218)))));
 
             if (itemSearchBox.Text != "Search")
             {
@@ -1378,16 +1410,12 @@ namespace ACNHPoker
 
                 fieldGridView.Columns["id"].Visible = false;
                 fieldGridView.Columns["iName"].Visible = false;
-                fieldGridView.Columns["jpn"].Visible = false;
-                fieldGridView.Columns["tchi"].Visible = false;
-                fieldGridView.Columns["schi"].Visible = false;
-                fieldGridView.Columns["kor"].Visible = false;
-                fieldGridView.Columns["fre"].Visible = false;
-                fieldGridView.Columns["ger"].Visible = false;
-                fieldGridView.Columns["spa"].Visible = false;
-                fieldGridView.Columns["ita"].Visible = false;
-                fieldGridView.Columns["dut"].Visible = false;
-                fieldGridView.Columns["rus"].Visible = false;
+
+                if (fieldGridView.Columns.Contains(languageSetting))
+                {
+                    hideAllLanguage();
+                    fieldGridView.Columns[languageSetting].Visible = true;
+                }
 
                 DataGridViewImageColumn imageColumn = new DataGridViewImageColumn
                 {
@@ -1435,7 +1463,7 @@ namespace ACNHPoker
             recipeModeBtn.BackColor = Color.FromArgb(((int)(((byte)(114)))), ((int)(((byte)(137)))), ((int)(((byte)(218)))));
             flowerModeBtn.BackColor = Color.FromArgb(((int)(((byte)(80)))), ((int)(((byte)(80)))), ((int)(((byte)(255)))));
             favModeBtn.BackColor = Color.FromArgb(((int)(((byte)(114)))), ((int)(((byte)(137)))), ((int)(((byte)(218)))));
-            fieldModeBtn.BackColor = Color.FromArgb(((int)(((byte)(114)))), ((int)(((byte)(137)))), ((int)(((byte)(218)))));
+            //fieldModeBtn.BackColor = Color.FromArgb(((int)(((byte)(114)))), ((int)(((byte)(137)))), ((int)(((byte)(218)))));
 
             if (itemSearchBox.Text != "Search")
             {
@@ -1450,17 +1478,13 @@ namespace ACNHPoker
 
                 fieldGridView.Columns["id"].Visible = false;
                 fieldGridView.Columns["iName"].Visible = false;
-                fieldGridView.Columns["jpn"].Visible = false;
-                fieldGridView.Columns["tchi"].Visible = false;
-                fieldGridView.Columns["schi"].Visible = false;
-                fieldGridView.Columns["kor"].Visible = false;
-                fieldGridView.Columns["fre"].Visible = false;
-                fieldGridView.Columns["ger"].Visible = false;
-                fieldGridView.Columns["spa"].Visible = false;
-                fieldGridView.Columns["ita"].Visible = false;
-                fieldGridView.Columns["dut"].Visible = false;
-                fieldGridView.Columns["rus"].Visible = false;
                 fieldGridView.Columns["value"].Visible = false;
+
+                if (fieldGridView.Columns.Contains(languageSetting))
+                {
+                    hideAllLanguage();
+                    fieldGridView.Columns[languageSetting].Visible = true;
+                }
 
                 DataGridViewImageColumn imageColumn = new DataGridViewImageColumn
                 {
@@ -1508,7 +1532,7 @@ namespace ACNHPoker
             recipeModeBtn.BackColor = Color.FromArgb(((int)(((byte)(114)))), ((int)(((byte)(137)))), ((int)(((byte)(218)))));
             flowerModeBtn.BackColor = Color.FromArgb(((int)(((byte)(114)))), ((int)(((byte)(137)))), ((int)(((byte)(218)))));
             favModeBtn.BackColor = Color.FromArgb(((int)(((byte)(80)))), ((int)(((byte)(80)))), ((int)(((byte)(255)))));
-            fieldModeBtn.BackColor = Color.FromArgb(((int)(((byte)(114)))), ((int)(((byte)(137)))), ((int)(((byte)(218)))));
+            //fieldModeBtn.BackColor = Color.FromArgb(((int)(((byte)(114)))), ((int)(((byte)(137)))), ((int)(((byte)(218)))));
 
             if (itemSearchBox.Text != "Search")
             {
@@ -1550,7 +1574,7 @@ namespace ACNHPoker
             recipeModeBtn.BackColor = Color.FromArgb(((int)(((byte)(114)))), ((int)(((byte)(137)))), ((int)(((byte)(218)))));
             flowerModeBtn.BackColor = Color.FromArgb(((int)(((byte)(114)))), ((int)(((byte)(137)))), ((int)(((byte)(218)))));
             favModeBtn.BackColor = Color.FromArgb(((int)(((byte)(114)))), ((int)(((byte)(137)))), ((int)(((byte)(218)))));
-            fieldModeBtn.BackColor = Color.FromArgb(((int)(((byte)(80)))), ((int)(((byte)(80)))), ((int)(((byte)(255)))));
+            //fieldModeBtn.BackColor = Color.FromArgb(((int)(((byte)(80)))), ((int)(((byte)(80)))), ((int)(((byte)(255)))));
 
             if (itemSearchBox.Text != "Search")
             {
@@ -1619,15 +1643,15 @@ namespace ACNHPoker
                 {
                     if (currentDataTable == source)
                     {
-                        (fieldGridView.DataSource as DataTable).DefaultView.RowFilter = string.Format("eng" + " LIKE '%{0}%'", EscapeLikeValue(itemSearchBox.Text));
+                        (fieldGridView.DataSource as DataTable).DefaultView.RowFilter = string.Format(languageSetting + " LIKE '%{0}%'", EscapeLikeValue(itemSearchBox.Text));
                     }
                     else if (currentDataTable == recipeSource)
                     {
-                        (fieldGridView.DataSource as DataTable).DefaultView.RowFilter = string.Format("eng" + " LIKE '%{0}%'", EscapeLikeValue(itemSearchBox.Text));
+                        (fieldGridView.DataSource as DataTable).DefaultView.RowFilter = string.Format(languageSetting + " LIKE '%{0}%'", EscapeLikeValue(itemSearchBox.Text));
                     }
                     else if (currentDataTable == flowerSource)
                     {
-                        (fieldGridView.DataSource as DataTable).DefaultView.RowFilter = string.Format("eng" + " LIKE '%{0}%'", EscapeLikeValue(itemSearchBox.Text));
+                        (fieldGridView.DataSource as DataTable).DefaultView.RowFilter = string.Format(languageSetting + " LIKE '%{0}%'", EscapeLikeValue(itemSearchBox.Text));
                     }
                     else if (currentDataTable == favSource)
                     {
@@ -1824,7 +1848,7 @@ namespace ACNHPoker
                     else if (currentDataTable == fieldSource)
                         hexValue = fieldGridView.Rows[fieldGridView.CurrentRow.Index + 1].Cells["value"].Value.ToString();
 
-                    selection.receiveID(Utilities.precedingZeros(selectedItem.fillItemID(), 4), "eng", Utilities.precedingZeros(hexValue, 8));
+                    selection.receiveID(Utilities.precedingZeros(selectedItem.fillItemID(), 4), languageSetting, Utilities.precedingZeros(hexValue, 8));
                 }
 
             }
@@ -1866,7 +1890,7 @@ namespace ACNHPoker
                     else if (currentDataTable == fieldSource)
                         hexValue = fieldGridView.Rows[fieldGridView.CurrentRow.Index - 1].Cells["value"].Value.ToString();
 
-                    selection.receiveID(Utilities.precedingZeros(selectedItem.fillItemID(), 4), "eng", Utilities.precedingZeros(hexValue, 8));
+                    selection.receiveID(Utilities.precedingZeros(selectedItem.fillItemID(), 4), languageSetting, Utilities.precedingZeros(hexValue, 8));
                 }
             }
         }
@@ -1885,7 +1909,7 @@ namespace ACNHPoker
             if (currentDataTable == source)
             {
                 string id = fieldGridView.Rows[index].Cells["id"].Value.ToString();
-                string name = fieldGridView.Rows[index].Cells["eng"].Value.ToString();
+                string name = fieldGridView.Rows[index].Cells[languageSetting].Value.ToString();
 
                 IdTextbox.Text = id;
                 HexTextbox.Text = "00000000";
@@ -1895,7 +1919,7 @@ namespace ACNHPoker
             else if (currentDataTable == recipeSource)
             {
                 string id = "16A2"; // Recipe;
-                string name = fieldGridView.Rows[index].Cells["eng"].Value.ToString();
+                string name = fieldGridView.Rows[index].Cells[languageSetting].Value.ToString();
                 string hexValue = fieldGridView.Rows[index].Cells["id"].Value.ToString();
 
                 IdTextbox.Text = id;
@@ -1906,7 +1930,7 @@ namespace ACNHPoker
             else if (currentDataTable == flowerSource)
             {
                 string id = fieldGridView.Rows[index].Cells["id"].Value.ToString();
-                string name = fieldGridView.Rows[index].Cells["eng"].Value.ToString();
+                string name = fieldGridView.Rows[index].Cells[languageSetting].Value.ToString();
                 string hexValue = fieldGridView.Rows[index].Cells["value"].Value.ToString();
 
                 IdTextbox.Text = id;
@@ -2309,6 +2333,8 @@ namespace ACNHPoker
                 floorRightClick.Items.Add(CopyArea);
             if (AreaCopied && !floorRightClick.Items.Contains(PasteArea))
                 floorRightClick.Items.Add(PasteArea);
+            if (AreaSet && !floorRightClick.Items.Contains(SaveArea))
+                floorRightClick.Items.Add(SaveArea);
         }
 
         private void copyAreaToolStripMenuItem_Click(object sender, EventArgs e)
@@ -2553,8 +2579,119 @@ namespace ACNHPoker
                 floorRightClick.Items.Remove(CopyArea);
             if (floorRightClick.Items.Contains(PasteArea))
                 floorRightClick.Items.Remove(PasteArea);
+            if (floorRightClick.Items.Contains(SaveArea))
+                floorRightClick.Items.Remove(SaveArea);
             moveAnchor(anchorX, anchorY);
             miniMapBox.BackgroundImage = MiniMap.combineMap(MiniMap.drawBackground(), MiniMap.drawItemMap());
+        }
+
+        private void saveAreaToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            int TopLeftX;
+            int TopLeftY;
+            int BottomRightX;
+            int BottomRightY;
+
+            if (Corner1X <= Corner2X)
+            {
+                if (Corner1Y <= Corner2Y) // Top Left
+                {
+                    TopLeftX = Corner1X;
+                    TopLeftY = Corner1Y;
+                    BottomRightX = Corner2X;
+                    BottomRightY = Corner2Y;
+                }
+                else // Bottom Left
+                {
+                    TopLeftX = Corner1X;
+                    TopLeftY = Corner2Y; //
+                    BottomRightX = Corner2X;
+                    BottomRightY = Corner1Y; //
+                }
+            }
+            else
+            {
+                if (Corner1Y <= Corner2Y) // Top Right
+                {
+                    TopLeftX = Corner2X; //
+                    TopLeftY = Corner1Y;
+                    BottomRightX = Corner1X; //
+                    BottomRightY = Corner2Y;
+                }
+                else // Bottom Left
+                {
+                    TopLeftX = Corner2X;
+                    TopLeftY = Corner2Y;
+                    BottomRightX = Corner1X;
+                    BottomRightY = Corner1Y;
+                }
+            }
+
+            int numberOfColumn = BottomRightX - TopLeftX + 1;
+            int numberOfRow = BottomRightY - TopLeftY + 1;
+
+            int sizeOfRow = 0x8;
+            byte[] save = { };
+            byte[] tempItem = new byte[sizeOfRow];
+
+            for (int i = 0; i < numberOfColumn; i++)
+            {
+                for (int j = 0; j < numberOfRow; j++)
+                {
+                    if (layer1Btn.Checked)
+                        Buffer.BlockCopy(Layer1, (int)((0xC00 * (i + TopLeftX)) + (0x10 * (j + TopLeftY))), tempItem, 0, sizeOfRow);
+                    else
+                        Buffer.BlockCopy(Layer2, (int)((0xC00 * (i + TopLeftX)) + (0x10 * (j + TopLeftY))), tempItem, 0, sizeOfRow);
+
+                    if (Utilities.ByteToHexString(tempItem).StartsWith("FEFF0000") || Utilities.ByteToHexString(tempItem).StartsWith("FDFF0000"))
+                    {
+
+                    }
+                    else
+                        save = Utilities.add(save, tempItem);
+                }
+            }
+
+            moveAnchor(anchorX, anchorY);
+
+            SaveFileDialog file = new SaveFileDialog()
+            {
+                Filter = "New Horizons Bulk Spawn (*.nhbs)|*.nhbs|New Horizons Inventory(*.nhi) | *.nhi",
+                FileName = "(" + numberOfRow + ")" + "filename",
+            };
+
+            Configuration config = ConfigurationManager.OpenExeConfiguration(Application.ExecutablePath);
+
+            string savepath;
+
+            if (config.AppSettings.Settings["LastSave"].Value.Equals(string.Empty))
+                savepath = Directory.GetCurrentDirectory() + @"\save";
+            else
+                savepath = config.AppSettings.Settings["LastSave"].Value;
+
+            if (Directory.Exists(savepath))
+            {
+                file.InitialDirectory = savepath;
+            }
+            else
+            {
+                file.InitialDirectory = @"C:\";
+            }
+
+            if (file.ShowDialog() != DialogResult.OK)
+                return;
+
+            string[] temp = file.FileName.Split('\\');
+            string path = "";
+            for (int i = 0; i < temp.Length - 1; i++)
+                path = path + temp[i] + "\\";
+
+            config.AppSettings.Settings["LastSave"].Value = path;
+            config.Save(ConfigurationSaveMode.Minimal);
+
+            File.WriteAllBytes(file.FileName, save);
+            if (sound)
+                System.Media.SystemSounds.Asterisk.Play();
         }
 
         #endregion
@@ -2664,6 +2801,8 @@ namespace ACNHPoker
                 e.Handled = true;
             }
             if (c >= 'a' && c <= 'f') e.KeyChar = char.ToUpper(c);
+
+            updateVariation();
         }
 
         private void Hex_KeyUp(object sender, KeyEventArgs e)
@@ -2681,7 +2820,7 @@ namespace ACNHPoker
 
             if (itemID.Equals("315A") || itemID.Equals("1618") || itemID.Equals("342F"))
             {
-                selectedItem.setup(GetNameFromID(itemID, source), Convert.ToUInt16("0x" + itemID, 16), Convert.ToUInt32("0x" + itemData, 16), GetImagePathFromID(itemID, source), true, GetImagePathFromID(Utilities.turn2bytes(itemData), source), "00", flag2);
+                selectedItem.setup(GetNameFromID(itemID, source), Convert.ToUInt16("0x" + itemID, 16), Convert.ToUInt32("0x" + itemData, 16), GetImagePathFromID(itemID, source), true, GetImagePathFromID(Utilities.turn2bytes(itemData), source, Convert.ToUInt32("0x" + Utilities.translateVariationValueBack(front), 16)), "00", flag2);
             }
             else if (itemID.Equals("16A2"))
             {
@@ -2694,60 +2833,6 @@ namespace ACNHPoker
             else
             {
                 selectedItem.setup(GetNameFromID(itemID, source), Convert.ToUInt16("0x" + itemID, 16), Convert.ToUInt32("0x" + itemData, 16), GetImagePathFromID(itemID, source, Convert.ToUInt32("0x" + itemData, 16)), true, "", "00", flag2);
-            }
-        }
-
-        private void Hex_ValueChanged(object sender, EventArgs e)
-        {
-            if (IdTextbox.Text.Equals(string.Empty) || HexTextbox.Text.Equals(string.Empty))
-                return;
-
-            long data = Convert.ToUInt32(((RichTextBox)(sender)).Text.ToString(), 16);
-            string hexValue = data.ToString("X");
-
-            string itemID = Utilities.precedingZeros(IdTextbox.Text, 4);
-            string itemData = Utilities.precedingZeros(hexValue, 8);
-            string flag2 = Utilities.precedingZeros(FlagTextbox.Text, 2);
-
-            UInt16 IntId = Convert.ToUInt16("0x" + itemID, 16);
-            string front = Utilities.precedingZeros(itemData, 8).Substring(0, 4);
-            string back = Utilities.precedingZeros(itemData, 8).Substring(4, 4);
-
-            if (itemID.Equals("315A") || itemID.Equals("1618") || itemID.Equals("342F"))
-            {
-                selectedItem.setup(GetNameFromID(itemID, source), Convert.ToUInt16("0x" + itemID, 16), Convert.ToUInt32("0x" + itemData, 16), GetImagePathFromID(itemID, source), true, GetImagePathFromID(Utilities.turn2bytes(itemData), source), "00", flag2);
-            }
-            else if (itemID.Equals("16A2"))
-            {
-                selectedItem.setup(GetNameFromID(itemID, recipeSource), Convert.ToUInt16("0x" + itemID, 16), Convert.ToUInt32("0x" + itemData, 16), GetImagePathFromID(Utilities.turn2bytes(itemData), recipeSource), true, "", "00", flag2);
-            }
-            else if (ItemAttr.hasFenceWithVariation(IntId))  // Fence Variation
-            {
-                selectedItem.setup(GetNameFromID(itemID, source), Convert.ToUInt16("0x" + itemID, 16), Convert.ToUInt32("0x" + itemData, 16), GetImagePathFromID(itemID, source, Convert.ToUInt32("0x" + front, 16)), true, "", "00", flag2);
-            }
-            else
-            {
-                selectedItem.setup(GetNameFromID(itemID, source), Convert.ToUInt16("0x" + itemID, 16), Convert.ToUInt32("0x" + itemData, 16), GetImagePathFromID(itemID, source, Convert.ToUInt32("0x" + itemData, 16)), true, "", "00", flag2);
-            }
-
-            if (selection != null)
-            {
-                //selection.Dispose();
-                string id = Utilities.precedingZeros(selectedItem.fillItemID(), 4);
-                string value = Utilities.precedingZeros(selectedItem.fillItemData(), 8);
-
-                if (ItemAttr.hasFenceWithVariation(IntId))  // Fence Variation
-                {
-                    selection.receiveID(Utilities.precedingZeros(selectedItem.fillItemID(), 4), "eng", value);
-                }
-                else if (id == "315A" || id == "1618" || id == "342F")
-                {
-                    selection.receiveID(Utilities.turn2bytes(selectedItem.fillItemData()), "eng");
-                }
-                else
-                {
-                    selection.receiveID(Utilities.precedingZeros(selectedItem.fillItemID(), 4), "eng");
-                }
             }
         }
 
@@ -2794,6 +2879,8 @@ namespace ACNHPoker
             {
                 HexTextbox.Text = "00000000";
             }
+
+            updateVariation();
         }
 
         #region Refresh
@@ -3740,15 +3827,15 @@ namespace ACNHPoker
             UInt16 IntId = Convert.ToUInt16("0x" + id, 16);
             if (ItemAttr.hasFenceWithVariation(IntId))  // Fence Variation
             {
-                selection.receiveID(Utilities.precedingZeros(selectedItem.fillItemID(), 4), "eng", value);
+                selection.receiveID(Utilities.precedingZeros(selectedItem.fillItemID(), 4), languageSetting, value);
             }
             else if (id == "315A" || id == "1618" || id == "342F")
             {
-                selection.receiveID(Utilities.turn2bytes(selectedItem.fillItemData()), "eng");
+                selection.receiveID(Utilities.turn2bytes(selectedItem.fillItemData()), languageSetting);
             }
             else
             {
-                selection.receiveID(Utilities.precedingZeros(selectedItem.fillItemID(), 4), "eng");
+                selection.receiveID(Utilities.precedingZeros(selectedItem.fillItemID(), 4), languageSetting);
             }
             selection.mapform = this;
             variationBtn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(80)))), ((int)(((byte)(80)))), ((int)(((byte)(255)))));
@@ -3927,7 +4014,7 @@ namespace ACNHPoker
 
         private void saveTopngToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            miniMap big = new miniMap(Layer1, Acre, 4);
+            miniMap big = new miniMap(Layer1, Acre, Building, 4);
             SaveFileDialog file = new SaveFileDialog()
             {
                 Filter = "Portable Network Graphics (*.png)|*.png",
@@ -4092,7 +4179,7 @@ namespace ACNHPoker
         private void bulkSpawnToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (bulk == null)
-                bulk = new bulkSpawn(s, bot, Layer1, Layer2, Acre, anchorX, anchorY, this, ignore, sound); ;
+                bulk = new bulkSpawn(s, bot, Layer1, Layer2, Acre, Building, anchorX, anchorY, this, ignore, sound); ;
             bulk.StartPosition = FormStartPosition.CenterParent;
             bulk.ShowDialog();
         }
@@ -5204,6 +5291,649 @@ namespace ACNHPoker
                         }
                     }
                 }
+            }
+        }
+
+        private void flag00To04ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (AreaSet || AreaCopied)
+            {
+                if (Corner1X < 0 || Corner1Y < 0 || Corner2X < 0 || Corner2Y < 0 || Corner1X > 111 || Corner1Y > 95 || Corner2X > 111 || Corner2Y > 95)
+                {
+                    myMessageBox.Show("Selected Area Out of Bounds!", "Please use your brain, My Master.", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                int TopLeftX;
+                int TopLeftY;
+                int BottomRightX;
+                int BottomRightY;
+
+                if (Corner1X <= Corner2X)
+                {
+                    if (Corner1Y <= Corner2Y) // Top Left
+                    {
+                        TopLeftX = Corner1X;
+                        TopLeftY = Corner1Y;
+                        BottomRightX = Corner2X;
+                        BottomRightY = Corner2Y;
+                    }
+                    else // Bottom Left
+                    {
+                        TopLeftX = Corner1X;
+                        TopLeftY = Corner2Y; //
+                        BottomRightX = Corner2X;
+                        BottomRightY = Corner1Y; //
+                    }
+                }
+                else
+                {
+                    if (Corner1Y <= Corner2Y) // Top Right
+                    {
+                        TopLeftX = Corner2X; //
+                        TopLeftY = Corner1Y;
+                        BottomRightX = Corner1X; //
+                        BottomRightY = Corner2Y;
+                    }
+                    else // Bottom Left
+                    {
+                        TopLeftX = Corner2X;
+                        TopLeftY = Corner2Y;
+                        BottomRightX = Corner1X;
+                        BottomRightY = Corner1Y;
+                    }
+                }
+
+                int numberOfColumn = BottomRightX - TopLeftX + 1;
+                int numberOfRow = BottomRightY - TopLeftY + 1;
+
+                int sizeOfRow = 16;
+
+                SavedArea = new byte[numberOfColumn * 2][];
+
+                for (int i = 0; i < numberOfColumn * 2; i++)
+                {
+                    SavedArea[i] = new byte[numberOfRow * sizeOfRow];
+                }
+
+                for (int i = 0; i < numberOfColumn; i++)
+                {
+                    for (int j = 0; j < numberOfRow; j++)
+                    {
+                        if (layer1Btn.Checked)
+                        {
+                            Buffer.BlockCopy(Layer1, (int)((0xC00 * (i + TopLeftX)) + (0x10 * (j + TopLeftY))), SavedArea[i * 2], 0x10 * j, 0x10);
+                            Buffer.BlockCopy(Layer1, (int)((0xC00 * (i + TopLeftX)) + (0x10 * (j + TopLeftY)) + 0x600), SavedArea[i * 2 + 1], 0x10 * j, 0x10);
+                            if (SavedArea[i * 2][0x10 * j] != 0xFE || SavedArea[i * 2][0x10 * j + 1] != 0xFF)
+                            {
+                                if (SavedArea[i * 2][0x10 * j + 2] == 0x00)
+                                    SavedArea[i * 2][0x10 * j + 2] = 0x04;
+                            }
+                        }
+                        else
+                        {
+                            Buffer.BlockCopy(Layer2, (int)((0xC00 * (i + TopLeftX)) + (0x10 * (j + TopLeftY))), SavedArea[i * 2], 0x10 * j, 0x10);
+                            Buffer.BlockCopy(Layer2, (int)((0xC00 * (i + TopLeftX)) + (0x10 * (j + TopLeftY)) + 0x600), SavedArea[i * 2 + 1], 0x10 * j, 0x10);
+                            if (SavedArea[i * 2][0x10 * j] != 0xFE || SavedArea[i * 2][0x10 * j + 1] != 0xFF)
+                            {
+                                if (SavedArea[i * 2][0x10 * j + 2] == 0x00)
+                                    SavedArea[i * 2][0x10 * j + 2] = 0x04;
+                            }
+                        }
+                    }
+                }
+
+                long address;
+
+                if (layer1Btn.Checked)
+                {
+                    address = Utilities.mapZero;
+                }
+                else if (layer2Btn.Checked)
+                {
+                    address = Utilities.mapZero + Utilities.mapSize;
+                }
+                else
+                    return;
+
+                disableBtn();
+
+                Thread pasteAreaThread = new Thread(delegate () { pasteArea(address, TopLeftX, TopLeftY, numberOfColumn, numberOfRow); });
+                pasteAreaThread.Start();
+
+                ClearCopiedAreaBtn_Click(this, e);
+            }
+            else
+            {
+                ToolStripItem item = (sender as ToolStripItem);
+                if (item != null)
+                {
+                    if (item.Owner is ContextMenuStrip owner)
+                    {
+                        var btn = (floorSlot)owner.SourceControl;
+
+                        if (btn.flag2 != "00")
+                            return;
+
+                        try
+                        {
+
+                            if (anchorX < 0 || anchorY < 0)
+                            {
+                                return;
+                            }
+
+                            long address;
+
+                            if (layer1Btn.Checked)
+                            {
+                                address = getAddress(btn.mapX, btn.mapY);
+                            }
+                            else if (layer2Btn.Checked)
+                            {
+                                address = (getAddress(btn.mapX, btn.mapY) + Utilities.mapSize);
+                            }
+                            else
+                                return;
+
+                            disableBtn();
+
+                            btnToolTip.RemoveAll();
+
+                            string itemID = Utilities.precedingZeros(btn.itemID.ToString("X"), 4);
+                            string itemData = Utilities.precedingZeros(btn.itemData.ToString("X"), 8);
+                            string flag1 = btn.flag1;
+                            string flag2 = "04";
+
+                            Thread dropThread = new Thread(delegate () { dropItem(address, itemID, itemData, flag1, flag2, btn); });
+                            dropThread.Start();
+                        }
+                        catch (Exception ex)
+                        {
+                            Log.logEvent("Map", "Flag04: " + ex.Message.ToString());
+                            return;
+                        }
+                    }
+                }
+            }
+        }
+
+        private void placeVariationBtn_Click(object sender, EventArgs e)
+        {
+            if (IdTextbox.Text == "" || HexTextbox.Text == "" || FlagTextbox.Text == "")
+            {
+                return;
+            }
+
+            if (selectedButton == null)
+            {
+                MessageBox.Show("Please select a slot!");
+                return;
+            }
+
+            string flag1 = selectedItem.getFlag1();
+            string flag2 = Utilities.precedingZeros(FlagTextbox.Text, 2);
+
+            inventorySlot[,] variationList = variation.getVariationList(IdTextbox.Text, flag1, flag2, HexTextbox.Text);
+            byte[][] spawnArea = null;
+
+
+            if (variationList != null)
+            {
+
+                int TopLeftX = selectedButton.mapX;
+                int TopLeftY = selectedButton.mapY;
+                int row;
+                int column;
+                int BottomRightX = 0;
+                int BottomRightY = 0;
+
+                int main = variationList.GetLength(0);
+                int sub = variationList.GetLength(1);
+
+                variationSpawn variationSpawner = new variationSpawn(variationList);
+                int result = (int)variationSpawner.ShowDialog(this);
+
+                if (result == 1) // Main
+                {
+                    BottomRightX = selectedButton.mapX + numOfColumn - 1;
+                    row = variationList.GetLength(0);
+                    BottomRightY = TopLeftY + row - 1;
+                    spawnArea = buildVariationArea(variationList, row, numOfColumn, 1);
+                }
+                else if (result == 6) // Sub
+                {
+                    BottomRightX = selectedButton.mapX + numOfColumn - 1;
+                    row = variationList.GetLength(1);
+                    BottomRightY = TopLeftY + row - 1;
+                    spawnArea = buildVariationArea(variationList, row, numOfColumn, 6);
+                }
+                else if (result == 5) // All
+                {
+                    BottomRightX = selectedButton.mapX + main - 1;
+                    row = sub;
+                    column = main;
+                    BottomRightY = TopLeftY + row - 1;
+                    spawnArea = buildVariationArea(variationList, row, column, 5);
+                }
+                else if (result == 3) // Main H
+                {
+                    BottomRightY = selectedButton.mapY + numOfRow - 1;
+                    column = variationList.GetLength(0);
+                    BottomRightX = TopLeftX + column - 1;
+                    spawnArea = buildVertVariationArea(variationList, column, numOfRow, 3);
+                }
+                else if (result == 7) // Sub H
+                {
+                    BottomRightY = selectedButton.mapY + numOfRow - 1;
+                    column = variationList.GetLength(1);
+                    BottomRightX = TopLeftX + column - 1;
+                    spawnArea = buildVertVariationArea(variationList, column, numOfRow, 7);
+                }
+                else if (result == 4) // All H
+                {
+                    BottomRightY = selectedButton.mapY + main - 1;
+                    row = main;
+                    column = sub;
+                    BottomRightX = TopLeftX + column - 1;
+                    spawnArea = buildVertVariationArea(variationList, column, row, 4);
+                }
+                else
+                {
+                    return;
+                }
+
+                long address;
+
+                if (layer1Btn.Checked)
+                {
+                    address = Utilities.mapZero;
+                }
+                else if (layer2Btn.Checked)
+                {
+                    address = Utilities.mapZero + Utilities.mapSize;
+                }
+                else
+                    return;
+
+                disableBtn();
+
+                btnToolTip.RemoveAll();
+
+                Thread SpawnThread = new Thread(delegate () { areaSpawnThread(address, spawnArea, TopLeftX, TopLeftY, BottomRightX, BottomRightY); });
+                SpawnThread.Start();
+            }
+            else
+            {
+                myMessageBox.Show("No variation found for the selected item!", "Error 404", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                return;
+            }
+        }
+
+        private byte[][] buildVariationArea(inventorySlot[,] variation, int numberOfRow, int multiple = 1, int mode = 1)
+        {
+            int numberOfColumn = multiple;
+            int sizeOfRow = 16;
+
+            byte[][] b = new byte[numberOfColumn * 2][];
+
+            for (int i = 0; i < numberOfColumn * 2; i++)
+            {
+                b[i] = new byte[numberOfRow * sizeOfRow];
+            }
+
+            if (mode == 1) // Main
+            {
+                for (int i = 0; i < numberOfColumn; i++)
+                {
+                    for (int j = 0; j < numberOfRow; j++)
+                    {
+                        string itemID = Utilities.precedingZeros(variation[j, 0].fillItemID(), 4);
+                        string itemData = Utilities.precedingZeros(variation[j, 0].fillItemData(), 8);
+                        string flag1 = Utilities.precedingZeros(variation[j, 0].getFlag1(), 2);
+                        string flag2 = Utilities.precedingZeros(variation[j, 0].getFlag2(), 2);
+
+                        byte[] ItemLeft = Utilities.stringToByte(Utilities.buildDropStringLeft(itemID, itemData, flag1, flag2));
+                        byte[] ItemRight = Utilities.stringToByte(Utilities.buildDropStringRight(itemID));
+
+                        Buffer.BlockCopy(ItemLeft, 0, b[i * 2], 0x10 * j, 16);
+                        Buffer.BlockCopy(ItemRight, 0, b[i * 2 + 1], 0x10 * j, 16);
+                    }
+                }
+            }
+            else if (mode == 6) // Sub
+            {
+                for (int i = 0; i < numberOfColumn; i++)
+                {
+                    for (int j = 0; j < numberOfRow; j++)
+                    {
+                        string itemID = Utilities.precedingZeros(variation[0, j].fillItemID(), 4);
+                        string itemData = Utilities.precedingZeros(variation[0, j].fillItemData(), 8);
+                        string flag1 = Utilities.precedingZeros(variation[0, j].getFlag1(), 2);
+                        string flag2 = Utilities.precedingZeros(variation[0, j].getFlag2(), 2);
+
+                        byte[] ItemLeft = Utilities.stringToByte(Utilities.buildDropStringLeft(itemID, itemData, flag1, flag2));
+                        byte[] ItemRight = Utilities.stringToByte(Utilities.buildDropStringRight(itemID));
+
+                        Buffer.BlockCopy(ItemLeft, 0, b[i * 2], 0x10 * j, 16);
+                        Buffer.BlockCopy(ItemRight, 0, b[i * 2 + 1], 0x10 * j, 16);
+                    }
+                }
+            }
+            else // All
+            {
+                for (int i = 0; i < numberOfColumn; i++)
+                {
+                    for (int j = 0; j < numberOfRow; j++)
+                    {
+                        string itemID = Utilities.precedingZeros(variation[i, j].fillItemID(), 4);
+                        string itemData = Utilities.precedingZeros(variation[i, j].fillItemData(), 8);
+                        string flag1 = Utilities.precedingZeros(variation[i, j].getFlag1(), 2);
+                        string flag2 = Utilities.precedingZeros(variation[i, j].getFlag2(), 2);
+
+                        byte[] ItemLeft = Utilities.stringToByte(Utilities.buildDropStringLeft(itemID, itemData, flag1, flag2));
+                        byte[] ItemRight = Utilities.stringToByte(Utilities.buildDropStringRight(itemID));
+
+                        Buffer.BlockCopy(ItemLeft, 0, b[i * 2], 0x10 * j, 16);
+                        Buffer.BlockCopy(ItemRight, 0, b[i * 2 + 1], 0x10 * j, 16);
+                    }
+                }
+            }
+
+            return b;
+        }
+
+        private byte[][] buildVertVariationArea(inventorySlot[,] variation, int numberOfColumn, int multiple = 1, int mode = 3)
+        {
+            int numberOfRow = multiple;
+            int sizeOfRow = 16;
+
+            byte[][] b = new byte[numberOfColumn * 2][];
+
+            for (int i = 0; i < numberOfColumn * 2; i++)
+            {
+                b[i] = new byte[numberOfRow * sizeOfRow];
+            }
+
+            if (mode == 3) // Main
+            {
+                for (int i = 0; i < numberOfColumn; i++)
+                {
+                    for (int j = 0; j < numberOfRow; j++)
+                    {
+                        string itemID = Utilities.precedingZeros(variation[i, 0].fillItemID(), 4);
+                        string itemData = Utilities.precedingZeros(variation[i, 0].fillItemData(), 8);
+                        string flag1 = Utilities.precedingZeros(variation[i, 0].getFlag1(), 2);
+                        string flag2 = Utilities.precedingZeros(variation[i, 0].getFlag2(), 2);
+
+                        byte[] ItemLeft = Utilities.stringToByte(Utilities.buildDropStringLeft(itemID, itemData, flag1, flag2));
+                        byte[] ItemRight = Utilities.stringToByte(Utilities.buildDropStringRight(itemID));
+
+                        Buffer.BlockCopy(ItemLeft, 0, b[i * 2], 0x10 * j, 16);
+                        Buffer.BlockCopy(ItemRight, 0, b[i * 2 + 1], 0x10 * j, 16);
+                    }
+                }
+            }
+            else if (mode == 7) // Sub
+            {
+                for (int i = 0; i < numberOfColumn; i++)
+                {
+                    for (int j = 0; j < numberOfRow; j++)
+                    {
+                        string itemID = Utilities.precedingZeros(variation[0, i].fillItemID(), 4);
+                        string itemData = Utilities.precedingZeros(variation[0, i].fillItemData(), 8);
+                        string flag1 = Utilities.precedingZeros(variation[0, i].getFlag1(), 2);
+                        string flag2 = Utilities.precedingZeros(variation[0, i].getFlag2(), 2);
+
+                        byte[] ItemLeft = Utilities.stringToByte(Utilities.buildDropStringLeft(itemID, itemData, flag1, flag2));
+                        byte[] ItemRight = Utilities.stringToByte(Utilities.buildDropStringRight(itemID));
+
+                        Buffer.BlockCopy(ItemLeft, 0, b[i * 2], 0x10 * j, 16);
+                        Buffer.BlockCopy(ItemRight, 0, b[i * 2 + 1], 0x10 * j, 16);
+                    }
+                }
+            }
+            else // All
+            {
+                for (int i = 0; i < numberOfColumn; i++)
+                {
+                    for (int j = 0; j < numberOfRow; j++)
+                    {
+                        string itemID = Utilities.precedingZeros(variation[j, i].fillItemID(), 4);
+                        string itemData = Utilities.precedingZeros(variation[j, i].fillItemData(), 8);
+                        string flag1 = Utilities.precedingZeros(variation[j, i].getFlag1(), 2);
+                        string flag2 = Utilities.precedingZeros(variation[j, i].getFlag2(), 2);
+
+                        byte[] ItemLeft = Utilities.stringToByte(Utilities.buildDropStringLeft(itemID, itemData, flag1, flag2));
+                        byte[] ItemRight = Utilities.stringToByte(Utilities.buildDropStringRight(itemID));
+
+                        Buffer.BlockCopy(ItemLeft, 0, b[i * 2], 0x10 * j, 16);
+                        Buffer.BlockCopy(ItemRight, 0, b[i * 2 + 1], 0x10 * j, 16);
+                    }
+                }
+            }
+
+            return b;
+        }
+
+        private void updateVariation()
+        {
+            if (IdTextbox.Text.Equals(string.Empty) || HexTextbox.Text.Equals(string.Empty))
+                return;
+
+            long data = Convert.ToUInt32(HexTextbox.Text.ToString(), 16);
+            string hexValue = data.ToString("X");
+
+            string itemID = Utilities.precedingZeros(IdTextbox.Text, 4);
+            string itemData = Utilities.precedingZeros(hexValue, 8);
+            string flag2 = Utilities.precedingZeros(FlagTextbox.Text, 2);
+
+            UInt16 IntId = Convert.ToUInt16("0x" + itemID, 16);
+            string front = Utilities.precedingZeros(itemData, 8).Substring(0, 4);
+            string back = Utilities.precedingZeros(itemData, 8).Substring(4, 4);
+
+            if (itemID.Equals("315A") || itemID.Equals("1618") || itemID.Equals("342F"))
+            {
+                selectedItem.setup(GetNameFromID(itemID, source), Convert.ToUInt16("0x" + itemID, 16), Convert.ToUInt32("0x" + itemData, 16), GetImagePathFromID(itemID, source), true, GetImagePathFromID(Utilities.turn2bytes(itemData), source, Convert.ToUInt32("0x" + Utilities.translateVariationValueBack(front), 16)), "00", flag2);
+            }
+            else if (itemID.Equals("16A2"))
+            {
+                selectedItem.setup(GetNameFromID(itemID, recipeSource), Convert.ToUInt16("0x" + itemID, 16), Convert.ToUInt32("0x" + itemData, 16), GetImagePathFromID(Utilities.turn2bytes(itemData), recipeSource), true, "", "00", flag2);
+            }
+            else if (ItemAttr.hasFenceWithVariation(IntId))  // Fence Variation
+            {
+                selectedItem.setup(GetNameFromID(itemID, source), Convert.ToUInt16("0x" + itemID, 16), Convert.ToUInt32("0x" + itemData, 16), GetImagePathFromID(itemID, source, Convert.ToUInt32("0x" + front, 16)), true, "", "00", flag2);
+            }
+            else
+            {
+                selectedItem.setup(GetNameFromID(itemID, source), Convert.ToUInt16("0x" + itemID, 16), Convert.ToUInt32("0x" + itemData, 16), GetImagePathFromID(itemID, source, Convert.ToUInt32("0x" + itemData, 16)), true, "", "00", flag2);
+            }
+
+            if (selection != null)
+            {
+                //selection.Dispose();
+                string id = Utilities.precedingZeros(selectedItem.fillItemID(), 4);
+                string value = Utilities.precedingZeros(selectedItem.fillItemData(), 8);
+
+                if (ItemAttr.hasFenceWithVariation(IntId))  // Fence Variation
+                {
+                    selection.receiveID(Utilities.precedingZeros(selectedItem.fillItemID(), 4), languageSetting, value);
+                }
+                else if (id == "315A" || id == "1618" || id == "342F")
+                {
+                    selection.receiveID(Utilities.turn2bytes(selectedItem.fillItemData()), languageSetting);
+                }
+                else
+                {
+                    selection.receiveID(Utilities.precedingZeros(selectedItem.fillItemID(), 4), languageSetting);
+                }
+            }
+        }
+
+        private void LanguageSetup(string configLanguage)
+        {
+            switch (configLanguage)
+            {
+                case "eng":
+                    Language.SelectedIndex = 0;
+                    break;
+                case "jpn":
+                    Language.SelectedIndex = 1;
+                    break;
+                case "tchi":
+                    Language.SelectedIndex = 2;
+                    break;
+                case "schi":
+                    Language.SelectedIndex = 3;
+                    break;
+                case "kor":
+                    Language.SelectedIndex = 4;
+                    break;
+                case "fre":
+                    Language.SelectedIndex = 5;
+                    break;
+                case "ger":
+                    Language.SelectedIndex = 6;
+                    break;
+                case "spa":
+                    Language.SelectedIndex = 7;
+                    break;
+                case "ita":
+                    Language.SelectedIndex = 8;
+                    break;
+                case "dut":
+                    Language.SelectedIndex = 9;
+                    break;
+                case "rus":
+                    Language.SelectedIndex = 10;
+                    break;
+                default:
+                    Language.SelectedIndex = 0;
+                    break;
+            }
+        }
+
+        private void Language_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            itemSearchBox.Clear();
+
+            switch (Language.SelectedIndex)
+            {
+                case 0:
+                    languageSetting = "eng";
+                    break;
+                case 1:
+                    languageSetting = "jpn";
+                    break;
+                case 2:
+                    languageSetting = "tchi";
+                    break;
+                case 3:
+                    languageSetting = "schi";
+                    break;
+                case 4:
+                    languageSetting = "kor";
+                    break;
+                case 5:
+                    languageSetting = "fre";
+                    break;
+                case 6:
+                    languageSetting = "ger";
+                    break;
+                case 7:
+                    languageSetting = "spa";
+                    break;
+                case 8:
+                    languageSetting = "ita";
+                    break;
+                case 9:
+                    languageSetting = "dut";
+                    break;
+                case 10:
+                    languageSetting = "rus";
+                    break;
+                default:
+                    languageSetting = "eng";
+                    break;
+            }
+
+            if (fieldGridView.Columns.Contains(languageSetting))
+            {
+                hideAllLanguage();
+                fieldGridView.Columns[languageSetting].Visible = true;
+            }
+        }
+
+        private void hideAllLanguage()
+        {
+            if (fieldGridView.Columns.Contains("id"))
+            {
+                fieldGridView.Columns["eng"].Visible = false;
+                fieldGridView.Columns["jpn"].Visible = false;
+                fieldGridView.Columns["tchi"].Visible = false;
+                fieldGridView.Columns["schi"].Visible = false;
+                fieldGridView.Columns["kor"].Visible = false;
+                fieldGridView.Columns["fre"].Visible = false;
+                fieldGridView.Columns["ger"].Visible = false;
+                fieldGridView.Columns["spa"].Visible = false;
+                fieldGridView.Columns["ita"].Visible = false;
+                fieldGridView.Columns["dut"].Visible = false;
+                fieldGridView.Columns["rus"].Visible = false;
+            }
+        }
+
+        private void FlashTimer_Tick(object sender, EventArgs e)
+        {
+            var rand = new Random();
+            int CurrentR = fieldModeBtn.BackColor.R;
+            int CurrentG = fieldModeBtn.BackColor.G;
+            int CurrentB = fieldModeBtn.BackColor.B;
+            int NewR;
+            int NewG;
+            int NewB;
+
+            if (CurrentR == target[targetValue].R && CurrentG == target[targetValue].G && CurrentB == target[targetValue].B)
+            {
+                targetValue++;
+                if (targetValue >= 7)
+                    targetValue = 0;
+            }
+            else
+            {
+                if (CurrentR > target[targetValue].R)
+                    NewR = CurrentR - rand.Next(1, 5);
+                else if (CurrentR < target[targetValue].R)
+                    NewR = CurrentR + rand.Next(1, 5);
+                else
+                    NewR = CurrentR;
+                if (NewR < 0)
+                    NewR = 0;
+                if (NewR > 255)
+                    NewR = 255;
+
+                if (CurrentG > target[targetValue].G)
+                    NewG = CurrentG - rand.Next(1, 5);
+                else if (CurrentG < target[targetValue].G)
+                    NewG = CurrentG + rand.Next(1, 5);
+                else
+                    NewG = CurrentG;
+                if (NewG < 0)
+                    NewG = 0;
+                if (NewG > 255)
+                    NewG = 255;
+
+                if (CurrentB > target[targetValue].B)
+                    NewB = CurrentB - rand.Next(1, 5);
+                else if (CurrentB < target[targetValue].B)
+                    NewB = CurrentB + rand.Next(1, 5);
+                else
+                    NewB = CurrentB;
+                if (NewB < 0)
+                    NewB = 0;
+                if (NewB > 255)
+                    NewB = 255;
+
+                fieldModeBtn.BackColor = Color.FromArgb(NewR, NewG, NewB);
             }
         }
     }

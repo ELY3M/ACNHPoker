@@ -227,10 +227,10 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BadTimeSimulator.cs">
+    <Compile Include="Map\BadTimeSimulator.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="BadTimeSimulator.Designer.cs">
+    <Compile Include="Map\BadTimeSimulator.Designer.cs">
       <DependentUpon>BadTimeSimulator.cs</DependentUpon>
     </Compile>
     <Compile Include="Custom\CountDownTimer.cs" />
@@ -276,6 +276,12 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Twitch\VillagerOrder.cs" />
+    <Compile Include="Map\variationSpawn.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Map\variationSpawn.Designer.cs">
+      <DependentUpon>variationSpawn.cs</DependentUpon>
+    </Compile>
     <Compile Include="Villager\Friendship.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -374,7 +380,7 @@
     <Compile Include="Custom\VillagerSelector.cs">
       <SubType>Component</SubType>
     </Compile>
-    <EmbeddedResource Include="BadTimeSimulator.resx">
+    <EmbeddedResource Include="Map\BadTimeSimulator.resx">
       <DependentUpon>BadTimeSimulator.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Map\bulkSpawn.resx">
@@ -396,6 +402,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Twitch\OrderDisplay.resx">
       <DependentUpon>OrderDisplay.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Map\variationSpawn.resx">
+      <DependentUpon>variationSpawn.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Villager\Friendship.resx">
       <DependentUpon>Friendship.cs</DependentUpon>

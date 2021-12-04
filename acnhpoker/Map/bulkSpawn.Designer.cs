@@ -487,6 +487,7 @@ namespace ACNHPoker
             this.MinimizeBox = false;
             this.MinimumSize = new System.Drawing.Size(690, 450);
             this.Name = "bulkSpawn";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Bulk Spawn";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.bulkSpawn_FormClosed);
             ((System.ComponentModel.ISupportInitialize)(this.miniMapBox)).EndInit();

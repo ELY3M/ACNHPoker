@@ -1,8 +1,10 @@
 # ACNHPoker
 
+![Release Image](https://i.ibb.co/txCNG22/131313.png)
+
    1. Spawns items for you on Animal Crossing New Horizons using [sys-botbase](https://github.com/olliz0r/sys-botbase) or [USB-Botbase](https://github.com/fishguy6564/USB-Botbase).
    2. Manipulate in-game critter spawn rate.
-   3. Contorl turnip buying/selling price.
+   3. Control turnip buying/selling price.
    4. Uncover your weather seed for [MeteoNook](https://wuffs.org/acnh/weather/)
    5. And more
 
@@ -267,6 +269,20 @@ https://youtu.be/-zztRgmtXig
 	* Update to use v2 villager house (.nhv2)
 	* Fixed a bug where interacting with the villager house might crash the game.
 	* Fixed the Twitch villager inject.
+* R18.5
+	* Update for Game version number 2.0.1
+* R18.6
+	* Update for Game version number 2.0.2
+	* Added	a dialog for variation spawning in "Map Dropper"
+* R18.7
+	* Update for Game version number 2.0.3
+	* Added	a button to flip variation spawning to horizontal.
+	* Added "Area Select" -> "Right Click" -> "Save to file" to "Map Dropper".
+      * You can select .nhi or .nhbs. Noted that empty space and extension will be skipped.
+	* Fixed the variation displayed on the wall-mount/ceiling-mount.
+	* Added basic building indicator to "Map Dropper"
+      * Noted that the indicator only provide a general guidance. ~0.5 grid error might happen.
+	
 
 ## Contributing
 

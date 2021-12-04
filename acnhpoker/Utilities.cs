@@ -14,7 +14,7 @@ using System.Windows.Forms;
 
 namespace ACNHPoker
 {
-    class Utilities
+    static class Utilities
     {
         public static UInt32 masterAddress = 0xAF70D6E0; 
 
@@ -96,7 +96,9 @@ namespace ACNHPoker
         public const int AllAcreSize = AcreMax * 2;
         public const int AcreAndPlaza = AllAcreSize + 2 + 2 + 4 + 4;
 
-        public static UInt32 BuildingOffset = mapZero + 0xCF610; //TODO?
+        public static UInt32 BuildingOffset = mapZero + 0xCF600;
+        private const int BuildingSize = 0x14;
+        private const int AllBuildingSize = 46 * BuildingSize;
 
         public static UInt32 player1SlotBase = masterAddress;
         public static UInt32 playerOffset = 0x11B968;
@@ -149,19 +151,19 @@ namespace ACNHPoker
         public static UInt32 player8House21Base = player8HouseBase + 0xA0;
 
         // ---- Critter
-        public static UInt32 InsectAppearPointer = 0x404C4BF8;
+        public static UInt32 InsectAppearPointer = 0x404C4D18; //0x404C4BF8;
         public static Int32 InsectDataSize = 2 * (1 + 6 * 12 + 5);
         public static Int32 InsectNumRecords = 166;
 
         public static Int32 FishDataSize = 88;
 
-        public static UInt32 FishRiverAppearPointer = 0x40504388; 
+        public static UInt32 FishRiverAppearPointer = 0x405044A8; //0x40504388; 
         public static Int32 FishRiverNumRecords = 100;
 
-        public static UInt32 FishSeaAppearPointer = 0x4051A568;
+        public static UInt32 FishSeaAppearPointer = 0x4051A688; //0x4051A568;
         public static Int32 FishSeaNumRecords = 76;
 
-        public static UInt32 CreatureSeaAppearPointer = 0x4048688C;
+        public static UInt32 CreatureSeaAppearPointer = 0x404869AC; //0x4048688C;
         public static Int32 SeaCreatureDataSize = 88;
         public static Int32 SeaCreatureNumRecords = 41 * 2;
         // ----
@@ -181,13 +183,13 @@ namespace ACNHPoker
         public static readonly string freezeTimeValue = "D503201F";
         public static readonly string unfreezeTimeValue = "F9203260";
 
-        public static UInt32 wSpeedAddress = 0x01605DF0;
+        public static UInt32 wSpeedAddress = 0x01605EB0; //0x01605E90; // 0x01605E20; //0x01605DF0;
         public static readonly string wSpeedX1 = "BD578661";
         public static readonly string wSpeedX2 = "1E201001";
         public static readonly string wSpeedX3 = "1E211001";
         public static readonly string wSpeedX4 = "1E221001";
 
-        public static UInt32 CollisionAddress = 0x01554D50;
+        public static UInt32 CollisionAddress = 0x01554E10; //0x01554DF0; // 0x01554D80; //0x01554D50;
         public static readonly string CollisionDisable = "12800014";
         public static readonly string CollisionEnable = "B95BA014";
 
@@ -251,11 +253,6 @@ namespace ACNHPoker
         public static Dictionary<string, string> itemkind = new Dictionary<string, string>();
 
         private static Object botLock = new Object();
-
-        public Utilities()
-        {
-
-        }
 
         public static void buildDictionary()
         {
@@ -2314,6 +2311,45 @@ namespace ACNHPoker
             }
         }
 
+        public static byte[] getBuilding(Socket socket, USBBot bot)
+        {
+            lock (botLock)
+            {
+                try
+                {
+                    if (bot == null)
+                    {
+                        Debug.Print("[Sys] Peek : Building " + BuildingOffset);
+
+                        byte[] b = ReadByteArray(socket, BuildingOffset, AllBuildingSize);
+
+                        if (b == null)
+                        {
+                            MessageBox.Show("Wait something is wrong here!? \n\n Building");
+                        }
+                        return b;
+                    }
+                    else
+                    {
+                        Debug.Print("[Usb] Peek : Building " + BuildingOffset);
+
+                        byte[] b = bot.ReadBytes(BuildingOffset, AllBuildingSize);
+
+                        if (b == null)
+                        {
+                            MessageBox.Show("Wait something is wrong here!? \n\n Building");
+                        }
+                        return b;
+                    }
+                }
+                catch
+                {
+                    MessageBox.Show("Exception, try restarting the program or reconnecting to the switch.");
+                    return null;
+                }
+            }
+        }
+
         public static byte[] getCoordinate(Socket socket, USBBot bot)
         {
             lock (botLock)
@@ -2782,6 +2818,40 @@ namespace ACNHPoker
 
         public static byte[] FreezeRate(string rate) => Encode("configure freezeRate " + rate);
 
+        public static void FreezeBig(Socket socket, uint offset, byte[] data, uint size)
+        {
+            uint max = 0x2000;
+
+            if (size <= max)
+                Utilities.SendString(socket, Freeze(offset, data));
+            else
+            {
+                byte[] current = new byte[max];
+                byte[] remain = new byte[size - max];
+
+                Buffer.BlockCopy(data, 0, current, 0, (int)max);
+                Buffer.BlockCopy(data, (int)max, remain, 0, (int)(size - max));
+
+                Utilities.SendString(socket, Freeze(offset, current));
+
+                FreezeBig(socket, offset + max, remain, size - max);
+            }
+        }
+
+        public static void unFreezeBig(Socket socket, uint offset, uint size)
+        {
+            uint max = 0x2000;
+
+            if (size <= max)
+                Utilities.SendString(socket, UnFreeze(offset));
+            else
+            {
+                Utilities.SendString(socket, UnFreeze(offset));
+
+                unFreezeBig(socket, offset + max, size - max);
+            }
+        }
+
         public static string getVersion(Socket socket)
         {
             lock (botLock)
@@ -3024,6 +3094,49 @@ namespace ACNHPoker
             }
             else
                 return false;
+        }
+
+        public static string translateVariationValueBack(string input)
+        {
+            if (input.Length > 4)
+                return "0000";
+
+            int hexValue = Convert.ToUInt16("0x" + input, 16);
+
+            if (hexValue < 0x8)
+            {
+                return Utilities.precedingZeros(input, 4);
+            }
+            else if (hexValue < 0x10)
+            {
+                return Utilities.precedingZeros((hexValue + 0x20 - 0x8).ToString("X"), 4);
+            }
+            else if (hexValue < 0x18)
+            {
+                return Utilities.precedingZeros((hexValue + 0x40 - 0x10).ToString("X"), 4);
+            }
+            else if (hexValue < 0x20)
+            {
+                return Utilities.precedingZeros((hexValue + 0x60 - 0x18).ToString("X"), 4);
+            }
+            else if (hexValue < 0x28)
+            {
+                return Utilities.precedingZeros((hexValue + 0x80 - 0x20).ToString("X"), 4);
+            }
+            else if (hexValue < 0x30)
+            {
+                return Utilities.precedingZeros((hexValue + 0xA0 - 0x28).ToString("X"), 4);
+            }
+            else if (hexValue < 0x38)
+            {
+                return Utilities.precedingZeros((hexValue + 0xC0 - 0x30).ToString("X"), 4);
+            }
+            else if (hexValue < 0x40)
+            {
+                return Utilities.precedingZeros((hexValue + 0xE0 - 0x38).ToString("X"), 4);
+            }
+            else
+                return "0000";
         }
 
         #region Villager
