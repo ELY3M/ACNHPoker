@@ -20,7 +20,7 @@ namespace ACNHPoker
     {
         #region variable
         private static Socket s;
-        private string version = "ACNH Poker R18.7 for v2.0.3";
+        private string version = "ACNH Poker R18.8 for v2.0.4";
         private inventorySlot selectedButton;
         private Villager[] V = null;
         private Button[] villagerButton = null;
@@ -51,6 +51,7 @@ namespace ACNHPoker
         public map Map = null;
         public MapRegenerator R = null;
         public Freezer F = null;
+        public Bulldozer B = null;
         private miniMap MiniMap = null;
         private USBBot bot = null;
         private bool offline = true;
@@ -881,10 +882,19 @@ namespace ACNHPoker
 
         private void freezerBtn_Click(object sender, EventArgs e)
         {
-            if (R == null)
+            if (F == null)
             {
                 F = new Freezer(s, this, sound);
                 F.Show();
+            }
+        }
+
+        private void BulldozerBtn_Click(object sender, EventArgs e)
+        {
+            if (B == null)
+            {
+                B = new Bulldozer(s, this, sound);
+                B.Show();
             }
         }
 
@@ -1130,6 +1140,20 @@ namespace ACNHPoker
         private void button18_Click(object sender, EventArgs e)
         {
             controller.emote(0);
+        }
+
+        private void HouseIndexValue_TextChanged(object sender, EventArgs e)
+        {
+            if (HouseIndexValue.Text.Equals("-1"))
+            {
+                HouseIndexValue.ForeColor = Color.Red;
+                HouseIndexLabel.ForeColor = Color.Red;
+            }
+            else
+            {
+                HouseIndexValue.ForeColor = Color.White;
+                HouseIndexLabel.ForeColor = Color.White;
+            }
         }
     }
 }
