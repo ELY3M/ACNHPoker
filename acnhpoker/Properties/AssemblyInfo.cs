@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿//modded by ELY M.
+using System.Reflection;
 using System.Resources;
 using System.Runtime.InteropServices;
 
@@ -7,20 +8,20 @@ using System.Runtime.InteropServices;
 // associated with an assembly.
 [assembly: AssemblyTitle("ACNHPoker")]
 [assembly: AssemblyDescription("Animal Crossing New Horizons Item Spawning Tool")]
-[assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("MyShiLingStar")]
+[assembly: AssemblyConfiguration("Modded by ELY M.")]
+[assembly: AssemblyCompany("MyShiLingStar + Modded by ELY M.")]
 [assembly: AssemblyProduct("ACNHPoker")]
-[assembly: AssemblyCopyright("Copyright ©  2020-2022")]
+[assembly: AssemblyCopyright("Copyright © 2020-2022")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
 // Setting ComVisible to false makes the types in this assembly not visible
 // to COM components.  If you need to access a type in this assembly from
 // COM, set the ComVisible attribute to true on that type.
-[assembly: ComVisible(true)]
+[assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("EEAC8CC2-A0A6-45AD-8A36-BA2C19CE8B89")]
+[assembly: Guid("6F4FB65C-DB81-402F-AB51-0F0010BA5256")]
 
 // Version information for an assembly consists of the following four values:
 //
